@@ -20,13 +20,14 @@ public class ShooterTwoWheelShoot extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.shooter.setCoastMode();
     	targetRPM = SmartDashboard.getNumber("Shooter Speed");
+    	Robot.shooter.setRPMTwoWheel(targetRPM);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	SmartDashboard.putNumber("Encoder RPM #1", Robot.shooter.getEncoderRPM());
+    	SmartDashboard.putNumber("Encoder Value #2", Robot.shooter.getEncoderRPMTwo());
     }
 
     // Make this return true when this Command no longer needs to run execute()

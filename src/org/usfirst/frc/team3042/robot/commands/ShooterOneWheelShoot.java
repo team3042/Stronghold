@@ -20,20 +20,26 @@ public class ShooterOneWheelShoot extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.shooter.setCoastMode();
     	targetRPM = SmartDashboard.getNumber("Shooter Speed");
+    	Robot.shooter.setRPM(targetRPM);
+    	
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	/*
     	//Bang-bang controller keeping motor at desired RPM
-    	if(Robot.shooter.getEncoderRPM() < targetRPM) {
+    	if(Math.abs(Robot.shooter.getEncoderRPM()) < targetRPM) {
     		Robot.shooter.shoot(1.0);
     	}
     	else {
     		Robot.shooter.coast();
     	}
-    	System.out.println(Robot.shooter.getEncoderRPM());
+    	*/
+    	SmartDashboard.putNumber("Encoder RPM", Robot.shooter.getEncoderRPM());
+    	
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -43,12 +49,10 @@ public class ShooterOneWheelShoot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.shooter.setBrakeMode();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.shooter.setBrakeMode();
     }
 }
