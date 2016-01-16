@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
+import org.usfirst.frc.team3042.robot.subsystems.Camera;
 import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static final Camera camera = new Camera();
 	public static final Shooter shooter = new Shooter();
 	public static OI oi;
 
