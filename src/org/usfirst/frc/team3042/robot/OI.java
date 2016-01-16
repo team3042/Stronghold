@@ -1,7 +1,10 @@
 package org.usfirst.frc.team3042.robot;
 
+import org.usfirst.frc.team3042.robot.commands.ShooterOneWheelShoot;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
-import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -14,6 +17,9 @@ public class OI {
     // number it is.
     // Joystick stick = new Joystick(port);
     // Button button = new JoystickButton(stick, buttonNumber);
+	Joystick joystickGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_3);
+	
+	Button buttonFire = new JoystickButton(joystickGunner, 1);
     
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
@@ -34,5 +40,9 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+	
+	public OI() {
+		buttonFire.whileHeld(new ShooterOneWheelShoot());
+	}
 }
 

@@ -3,13 +3,16 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class ShooterShoot extends Command {
+public class ShooterTwoWheelShoot extends Command {
 
-    public ShooterShoot() {
+	double targetRPM = 0;
+	
+    public ShooterTwoWheelShoot() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.shooter);
@@ -17,10 +20,13 @@ public class ShooterShoot extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.shooter.setCoastMode();
+    	targetRPM = SmartDashboard.getNumber("Shooter Speed");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
