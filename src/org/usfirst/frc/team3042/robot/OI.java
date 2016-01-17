@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.commands.ShooterOneWheelShoot;
+import org.usfirst.frc.team3042.robot.commands.ShooterIntake;
+import org.usfirst.frc.team3042.robot.commands.ShooterTwoWheelShoot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -19,7 +20,8 @@ public class OI {
     // Button button = new JoystickButton(stick, buttonNumber);
 	Joystick joystickGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_3);
 	
-	Button buttonFire = new JoystickButton(joystickGunner, 1);
+	Button buttonTwoWheelFire = new JoystickButton(joystickGunner, 1);
+	Button buttonIntake = new JoystickButton(joystickGunner, 2);
     
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
@@ -42,7 +44,8 @@ public class OI {
     // button.whenReleased(new ExampleCommand());
 	
 	public OI() {
-		buttonFire.whileHeld(new ShooterOneWheelShoot());
+		buttonTwoWheelFire.whileHeld(new ShooterTwoWheelShoot());
+		buttonIntake.whileHeld(new ShooterIntake());
 	}
 }
 

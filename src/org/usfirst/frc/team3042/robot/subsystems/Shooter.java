@@ -13,8 +13,10 @@ import org.usfirst.frc.team3042.robot.commands.ShooterStop;
  */
 public class Shooter extends Subsystem {
 	
-	CANTalon talon1 = new CANTalon(RobotMap.SHOOTER_TALON_1);
-	CANTalon talon2 = new CANTalon(RobotMap.SHOOTER_TALON_2);
+	CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
+	CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
+	
+	int talonLeftZero, talonRightZero = 0;
 	
     
     // Put methods for controlling this subsystem
@@ -22,12 +24,12 @@ public class Shooter extends Subsystem {
 	
 	public Shooter() {
 		//Setting Talon settings
-		talon1.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
-		talon1.configEncoderCodesPerRev(1024);
-		talon1.reverseOutput(true);
-		talon2.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
-		talon2.configEncoderCodesPerRev(1024);
-		talon2.reverseOutput(false);
+		talonLeft.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+		talonLeft.configEncoderCodesPerRev(1024);
+		talonLeft.reverseOutput(true);
+		talonRight.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+		talonRight.configEncoderCodesPerRev(1024);
+		talonRight.reverseOutput(false);
 		encoderReset();
 	
 	}
@@ -41,60 +43,61 @@ public class Shooter extends Subsystem {
     }
     
     public void shoot(double speed) { 
-    	talon1.set(speed);
-    	
-    }
-    
-    public void stop() {
-    	talon1.changeControlMode(TalonControlMode.PercentVbus);
-    	talon2.changeControlMode(TalonControlMode.PercentVbus);
-    	talon1.set(0);
-    	talon2.set(0);
-    }
-    
-    public void coast() {
-    	this.stop();
-    }
-    
-    //Getting speed in native units per 100ms and converting to RPM
-    public double getEncoderRPM() {
-    	return talon1.getSpeed();
-    }
-    
-    public double getEncoderRPMTwo() {
-    	return talon2.getSpeed();
-    }
-    
-    
-    public int getEncoderVal() {
-    	return talon1.getEncPosition();
-    }
-    
-    public int getEncoderValTwo() {
-    	return talon2.getEncPosition();
-    }
-    
-    public void encoderReset() {
-    	talon1.setPosition(0);
-    	talon2.setPosition(0);
+    	talonLeft.set(speed);
+    	talonRight.set(speed);
     }
     
     public void setRPM(double speed) {
-    	talon1.setF(SmartDashboard.getNumber("F-Gain"));
-    	talon1.setP(.01);
-    	talon1.changeControlMode(TalonControlMode.Speed);
-    	talon1.set(speed);
+    	talonLeft.setF(SmartDashboard.getNumber("F-Gain"));
+    	talonLeft.setP(.01);
+    	talonLeft.changeControlMode(TalonControlMode.Speed);
+    	talonLeft.set(speed);
     }
-
+    
+    //Setting each flywheel to a target speed using PIDF through Talons
     public void setRPMTwoWheel(double speed) {
-    	talon1.setF(SmartDashboard.getNumber("F-Gain"));
-    	talon1.setP(.01);
-    	talon1.changeControlMode(TalonControlMode.Speed);
-    	talon1.set(speed);
-    	talon2.setF(SmartDashboard.getNumber("F-Gain"));
-    	talon2.setP(.01);
-    	talon2.changeControlMode(TalonControlMode.Speed);
-    	talon2.set(speed);
+    	talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
+    	talonLeft.setP(.01);
+    	talonLeft.changeControlMode(TalonControlMode.Speed);
+    	talonLeft.set(speed);
+    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
+    	talonRight.setP(.01);
+    	talonRight.changeControlMode(TalonControlMode.Speed);
+    	talonRight.set(speed);
     }
+    
+    //Changing Talons back to standard -1 to 1 control and stopping
+    public void stop() {
+    	talonLeft.changeControlMode(TalonControlMode.PercentVbus);
+    	talonRight.changeControlMode(TalonControlMode.PercentVbus);
+    	talonLeft.set(0);
+    	talonRight.set(0);
+    }
+    
+    //Getting speed in RPM
+    public double getEncoderRPMLeft() {
+    	return talonLeft.getSpeed();
+    }
+    
+    public double getEncoderRPMRight() {
+    	return talonRight.getSpeed();
+    }
+    
+    //Getting encoder position and zeroing
+    public int getEncoderValLeft() {
+    	return talonLeft.getEncPosition() - talonLeftZero;
+    }
+    
+    public int getEncoderValRight() {
+    	return talonRight.getEncPosition() - talonRightZero;
+    }
+    
+    //Finding starting point of each encoder
+    public void encoderReset() {
+    	talonLeftZero = talonLeft.getEncPosition();
+    	talonRightZero = talonRight.getEncPosition();
+    }
+    
+    
 }
 

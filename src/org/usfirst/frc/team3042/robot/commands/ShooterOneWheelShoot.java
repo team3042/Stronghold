@@ -37,7 +37,7 @@ public class ShooterOneWheelShoot extends Command {
     		Robot.shooter.coast();
     	}
     	*/
-    	SmartDashboard.putNumber("Encoder RPM", Robot.shooter.getEncoderRPM());
+    	SmartDashboard.putNumber("Encoder RPM", Robot.shooter.getEncoderRPMLeft());
     	
     	
     }

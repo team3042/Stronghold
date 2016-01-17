@@ -25,8 +25,8 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser chooser;
     
-    private double SHOOTER_SPEED;
-    private double F_GAIN = 0.0121;
+    private double SHOOTER_SPEED, INTAKE_SPEED;
+    private double F_GAIN_LEFT, F_GAIN_RIGHT = 0.0121;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -38,7 +38,9 @@ public class Robot extends IterativeRobot {
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
-        SmartDashboard.putNumber("F-Gain", F_GAIN);
+        SmartDashboard.putNumber("Intake Speed", INTAKE_SPEED);
+        SmartDashboard.putNumber("F-Gain Left", F_GAIN_LEFT);
+        SmartDashboard.putNumber("F-Gain Right", F_GAIN_RIGHT);
         
     }
 	
@@ -103,7 +105,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
-        SmartDashboard.putNumber("Encoder Value", shooter.getEncoderVal());
+        SmartDashboard.putNumber("Encoder Value", shooter.getEncoderValLeft());
     }
     
     /**

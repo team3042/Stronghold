@@ -26,8 +26,9 @@ public class ShooterTwoWheelShoot extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	SmartDashboard.putNumber("Encoder RPM #1", Robot.shooter.getEncoderRPM());
-    	SmartDashboard.putNumber("Encoder Value #2", Robot.shooter.getEncoderRPMTwo());
+    	//Getting RPM of each motor and outputting to dashboard for tracking
+    	SmartDashboard.putNumber("Encoder RPM Left", Robot.shooter.getEncoderRPMLeft());
+    	SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());
     }
 
     // Make this return true when this Command no longer needs to run execute()
