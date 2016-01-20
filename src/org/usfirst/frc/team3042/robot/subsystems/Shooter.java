@@ -1,8 +1,10 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
@@ -15,6 +17,8 @@ public class Shooter extends Subsystem {
 	
 	CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
 	CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
+	
+	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_POT_ARM, 1, 0);
 	
 	int talonLeftZero, talonRightZero = 0;
 	
@@ -98,6 +102,9 @@ public class Shooter extends Subsystem {
     	talonRightZero = talonRight.getEncPosition();
     }
     
+    public double getPotentiometerVal() {
+    	return pot.get();
+    }
     
 }
 

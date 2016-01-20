@@ -1,5 +1,8 @@
 package org.usfirst.frc.team3042.robot;
 
+import org.usfirst.frc.team3042.robot.commands.ServoSetOne;
+import org.usfirst.frc.team3042.robot.commands.ServoSetZero;
+import org.usfirst.frc.team3042.robot.commands.ShooterGetPotentiometer;
 import org.usfirst.frc.team3042.robot.commands.ShooterIntake;
 import org.usfirst.frc.team3042.robot.commands.ShooterTwoWheelShoot;
 
@@ -22,6 +25,11 @@ public class OI {
 	
 	Button buttonTwoWheelFire = new JoystickButton(joystickGunner, 1);
 	Button buttonIntake = new JoystickButton(joystickGunner, 2);
+	
+	Button buttonPotentiometer = new JoystickButton(joystickGunner, 5);
+	
+	Button buttonServoZero = new JoystickButton(joystickGunner, 3);
+	Button buttonServoOne = new JoystickButton(joystickGunner, 4);
     
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
@@ -46,6 +54,12 @@ public class OI {
 	public OI() {
 		buttonTwoWheelFire.whileHeld(new ShooterTwoWheelShoot());
 		buttonIntake.whileHeld(new ShooterIntake());
+		
+		buttonPotentiometer.whileHeld(new ShooterGetPotentiometer());
+		
+		buttonServoZero.whenPressed(new ServoSetZero());
+		buttonServoOne.whenPressed(new ServoSetOne());
+		
 	}
 }
 

@@ -13,6 +13,8 @@ public class RobotMap {
 	public static final int SHOOTER_TALON_LEFT = 9;
 	public static final int SHOOTER_TALON_RIGHT = 10;
 	
+	public static final int SHOOTER_POT_ARM = 1;
+	
 	public static final int GUNNER_JOYSTICK_USB_PORT_3 = 3;
     
     // If you are using multiple modules, make sure to define both the port
