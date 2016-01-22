@@ -29,6 +29,7 @@ public class Robot extends IterativeRobot {
     
     private double SHOOTER_SPEED, INTAKE_SPEED;
     private double F_GAIN_LEFT, F_GAIN_RIGHT = 0.0121;
+    private double POT_VAL;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -43,7 +44,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Intake Speed", INTAKE_SPEED);
         SmartDashboard.putNumber("F-Gain Left", F_GAIN_LEFT);
         SmartDashboard.putNumber("F-Gain Right", F_GAIN_RIGHT);
-        
+        SmartDashboard.putNumber("Potentiometer", POT_VAL);
     }
 	
 	/**
