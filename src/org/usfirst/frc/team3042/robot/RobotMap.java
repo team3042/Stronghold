@@ -10,6 +10,11 @@ public class RobotMap {
     // following variables to use with your drivetrain subsystem.
     // public static int leftMotor = 1;
     // public static int rightMotor = 2;
+	public static final int DRIVETRAIN_TALON_LEFT_1 = 1;
+	public static final int DRIVETRAIN_TALON_LEFT_2 = 2;
+	public static final int DRIVETAIN_TALON_RIGHT_1 = 3;
+	public static final int DRIVETRAIN_TALON_RIGHT_2 = 4;
+	
 	public static final int SHOOTER_TALON_LEFT = 9;
 	public static final int SHOOTER_TALON_RIGHT = 10;
 	
@@ -17,6 +22,8 @@ public class RobotMap {
 	
 	public static final int SHOOTER_POT_ARM = 0;
 	
+	public static final int LEFT_JOYSTICK_USB_PORT_1 = 1;
+	public static final int RIGHT_JOYSTICK_USB_PORT_2 = 2;
 	public static final int GUNNER_JOYSTICK_USB_PORT_3 = 3;
     
     // If you are using multiple modules, make sure to define both the port

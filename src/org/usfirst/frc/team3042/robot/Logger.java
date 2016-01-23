@@ -10,12 +10,13 @@ public class Logger extends FileIO {
 	boolean useConsole;
 	boolean useFile;
 	int level;
+	String cls;
 	
 	public Logger(boolean useConsole, boolean useFile, int level) {
 		//Naming file with timestamp
 		Date now = new Date();
 		SimpleDateFormat fileTimeStamp = new SimpleDateFormat(DATE_FORMAT);
-		String filename = "log-" + fileTimeStamp.format(now);
+		String filename = "log/" + fileTimeStamp.format(now);
 		this.openFile(filename);
 		
 		this.useConsole = useConsole;
@@ -24,6 +25,10 @@ public class Logger extends FileIO {
 	}
 	
 	public void log(String message, int level) {
+		cls = Thread.currentThread().getStackTrace()[1].getClassName();
+		
+		message = "[" + cls + "] " + message;
+		
 		if(level == this.level) {
 			if(useFile) {
 				this.writeToFile(message);
