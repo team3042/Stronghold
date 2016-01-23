@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,7 @@ public class Shooter extends Subsystem {
 	
 	CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
 	CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
+	Servo servo = new Servo(RobotMap.SHOOTER_SERVO);	
 	
 	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_POT_ARM, 1, 0);
 	
@@ -46,7 +48,7 @@ public class Shooter extends Subsystem {
 
     }
     
-    public void shoot(double speed) { 
+    public void setSpeed(double speed) { 
     	talonLeft.set(speed);
     	talonRight.set(speed);
     }
@@ -76,6 +78,15 @@ public class Shooter extends Subsystem {
     	talonRight.changeControlMode(TalonControlMode.PercentVbus);
     	talonLeft.set(0);
     	talonRight.set(0);
+    }
+    
+    //Setting the loading servo to various positions
+    public void setServoRetracted() {
+    	servo.setAngle(90);
+    }
+    
+    public void setServoExtended() {
+    	servo.setAngle(0);
     }
     
     //Getting speed in RPM

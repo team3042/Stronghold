@@ -13,6 +13,8 @@ public class RobotMap {
 	public static final int SHOOTER_TALON_LEFT = 9;
 	public static final int SHOOTER_TALON_RIGHT = 10;
 	
+	public static final int SHOOTER_SERVO = 1;
+	
 	public static final int SHOOTER_POT_ARM = 0;
 	
 	public static final int GUNNER_JOYSTICK_USB_PORT_3 = 3;

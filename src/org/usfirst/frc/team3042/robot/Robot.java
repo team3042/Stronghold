@@ -2,7 +2,6 @@
 package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
-import org.usfirst.frc.team3042.robot.subsystems.TestServo;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -21,11 +20,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static final Shooter shooter = new Shooter();
-	public static final TestServo servo = new TestServo();
 	public static OI oi;
 
     Command autonomousCommand;
     SendableChooser chooser;
+    Logger logger;
     
     private double SHOOTER_SPEED, INTAKE_SPEED;
     private double F_GAIN_LEFT, F_GAIN_RIGHT = 0.0121;
@@ -38,6 +37,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         chooser = new SendableChooser();
+        logger = new Logger(false, true, 1);
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
