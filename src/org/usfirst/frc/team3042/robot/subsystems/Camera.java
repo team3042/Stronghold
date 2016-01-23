@@ -8,12 +8,16 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
+import com.ni.vision.NIVision.RGBValue;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 
 //Compiled from two of the frc examples
 public class Camera extends Subsystem {
@@ -33,7 +37,7 @@ public class Camera extends Subsystem {
 		}
 	}
 	
-	private Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+	private Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
 	private ParticleReport report;
 	
@@ -42,9 +46,9 @@ public class Camera extends Subsystem {
 	float WIDTH_HEIGHT_RATIO = 1.43f;//The target width: 20 inches, divided by the target height: 14 inches.
 	double SCORE_MIN = 75.0;  //Minimum score to be considered a tote
 	
-	NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 110);	//Range for green light
-	NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(60, 255);	//Range for green light
-	NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(165, 175);	//Range for green light
+	NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(65, 255);	//Range for green light
+	NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(40, 255);	//Range for green light
 	
 	//The criteria and filtering and whatnot for the photo, not quite understood yet.
 	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
@@ -55,25 +59,44 @@ public class Camera extends Subsystem {
 	
 	public void initDefaultCommand() {
 	
-		
-
 	}
 
-	Image binaryFrame;
+	//Value used in putting images on roborio
+	NIVision.RGBValue value = new RGBValue(255,255,255,255);
+	
+	Image binaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 	public void updateImage(){
 		camera.getImage(frame);
-		CameraServer.getInstance().setImage(frame);
+		
+		try {
+			//Creates a png image on the roborio of Frame in location /tmp
+			NIVision.imaqWritePNGFile2(frame, File.createTempFile("Frame", ".png").getAbsolutePath(), 100, value, 1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//Threshold the image looking for target hsv color
 		NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
 	
+		try {
+			//Creates a png image of BinaryFrame on roborio in location /tmp
+			NIVision.imaqWritePNGFile2(binaryFrame, File.createTempFile("Masked", ".png").getAbsolutePath(), 100, NIVision.RGB_TRANSPARENT, 0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//Find particles
 		int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
 		SmartDashboard.putNumber("Masked particles", numParticles);
 		
 		//Filter out small particles
+		criteria[0] = new NIVision.ParticleFilterCriteria2();
 		criteria[0].lower = AREA_MINIMUM;
-		imaqError = NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, criteria, filterOptions, null);
+		NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, criteria, filterOptions, null);
+		
+		//CameraServer.getInstance().setImage(binaryFrame);
 		
 		//Send particle count after filtering to dashboard
 		numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
