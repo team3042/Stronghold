@@ -10,18 +10,21 @@ import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.RGBValue;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
 //Compiled from two of the frc examples
 public class Camera extends Subsystem {
+	//!!! Needs testing/research to confirm
 	
+	//Create the camera from an IP set in the robotMap
+	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
+	
+	//This particle report stores values for analyzed images
+	//We create an array (or "vector") to store many particle reports later on
+	//!!! It may extend comparator to allow it to sort what particles are most likely to be the target 
 	public class ParticleReport2 extends ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
 		double percentAreaToImageArea;
 		double convexHullArea;
@@ -37,70 +40,62 @@ public class Camera extends Subsystem {
 		}
 	}
 	
-	private Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
-	private ParticleReport report;
-	
 	double VIEW_ANGLE = 49.4; //default view angle for axis m1011
-	float AREA_MINIMUM = 0.5f; //Default Area minimum for particle as a percentage of total image area
 	float WIDTH_HEIGHT_RATIO = 1.43f;//The target width: 20 inches, divided by the target height: 14 inches.
 	double SCORE_MIN = 75.0;  //Minimum score to be considered a tote
 	
-	NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(165, 175);	//Range for green light
-	NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(65, 255);	//Range for green light
-	NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(40, 255);	//Range for green light
-	
-	//The criteria and filtering and whatnot for the photo, not quite understood yet.
-	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
-	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
-	
-	//Do not know what imaqError is, may not actually be needed anyways
-	int imaqError;
+	//!!! Do not know what imaqError is, may not actually be needed anyways
+	//int imaqError;
 	
 	public void initDefaultCommand() {
-	
+		
 	}
-
+	
 	//Value used in putting images on roborio
 	NIVision.RGBValue value = new RGBValue(255,255,255,255);
 	
-	Image binaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-	public void updateImage(){
-		camera.getImage(frame);
-		
+	//Creates an image in the roborios tmp folder
+	public void outPutImagePNG(Image image, String name){
 		try {
 			//Creates a png image on the roborio of Frame in location /tmp
-			NIVision.imaqWritePNGFile2(frame, File.createTempFile("Frame", ".png").getAbsolutePath(), 100, value, 1);
+			NIVision.imaqWritePNGFile2(image, File.createTempFile(name, ".png").getAbsolutePath(), 100, value, 1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//Threshold the image looking for target hsv color
-		NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+	}
 	
-		try {
-			//Creates a png image of BinaryFrame on roborio in location /tmp
-			NIVision.imaqWritePNGFile2(binaryFrame, File.createTempFile("Masked", ".png").getAbsolutePath(), 100, NIVision.RGB_TRANSPARENT, 0);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	//A method that allows other classes to utilize the camera classes ability to anazlyze frames
+	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
 		
-		//Find particles
-		int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
-		SmartDashboard.putNumber("Masked particles", numParticles);
+		//Get an image from the camera
+		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		camera.getImage(unfilteredFrame);
 		
-		//Filter out small particles
+		//Filter the image from the camera through an HSV filter
+		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredFrame, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
+		
+		return filteredBinaryFrame;
+	}
+	
+	//A method that filters out small particles from a binary image
+	public void filterOutSmallParticles(Image image, float lowerPercentage, float upperPercentage){
+		NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
+		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
+		
 		criteria[0] = new NIVision.ParticleFilterCriteria2();
-		criteria[0].lower = AREA_MINIMUM;
-		NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, criteria, filterOptions, null);
+		criteria[0].lower = lowerPercentage;
+		criteria[0].upper = upperPercentage;
 		
-		//CameraServer.getInstance().setImage(binaryFrame);
-		
-		//Send particle count after filtering to dashboard
-		numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
-		SmartDashboard.putNumber("Filtered particles", numParticles);
+		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
+	}
+	
+	//A method that will return a target if it finds one, otherwise returning null
+	//Sort of optimized for totes in some utilized methods, and in other methods optimized for the high goal in stronghold
+	//unclear if optimization for totes is also good for stronghold, deeper investigation required
+	public ParticleReport2 getTarget(Image image){
+		int numParticles = NIVision.imaqCountParticles(image, 1);
 		
 		if(numParticles > 0)
 		{
@@ -109,28 +104,33 @@ public class Camera extends Subsystem {
 			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				ParticleReport2 par = new ParticleReport2();
-				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.area = (int)NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.convexHullArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
-				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				par.convexHullArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				particles.add(par);
 			}
+			
+			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
 			particles.sort(null);
 		    
-			//
 			boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
 			this.aspectRatioScore(particles.get(0))>SCORE_MIN && 
 			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;
-			//
 			
-			SmartDashboard.putBoolean("IsTarget", isTarget);
-			SmartDashboard.putNumber("Distance", getDistToTargetInFeet(binaryFrame, particles.elementAt(0)));
-		}else{
-			SmartDashboard.putBoolean("IsTarget", false);
+			if(isTarget){
+				return particles.get(0);
+			}
 		}
+		return null;
+	}
+	
+	//returns distance to target, further investigation required to see if works properly
+	public double getDistanceToTarget(Image image, ParticleReport2 target){
+		return getDistToTargetInFeet(image, target);
 	}
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger

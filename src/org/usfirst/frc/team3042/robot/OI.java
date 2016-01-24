@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
-import org.usfirst.frc.team3042.robot.commands.TestCamera;
+import org.usfirst.frc.team3042.robot.commands.CameraFindTarget;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -39,7 +38,7 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     public OI(){
-    button.whenReleased(new TestCamera());
+    button.whenReleased(new CameraFindTarget());
     }
 }
 
