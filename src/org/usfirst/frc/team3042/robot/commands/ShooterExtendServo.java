@@ -12,12 +12,12 @@ public class ShooterExtendServo extends Command {
     public ShooterExtendServo() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.shooter);
+    	requires(Robot.shooterServo);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.shooter.setServoExtended();
+    	Robot.shooterServo.setServoExtended();
     }
 
     // Called repeatedly when this Command is scheduled to run
