@@ -15,8 +15,8 @@ import org.usfirst.frc.team3042.robot.commands.ShooterStop;
  */
 public class Shooter extends Subsystem {
 	
-	CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
-	CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
+	public CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
+	public CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
 		
 	
 	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_POT_ARM, 1, 0);
@@ -29,6 +29,7 @@ public class Shooter extends Subsystem {
 	
 	public Shooter() {
 		//Setting Talon settings
+		/*
 		talonLeft.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		talonLeft.configEncoderCodesPerRev(1024);
 		talonLeft.reverseOutput(true);
@@ -36,6 +37,7 @@ public class Shooter extends Subsystem {
 		talonRight.configEncoderCodesPerRev(1024);
 		talonRight.reverseOutput(false);
 		encoderReset();
+		*/
 	
 	}
 
@@ -61,13 +63,13 @@ public class Shooter extends Subsystem {
     
     //Setting each flywheel to a target speed using PIDF through Talons
     public void setRPMTwoWheel(double speed) {
-    	talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
-    	talonLeft.setP(.01);
-    	talonLeft.changeControlMode(TalonControlMode.Speed);
-    	talonLeft.set(speed);
-    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
-    	talonRight.setP(.01);
-    	talonRight.changeControlMode(TalonControlMode.Speed);
+    	//talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
+    	//talonLeft.setP(.01);
+    	//talonLeft.changeControlMode(TalonControlMode.Speed);
+    	talonLeft.set(-speed);
+    	//talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
+    	//talonRight.setP(.01);
+    	//talonRight.changeControlMode(TalonControlMode.Speed);
     	talonRight.set(speed);
     }
     

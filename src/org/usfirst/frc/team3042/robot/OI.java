@@ -21,9 +21,9 @@ public class OI {
     // number it is.
     // Joystick stick = new Joystick(port);
     // Button button = new JoystickButton(stick, buttonNumber);
-	public Joystick joystickLeft = new Joystick(RobotMap.LEFT_JOYSTICK_USB_PORT_1);
-	public Joystick joystickRight = new Joystick(RobotMap.RIGHT_JOYSTICK_USB_PORT_2);
-	public Joystick joystickGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_3);
+	public Joystick joystickLeft = new Joystick(RobotMap.LEFT_JOYSTICK_USB_PORT_0);
+	public Joystick joystickRight = new Joystick(RobotMap.RIGHT_JOYSTICK_USB_PORT_1);
+	public Joystick joystickGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_2);
 	
 	public Button lTrigger = new JoystickButton(joystickLeft, 1);
 	public Button rTrigger = new JoystickButton(joystickRight, 1);

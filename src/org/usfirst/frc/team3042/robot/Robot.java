@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
-    Logger logger;
+    public static Logger logger;
     
     private double SHOOTER_SPEED, INTAKE_SPEED;
     private double F_GAIN_LEFT, F_GAIN_RIGHT = 0.0121;
@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         chooser = new SendableChooser();
-        logger = new Logger(false, true, 1);
+        logger = new Logger(true, true, 1);
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
@@ -112,7 +112,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
-        SmartDashboard.putNumber("Encoder Value", shooter.getEncoderValLeft());
+        
     }
     
     /**

@@ -10,21 +10,21 @@ public class RobotMap {
     // following variables to use with your drivetrain subsystem.
     // public static int leftMotor = 1;
     // public static int rightMotor = 2;
-	public static final int DRIVETRAIN_TALON_LEFT_1 = 1;
-	public static final int DRIVETRAIN_TALON_LEFT_2 = 2;
+	public static final int DRIVETRAIN_TALON_LEFT_1 = 5;
+	public static final int DRIVETRAIN_TALON_LEFT_2 = 6;
 	public static final int DRIVETAIN_TALON_RIGHT_1 = 3;
 	public static final int DRIVETRAIN_TALON_RIGHT_2 = 4;
 	
-	public static final int SHOOTER_TALON_LEFT = 9;
-	public static final int SHOOTER_TALON_RIGHT = 10;
+	public static final int SHOOTER_TALON_LEFT = 2;
+	public static final int SHOOTER_TALON_RIGHT = 1;
 	
 	public static final int SHOOTER_SERVO = 1;
 	
 	public static final int SHOOTER_POT_ARM = 0;
 	
-	public static final int LEFT_JOYSTICK_USB_PORT_1 = 1;
-	public static final int RIGHT_JOYSTICK_USB_PORT_2 = 2;
-	public static final int GUNNER_JOYSTICK_USB_PORT_3 = 3;
+	public static final int LEFT_JOYSTICK_USB_PORT_0 = 0;
+	public static final int RIGHT_JOYSTICK_USB_PORT_1 = 1;
+	public static final int GUNNER_JOYSTICK_USB_PORT_2 = 2;
     
     // If you are using multiple modules, make sure to define both the port
     // number and the module. For example you with a rangefinder:

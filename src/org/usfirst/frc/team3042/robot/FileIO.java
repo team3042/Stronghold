@@ -9,11 +9,15 @@ public class FileIO {
 	PrintStream writer;
 	
 	boolean fileExists;
-	File file;
 
-	public void openFile(String filename) {
-		String url = "file:///" + filename;
-		file = new File(url);
+	public void openFile(String path, String filename) {
+		path = "/home/lvuser/" + path;
+		File dir = new File(path);
+		String url = "/home/lvuser/" + filename;
+		System.out.println(url);
+		File file = new File(url);
+		
+		dir.mkdir();
 		
 		try {
 			//Checking if file exists and deleting it and recreating it to clear if it does
@@ -22,8 +26,11 @@ public class FileIO {
 				file.delete();
 				file.createNewFile();
 			}
+			
 			writer = new PrintStream(file);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 	
 	public void writeToFile(String content) {
