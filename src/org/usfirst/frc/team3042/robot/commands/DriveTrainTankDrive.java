@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveTrainTankDrive extends Command {
 
 	//Scale the joystick values to restrict maximum speed
-    private final double speedScale = 1.0;
-    private final double leftScale = 1;
-    private final double rightScale = -1;
+    private final double speedScale = 0.75;
     Timer time = new Timer();
     
     //Inertial dampening
@@ -21,7 +19,7 @@ public class DriveTrainTankDrive extends Command {
     final int RIGHT = 1;
     double[] oldTime = new double[] {0, 0};
     double[] currentPower = new double[] {0,0};
-    double maxAccel = 4.0; //motor power per second
+    double maxAccel = 1.0; //motor power per second
 	
     public DriveTrainTankDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -31,6 +29,7 @@ public class DriveTrainTankDrive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.setMotors(0, 0);
     	time.start();
     }
@@ -50,9 +49,6 @@ public class DriveTrainTankDrive extends Command {
             leftPower = rightPower;
         }
         
-        leftPower *= leftScale;
-        rightPower *= rightScale;
-        
         Robot.driveTrain.setMotors(leftPower, rightPower);
     }
 
@@ -63,11 +59,13 @@ public class DriveTrainTankDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.logger.log("End", 1);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.logger.log("Interrupt", 1);
     }
     
     private double restrictAccel (double goalValue, int SIDE) {

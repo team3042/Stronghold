@@ -17,9 +17,6 @@ public class Shooter extends Subsystem {
 	
 	public CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
 	public CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
-		
-	
-	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_POT_ARM, 1, 0);
 	
 	int talonLeftZero, talonRightZero = 0;
 	
@@ -105,10 +102,6 @@ public class Shooter extends Subsystem {
     public void encoderReset() {
     	talonLeftZero = talonLeft.getEncPosition();
     	talonRightZero = talonRight.getEncPosition();
-    }
-    
-    public double getPotentiometerVal() {
-    	return pot.get();
     }
     
 }

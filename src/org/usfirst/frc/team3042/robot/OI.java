@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.commands.ShooterExtendServo;
 import org.usfirst.frc.team3042.robot.commands.ShooterRetractServo;
-import org.usfirst.frc.team3042.robot.commands.ShooterGetPotentiometer;
+import org.usfirst.frc.team3042.robot.commands.ShooterArmGetPotentiometer;
 import org.usfirst.frc.team3042.robot.commands.ShooterIntake;
 import org.usfirst.frc.team3042.robot.commands.ShooterTwoWheelShoot;
 
@@ -60,7 +60,7 @@ public class OI {
 		buttonTwoWheelFire.whileHeld(new ShooterTwoWheelShoot());
 		buttonIntake.whileHeld(new ShooterIntake());
 		
-		buttonPotentiometer.whileHeld(new ShooterGetPotentiometer());
+		buttonPotentiometer.whileHeld(new ShooterArmGetPotentiometer());
 		
 		buttonRetractServo.whenPressed(new ShooterRetractServo());
 		buttonExtendServo.whenPressed(new ShooterExtendServo());

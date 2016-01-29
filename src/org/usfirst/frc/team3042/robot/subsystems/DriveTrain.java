@@ -16,6 +16,8 @@ public class DriveTrain extends Subsystem {
 	CANTalon rightMotorFront = new CANTalon(RobotMap.DRIVETAIN_TALON_RIGHT_1);
 	CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
 	
+	private double leftScale = 1, rightScale = -1;
+	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -33,12 +35,23 @@ public class DriveTrain extends Subsystem {
     }
     
     public void setMotors(double left, double right) {
+    	left *= leftScale;
+    	right *= rightScale;
+    	
     	left = safetyTest(left);
     	right = safetyTest(right);
     	
     	setLeftMotors(left);
     	setRightMotors(right);
     }
+    
+    public void setMotorsRaw(double left, double right) {
+    	left = safetyTest(left);
+    	right = safetyTest(right);
+    	
+    	setLeftMotors(left);
+    	setRightMotors(right);		
+	}
     
     private double safetyTest(double motorValue) {
         motorValue = (motorValue < -1) ? -1 : motorValue;
@@ -56,6 +69,7 @@ public class DriveTrain extends Subsystem {
     	rightMotorFront.set(motorSpeed);
     	rightMotorRear.set(motorSpeed);
     }
+    
     
 }
 

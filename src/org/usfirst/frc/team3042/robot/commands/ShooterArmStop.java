@@ -3,43 +3,26 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class ShooterOneWheelShoot extends Command {
+public class ShooterArmStop extends Command {
 
-	double targetRPM = 0;
-	
-    public ShooterOneWheelShoot() {
+    public ShooterArmStop() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.shooter);
+    	requires(Robot.shooterArm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	targetRPM = SmartDashboard.getNumber("Shooter Speed");
-    	Robot.shooter.setRPM(targetRPM);
-    	
-    	
+    	Robot.logger.log("Initialize", 1);
+    	Robot.shooterArm.stop();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	/*
-    	//Bang-bang controller keeping motor at desired RPM
-    	if(Math.abs(Robot.shooter.getEncoderRPM()) < targetRPM) {
-    		Robot.shooter.shoot(1.0);
-    	}
-    	else {
-    		Robot.shooter.coast();
-    	}
-    	*/
-    	SmartDashboard.putNumber("Encoder RPM", Robot.shooter.getEncoderRPMLeft());
-    	
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -49,10 +32,12 @@ public class ShooterOneWheelShoot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.logger.log("End", 1);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.logger.log("Interrupt", 1);
     }
 }
