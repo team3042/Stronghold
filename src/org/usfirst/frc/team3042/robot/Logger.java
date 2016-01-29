@@ -4,9 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Logger extends FileIO {
 	
-	private static final String DATE_FORMAT = "yyyy-MM-dd-hhmmss";
+	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
+	private static final String LOG_TIME_FORMAT = "hh:mm:ss";
 	
 	String dir = "log/";
 	
@@ -19,7 +22,7 @@ public class Logger extends FileIO {
 		if(useFile) {
 			//Naming file with timestamp
 			Date now = new Date();
-			SimpleDateFormat fileTimeStamp = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat fileTimeStamp = new SimpleDateFormat(FILE_DATE_FORMAT);
 			fileTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
 			String filename = "logs/" + fileTimeStamp.format(now);
 			
@@ -33,14 +36,25 @@ public class Logger extends FileIO {
 	}
 	
 	public void log(String message, int level) {
-		//Getting and adding class name to log
-		cls = Thread.currentThread().getStackTrace()[2].getClassName();
-		int i = cls.lastIndexOf(".") + 1;
-		cls = cls.substring(i);
 		
-		message = "[" + cls + "] " + message;
+		this.level = (int) SmartDashboard.getNumber("Logger Level");
 		
-		if(level == this.level) {
+		if(level <= this.level) {
+			//Getting and adding class name to log
+			cls = Thread.currentThread().getStackTrace()[2].getClassName();
+			int i = cls.lastIndexOf(".") + 1;
+			cls = cls.substring(i);
+			
+			message = "[" + cls + "] " + message;
+			
+			//Adding timestamp to log
+			Date now = new Date();
+			SimpleDateFormat logTimeStamp = new SimpleDateFormat(LOG_TIME_FORMAT);
+			logTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+			String time = logTimeStamp.format(now);
+			
+			message = time + "\t" + message;
+			
 			if(useFile) {
 				this.writeToFile(message);
 			}
