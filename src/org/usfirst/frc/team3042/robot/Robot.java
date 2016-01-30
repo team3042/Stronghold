@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import org.usfirst.frc.team3042.robot.commands.CameraFindTarget;
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
 import org.usfirst.frc.team3042.robot.subsystems.Camera;
 import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
@@ -44,6 +45,13 @@ public class Robot extends IterativeRobot {
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
+        
+        SmartDashboard.putNumber("Tote hue min", CameraFindTarget.TARGET_HUE_RANGE.minValue);
+		SmartDashboard.putNumber("Tote hue max", CameraFindTarget.TARGET_HUE_RANGE.maxValue);
+		SmartDashboard.putNumber("Tote sat min", CameraFindTarget.TARGET_SAT_RANGE.minValue);
+		SmartDashboard.putNumber("Tote sat max", CameraFindTarget.TARGET_SAT_RANGE.maxValue);
+		SmartDashboard.putNumber("Tote val min", CameraFindTarget.TARGET_VAL_RANGE.minValue);
+		SmartDashboard.putNumber("Tote val max", CameraFindTarget.TARGET_VAL_RANGE.maxValue);
     }
 	
 	/**

@@ -28,6 +28,8 @@ public class Camera extends Subsystem {
 	public class ParticleReport2 extends ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
 		double percentAreaToImageArea;
 		double convexHullArea;
+		public int particleIndex;
+		public int boundingBoxRight;
 		
 		public int compareTo(ParticleReport r)
 		{
@@ -42,7 +44,6 @@ public class Camera extends Subsystem {
 	
 	double VIEW_ANGLE = 49.4; //default view angle for axis m1011
 	float WIDTH_HEIGHT_RATIO = 1.43f;//The target width: 20 inches, divided by the target height: 14 inches.
-	double SCORE_MIN = 75.0;  //Minimum score to be considered a tote
 	
 	//!!! Do not know what imaqError is, may not actually be needed anyways
 	//int imaqError;
@@ -52,13 +53,13 @@ public class Camera extends Subsystem {
 	}
 	
 	//Value used in putting images on roborio
-	NIVision.RGBValue value = new RGBValue(255,255,255,255);
+	//NIVision.RGBValue value = new NIVision.
 	
 	//Creates an image in the roborios tmp folder
 	public void outPutImagePNG(Image image, String name){
 		try {
 			//Creates a png image on the roborio of Frame in location /tmp
-			NIVision.imaqWritePNGFile2(image, File.createTempFile(name, ".png").getAbsolutePath(), 100, value, 1);
+			NIVision.imaqWritePNGFile2(image, File.createTempFile(name, ".png").getAbsolutePath(), 100, NIVision.RGB_BLACK, 1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,9 +85,7 @@ public class Camera extends Subsystem {
 		NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
 		
-		criteria[0] = new NIVision.ParticleFilterCriteria2();
-		criteria[0].lower = lowerPercentage;
-		criteria[0].upper = upperPercentage;
+		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, lowerPercentage, upperPercentage, 0, 0);
 		
 		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
 	}
@@ -94,7 +93,7 @@ public class Camera extends Subsystem {
 	//A method that will return a target if it finds one, otherwise returning null
 	//Sort of optimized for totes in some utilized methods, and in other methods optimized for the high goal in stronghold
 	//unclear if optimization for totes is also good for stronghold, deeper investigation required
-	public ParticleReport2 getTarget(Image image){
+	public ParticleReport2 getTarget(Image image, double SCORE_MIN){
 		int numParticles = NIVision.imaqCountParticles(image, 1);
 		
 		if(numParticles > 0)
@@ -104,11 +103,13 @@ public class Camera extends Subsystem {
 			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				ParticleReport2 par = new ParticleReport2();
+				par.particleIndex = particleIndex;
 				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
 				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
 				par.convexHullArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
 				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
 				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				par.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
 				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				particles.add(par);
@@ -117,9 +118,13 @@ public class Camera extends Subsystem {
 			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
 			particles.sort(null);
 		    
-			boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
+			/*boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
 			this.aspectRatioScore(particles.get(0))>SCORE_MIN && 
-			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;
+			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;*/
+			
+			boolean isTarget = this.TrapezoidScore(particles.get(0)) >= SCORE_MIN && 
+					this.aspectRatioScore(particles.get(0))>=SCORE_MIN && 
+					this.ConvexHullAreaScore(particles.get(0)) >= SCORE_MIN;
 			
 			if(isTarget){
 				return particles.get(0);
@@ -173,7 +178,6 @@ public class Camera extends Subsystem {
 	{
 		return ratioToScore(((report.boundingBox.width)/(report.boundingBox.height))/WIDTH_HEIGHT_RATIO);
 	}
-
 	
 	public double getDistToTargetInFeet (Image image, ParticleReport2 report) {
 		NIVision.GetImageSizeResult size;
