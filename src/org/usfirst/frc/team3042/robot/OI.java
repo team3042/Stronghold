@@ -3,6 +3,9 @@ package org.usfirst.frc.team3042.robot;
 import org.usfirst.frc.team3042.robot.commands.ShooterExtendServo;
 import org.usfirst.frc.team3042.robot.commands.ShooterRetractServo;
 import org.usfirst.frc.team3042.robot.commands.ShooterArmGetPotentiometer;
+import org.usfirst.frc.team3042.robot.commands.ShooterArmLower;
+import org.usfirst.frc.team3042.robot.commands.ShooterArmRaise;
+import org.usfirst.frc.team3042.robot.commands.ShooterArmSetPosition;
 import org.usfirst.frc.team3042.robot.commands.ShooterIntake;
 import org.usfirst.frc.team3042.robot.commands.ShooterTwoWheelShoot;
 
@@ -33,8 +36,12 @@ public class OI {
 	
 	Button buttonPotentiometer = new JoystickButton(joystickGunner, 5);
 	
-	Button buttonRetractServo = new JoystickButton(joystickGunner, 3);
-	Button buttonExtendServo = new JoystickButton(joystickGunner, 4);
+	Button buttonRaiseArm = new JoystickButton(joystickGunner, 3);
+	Button buttonLowerArm = new JoystickButton(joystickGunner, 4);
+	Button buttonSetArmPosition = new JoystickButton(joystickGunner, 6);
+	
+	Button buttonRetractServo = new JoystickButton(joystickGunner, 7);
+	Button buttonExtendServo = new JoystickButton(joystickGunner, 8);
     
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
@@ -61,6 +68,10 @@ public class OI {
 		buttonIntake.whileHeld(new ShooterIntake());
 		
 		buttonPotentiometer.whileHeld(new ShooterArmGetPotentiometer());
+		
+		buttonRaiseArm.whileHeld(new ShooterArmRaise());
+		buttonLowerArm.whileHeld(new ShooterArmLower());
+		buttonSetArmPosition.whenPressed(new ShooterArmSetPosition());
 		
 		buttonRetractServo.whenPressed(new ShooterRetractServo());
 		buttonExtendServo.whenPressed(new ShooterExtendServo());

@@ -4,6 +4,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrainTankDrive;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -16,11 +17,16 @@ public class DriveTrain extends Subsystem {
 	CANTalon rightMotorFront = new CANTalon(RobotMap.DRIVETAIN_TALON_RIGHT_1);
 	CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
 	
-	private double leftScale = 1, rightScale = -1;
-	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
+	public DriveTrain() {
+		leftMotorRear.changeControlMode(TalonControlMode.Follower);
+    	leftMotorRear.set(leftMotorFront.getDeviceID());
+    	rightMotorRear.changeControlMode(TalonControlMode.Follower);
+    	rightMotorRear.set(rightMotorFront.getDeviceID());
+	}
+	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -28,30 +34,46 @@ public class DriveTrain extends Subsystem {
     }
     
     public void stop() {
+    	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
+    	
     	leftMotorFront.set(0);
-    	leftMotorRear.set(0);
     	rightMotorFront.set(0);
-    	rightMotorRear.set(0);
     }
     
     public void setMotors(double left, double right) {
-    	left *= leftScale;
-    	right *= rightScale;
+    	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
+    	
+    	left = scaleLeft(left);
+    	right = scaleRight(right);
     	
     	left = safetyTest(left);
     	right = safetyTest(right);
     	
-    	setLeftMotors(left);
-    	setRightMotors(right);
+    	leftMotorFront.set(left);
+    	rightMotorFront.set(right);
     }
     
     public void setMotorsRaw(double left, double right) {
+    	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
+    	
     	left = safetyTest(left);
     	right = safetyTest(right);
     	
-    	setLeftMotors(left);
-    	setRightMotors(right);		
+    	leftMotorFront.set(left);
+    	rightMotorFront.set(right);		
 	}
+    
+    public void initMotionProfile() {
+    	leftMotorFront.clearMotionProfileTrajectories();
+    	leftMotorFront.changeControlMode(TalonControlMode.MotionProfile);
+    	rightMotorFront.changeControlMode(TalonControlMode.Follower);
+    	rightMotorFront.set(leftMotorFront.getDeviceID());
+    }
+    
+    public void streamMotionProfile(CANTalon.TrajectoryPoint point) {
+    	leftMotorFront.pushMotionProfileTrajectory(point);
+    	leftMotorFront.processMotionProfileBuffer();
+    }
     
     private double safetyTest(double motorValue) {
         motorValue = (motorValue < -1) ? -1 : motorValue;
@@ -60,14 +82,12 @@ public class DriveTrain extends Subsystem {
         return motorValue;
     }
     
-    private void setLeftMotors(double motorSpeed) {
-    	leftMotorFront.set(motorSpeed);
-    	leftMotorRear.set(motorSpeed);
+    private double scaleLeft(double left) {
+    	return left;
     }
     
-    private void setRightMotors(double motorSpeed) {
-    	rightMotorFront.set(motorSpeed);
-    	rightMotorRear.set(motorSpeed);
+    private double scaleRight(double right) {
+    	return right;
     }
     
     
