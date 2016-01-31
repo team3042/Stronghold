@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Logger extends FileIO {
 	
 	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
-
+	private static final String LOG_TIME_FORMAT = "hh:mm:ss.SSS";
+	
 	boolean useConsole;
 	boolean useFile;
 	int level;
@@ -50,9 +51,12 @@ public class Logger extends FileIO {
 			message = "[" + cls + "] " + message;
 			
 			//Adding timestamp to log
-			//String time = String.format("%10.3",timer.get());
-			
-			message = timer.get() + "\t" + message;
+			Date now = new Date();
+			SimpleDateFormat logTimeStamp = new SimpleDateFormat(LOG_TIME_FORMAT);
+			logTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+			String time = logTimeStamp.format(now);			
+						
+			message = time + "\t" + message;
 			
 			if(useFile) {
 				this.writeToFile(message);
