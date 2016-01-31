@@ -87,7 +87,7 @@ public class DriveTrain extends Subsystem {
     }
     
     private double scaleRight(double right) {
-    	return right;
+    	return -right;
     }
     
     

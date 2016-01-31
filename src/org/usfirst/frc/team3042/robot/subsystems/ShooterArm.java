@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
+import org.usfirst.frc.team3042.robot.commands.ShooterArmStop;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -20,7 +21,7 @@ public class ShooterArm extends Subsystem {
 
 	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_ARM_POT, 1, 0);
 	
-	private double rotateSpeed = .5;
+	private double rotateSpeed = .6;
 	private double upperLimit = 180;
 	private double lowerLimit = 70;
 	
@@ -30,27 +31,27 @@ public class ShooterArm extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new ShooterArmStop());
     }
     
     public void raise() {
     	talonRotate.changeControlMode(TalonControlMode.PercentVbus);
-    	if (getPotentiometerVal() < upperLimit) {
-    		talonRotate.set(rotateSpeed);
-    	}
-    	else {
-    		talonRotate.set(0);
-    	}
+    	//if (getPotentiometerVal() < upperLimit) {
+    		talonRotate.set(-rotateSpeed);
+    	//}
+    	//else {
+    	//	talonRotate.set(0);
+    	//}
     }
     
     public void lower() {
     	talonRotate.changeControlMode(TalonControlMode.PercentVbus);
-    	if (getPotentiometerVal() > lowerLimit) {
-    		talonRotate.set(-rotateSpeed);
-    	}
-    	else {
-    		talonRotate.set(0);
-    	}
+    	//if (getPotentiometerVal() > lowerLimit) {
+    		talonRotate.set(rotateSpeed);
+    	//}
+    	//else {
+    	//	talonRotate.set(0);
+    	//}
     }
     
     public void setPosition(double position) {

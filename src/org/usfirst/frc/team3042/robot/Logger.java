@@ -4,19 +4,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Logger extends FileIO {
 	
 	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
-	private static final String LOG_TIME_FORMAT = "hh:mm:ss";
-	
-	String dir = "log/";
-	
+
 	boolean useConsole;
 	boolean useFile;
 	int level;
 	String cls;
+
+	Timer timer = new Timer();
 	
 	public Logger(boolean useConsole, boolean useFile, int level) {
 		if(useFile) {
@@ -33,6 +33,8 @@ public class Logger extends FileIO {
 		this.useConsole = useConsole;
 		this.useFile = useFile;
 		this.level = level;
+		
+		timer.start();
 	}
 	
 	public void log(String message, int level) {
@@ -48,12 +50,9 @@ public class Logger extends FileIO {
 			message = "[" + cls + "] " + message;
 			
 			//Adding timestamp to log
-			Date now = new Date();
-			SimpleDateFormat logTimeStamp = new SimpleDateFormat(LOG_TIME_FORMAT);
-			logTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-			String time = logTimeStamp.format(now);
+			//String time = String.format("%10.3",timer.get());
 			
-			message = time + "\t" + message;
+			message = timer.get() + "\t" + message;
 			
 			if(useFile) {
 				this.writeToFile(message);

@@ -20,7 +20,7 @@ public class RobotMap {
 	
 	public static final int SHOOTER_SERVO = 1;
 	
-	public static final int SHOOTER_ARM_TALON = 7;
+	public static final int SHOOTER_ARM_TALON = 3;
 	public static final int SHOOTER_ARM_POT = 0;
 	
 	public static final int LEFT_JOYSTICK_USB_PORT_0 = 0;
