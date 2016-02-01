@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveTrainCalibration extends Command {
+public class DriveTrain_Calibration extends Command {
 	 //The time until we set motors to zero speed
     private double timeUntilMotorStop;
     
@@ -26,40 +26,36 @@ public class DriveTrainCalibration extends Command {
     private boolean motorsEngaged;
     
     //Directory where calibration files will be stored
-    private String dir = "Calibration/";
+    private String dir = "/home/lvuser/Calibration/";
     
     private final Timer timer = new Timer();
-    private final FileIO fileIO = new FileIO();
+    private final FileIO file = new FileIO();
     
-    public DriveTrainCalibration() {
-        // Use requires() here to declare subsystem dependencies
+    public DriveTrain_Calibration() {
         requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-       // Robot.driveTrain.resetEncoders();
-        
         Robot.logger.log("Initialize", 1);
-        
+
+        Robot.driveTrain.resetEncoders();
         timer.reset();
         timer.start();
         
-        fileIO.openFile(dir, SmartDashboard.getString("Calibration File Name"));
+        //Read from the SmartDashboard
+        String filename = SmartDashboard.getString("Calibration File Name");
+        double speed = SmartDashboard.getNumber("Calibration Motor Speed");
+        timeUntilMotorStop = SmartDashboard.getNumber("Calibration Length In Seconds");
+        timeUntilCommandStop =timeUntilMotorStop + decelerationTime;        
         
-        //Creating header
+        //Open file and create header
+        file.openFile(dir, filename);
+        file.writeToFile("Speed = " + Double.toString(speed));
+        file.writeToFile("Time\tLeft\tRight\tLeft Speed\tRight Speed");
         
-        fileIO.writeToFile(Double.toString(SmartDashboard.getNumber("Calibration Motor Speed")));
-        fileIO.writeToFile("Time\tLeft\tRight\tLeft Speed\tRight Speed");
-        
-        //Determine the time to stop motors and time to stop command
-        timeUntilMotorStop = (float)SmartDashboard.getNumber("Calibration Length In Seconds");
-        timeUntilCommandStop =timeUntilMotorStop + decelerationTime;
-
         //Set the drivetrain to these speeds
-        Robot.driveTrain.setMotors(
-                SmartDashboard.getNumber("Calibration Motor Speed"),
-                SmartDashboard.getNumber("Calibration Motor Speed"));
+        Robot.driveTrain.setMotors(speed, speed);
         motorsEngaged = true;
     }
 
@@ -90,22 +86,20 @@ public class DriveTrainCalibration extends Command {
     }
     
     private void outputCalibrationValuesToFile(){
-    	/*
         String completeOutPut;
         
-        String encoderValueLeft = Double.toString(driveTrain.getLeftEncoder());
-        String encoderValueRight = Double.toString(driveTrain.getRightEncoder());
+        String encoderValueLeft = Double.toString(Robot.driveTrain.getLeftEncoder());
+        String encoderValueRight = Double.toString(Robot.driveTrain.getRightEncoder());
         
-        String encoderSpeedLeft = Double.toString(driveTrain.getLeftSpeed());
-        String encoderSpeedRight = Double.toString(driveTrain.getRightSpeed());
+        String encoderSpeedLeft = Double.toString(Robot.driveTrain.getLeftSpeed());
+        String encoderSpeedRight = Double.toString(Robot.driveTrain.getRightSpeed());
         
-        SmartDashboard.putNumber("Right encoder", driveTrain.getRightEncoder());
-        SmartDashboard.putNumber("Left encoder", driveTrain.getLeftEncoder());
+        SmartDashboard.putNumber("Right encoder", Robot.driveTrain.getRightEncoder());
+        SmartDashboard.putNumber("Left encoder", Robot.driveTrain.getLeftEncoder());
         
         completeOutPut = timer.get()+"\t"+encoderValueLeft+"\t"+encoderValueRight+
                 "\t"+encoderSpeedLeft+"\t"+encoderSpeedRight;
         
-        fileIO.writeToFile(completeOutPut);
-        */
+        file.writeToFile(completeOutPut);
     }
 }

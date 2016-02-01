@@ -7,22 +7,20 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterExtendServo extends Command {
+public class ShooterArm_Lower extends Command {
 
-    public ShooterExtendServo() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	requires(Robot.shooterServo);
+    public ShooterArm_Lower() {
+    	requires(Robot.shooterArm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterServo.setServoExtended();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.shooterArm.lower();
     }
 
     // Make this return true when this Command no longer needs to run execute()

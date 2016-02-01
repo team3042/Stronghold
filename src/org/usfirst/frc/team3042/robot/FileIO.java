@@ -11,10 +11,8 @@ public class FileIO {
 	boolean fileExists;
 
 	public void openFile(String path, String filename) {
-		path = "/home/lvuser/" + path;
 		File dir = new File(path);
-		String url = "/home/lvuser/" + filename;
-		System.out.println(url);
+		String url = path + filename;
 		File file = new File(url);
 		
 		dir.mkdir();
@@ -22,7 +20,7 @@ public class FileIO {
 		try {
 			//Checking if file exists and deleting it and recreating it to clear if it does
 			fileExists = file.createNewFile();
-			if(!fileExists) {
+			if (!fileExists) {
 				file.delete();
 				file.createNewFile();
 			}

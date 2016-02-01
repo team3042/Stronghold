@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoDriveStraight extends Command {
+public class Auto_DriveStraight extends Command {
 	//Current point
 	int pointNumber = 0;
 
@@ -46,7 +46,7 @@ public class AutoDriveStraight extends Command {
 	//Array with all values of filterSum1
 	double[] filterSums1 = new double[(int) totalPoints];
 	
-    public AutoDriveStraight() {
+    public Auto_DriveStraight() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);

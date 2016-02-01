@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.ShooterStop;
+import org.usfirst.frc.team3042.robot.commands.Shooter_Stop;
 
 /**
  *
@@ -16,73 +16,72 @@ public class Shooter extends Subsystem {
 	public CANTalon talonLeft = new CANTalon(RobotMap.SHOOTER_TALON_LEFT);
 	public CANTalon talonRight = new CANTalon(RobotMap.SHOOTER_TALON_RIGHT);
 	
-	int talonLeftZero, talonRightZero = 0;
+	//Set starting points for the encoders
+	int talonLeftZero = 0, talonRightZero = 0;
 	
-    
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-	
+	//Closed-Loop PIDF values
+	double P = 0.01, I = 0, D = 0, F = 0;
+
 	public Shooter() {
 		//Setting Talon settings
-		/*
-		talonLeft.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
-		talonLeft.configEncoderCodesPerRev(1024);
 		talonLeft.reverseOutput(true);
-		talonRight.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
-		talonRight.configEncoderCodesPerRev(1024);
+		talonLeft.setInverted(true);
 		talonRight.reverseOutput(false);
-		encoderReset();
-		*/
+		talonRight.setInverted(false);
+		
+		//initEncoders();
+		
+		setPIDF();
+	}
 	
+	public void setPIDF() {
+		talonLeft.setPID(P, I, D);
+		talonRight.setPID(P, I, D);
+
+		talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
+    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
+	}
+	
+	void initEncoders() {
+		talonLeft.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+		talonRight.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+
+		talonLeft.configEncoderCodesPerRev(1024);
+		talonRight.configEncoderCodesPerRev(1024);
+
+		encoderReset();
 	}
 
-    public void initDefaultCommand() {
-    	
+    public void initDefaultCommand() {    	
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new ShooterStop());
-
+    	setDefaultCommand(new Shooter_Stop());
     }
     
+    public void stop() {
+    	setSpeed (0);
+    }
+     
     public void setSpeed(double speed) { 
+    	talonLeft.changeControlMode(TalonControlMode.PercentVbus);
+    	talonRight.changeControlMode(TalonControlMode.PercentVbus);
+    	
     	talonLeft.set(speed);
     	talonRight.set(speed);
-    }
-    
-    public void setRPM(double speed) {
-    	talonLeft.setF(SmartDashboard.getNumber("F-Gain"));
-    	talonLeft.setP(.01);
-    	talonLeft.changeControlMode(TalonControlMode.Speed);
-    	talonLeft.set(speed);
     }
     
     //Setting each flywheel to a target speed using PIDF through Talons
-    public void setRPMTwoWheel(double speed) {
-    	//talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
-    	//talonLeft.setP(.01);
-    	//talonLeft.changeControlMode(TalonControlMode.Speed);
-    	talonLeft.set(-speed);
-    	//talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
-    	//talonRight.setP(.01);
-    	//talonRight.changeControlMode(TalonControlMode.Speed);
+    public void setRPM(double speed) {
+    	talonLeft.changeControlMode(TalonControlMode.Speed);
+    	talonRight.changeControlMode(TalonControlMode.Speed);
+
+    	talonLeft.set(speed);
     	talonRight.set(speed);
     }
-    
-    //Changing Talons back to standard -1 to 1 control and stopping
-    public void stop() {
-    	talonLeft.changeControlMode(TalonControlMode.PercentVbus);
-    	talonRight.changeControlMode(TalonControlMode.PercentVbus);
-    	talonLeft.set(0);
-    	talonRight.set(0);
-    }
-    
-    
     
     //Getting speed in RPM
     public double getEncoderRPMLeft() {
     	return talonLeft.getSpeed();
     }
-    
     public double getEncoderRPMRight() {
     	return talonRight.getSpeed();
     }
@@ -91,7 +90,6 @@ public class Shooter extends Subsystem {
     public int getEncoderValLeft() {
     	return talonLeft.getEncPosition() - talonLeftZero;
     }
-    
     public int getEncoderValRight() {
     	return talonRight.getEncPosition() - talonRightZero;
     }

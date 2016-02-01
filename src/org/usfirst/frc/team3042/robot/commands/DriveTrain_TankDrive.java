@@ -8,22 +8,19 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class DriveTrainTankDrive extends Command {
+public class DriveTrain_TankDrive extends Command {
 
 	//Scale the joystick values to restrict maximum speed
-    private final double speedScale = 0.75;
-    Timer time = new Timer();
+    private final double speedScale = 1.0;
     
     //Inertial dampening
-    final int LEFT = 0;
-    final int RIGHT = 1;
+    final int LEFT = 0, RIGHT = 1;
+    Timer time = new Timer();
     double[] oldTime = new double[] {0, 0};
     double[] currentPower = new double[] {0,0};
-    double maxAccel = 1.0; //motor power per second
+    double maxAccel = 0.1; //motor power per second
 	
-    public DriveTrainTankDrive() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public DriveTrain_TankDrive() {
     	requires(Robot.driveTrain);
     }
 
@@ -42,10 +39,10 @@ public class DriveTrainTankDrive extends Command {
         restrictAccel(leftPower, LEFT);
         restrictAccel(rightPower, RIGHT);
         
-        if(Robot.oi.lTrigger.get()){
+        if (Robot.oi.leftButton_1.get()){
             rightPower = leftPower;
         }
-        else if (Robot.oi.rTrigger.get()){
+        else if (Robot.oi.rightButton_1.get()){
             leftPower = rightPower;
         }
         

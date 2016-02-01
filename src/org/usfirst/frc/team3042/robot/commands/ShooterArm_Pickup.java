@@ -7,20 +7,18 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArmSetPosition extends Command {
+public class ShooterArm_Pickup extends Command {
 
-	double position = 0.5;
+	double position = 0.0;
 	
-    public ShooterArmSetPosition() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public ShooterArm_Pickup() {
     	requires(Robot.shooterArm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	//Robot.shooterArm.setPosition(position);
+    	Robot.shooterArm.setPosition(position);
     }
 
     // Called repeatedly when this Command is scheduled to run

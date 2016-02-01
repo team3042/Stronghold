@@ -1,13 +1,6 @@
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.commands.ShooterExtendServo;
-import org.usfirst.frc.team3042.robot.commands.ShooterRetractServo;
-import org.usfirst.frc.team3042.robot.commands.ShooterArmGetPotentiometer;
-import org.usfirst.frc.team3042.robot.commands.ShooterArmLower;
-import org.usfirst.frc.team3042.robot.commands.ShooterArmRaise;
-import org.usfirst.frc.team3042.robot.commands.ShooterArmSetPosition;
-import org.usfirst.frc.team3042.robot.commands.ShooterIntake;
-import org.usfirst.frc.team3042.robot.commands.ShooterTwoWheelShoot;
+import org.usfirst.frc.team3042.robot.commands.*;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -18,64 +11,39 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-    //// CREATING BUTTONS
-    // One type of button is a joystick button which is any button on a joystick.
-    // You create one by telling it which joystick it's on and which button
-    // number it is.
-    // Joystick stick = new Joystick(port);
-    // Button button = new JoystickButton(stick, buttonNumber);
+	//Declare the joysticks
 	public Joystick joystickLeft = new Joystick(RobotMap.LEFT_JOYSTICK_USB_PORT_0);
 	public Joystick joystickRight = new Joystick(RobotMap.RIGHT_JOYSTICK_USB_PORT_1);
 	public Joystick joystickGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_2);
 	
-	public Button lTrigger = new JoystickButton(joystickLeft, 1);
-	public Button rTrigger = new JoystickButton(joystickRight, 1);
+	//Left Joystick Buttons
+	public Button leftButton_1 = new JoystickButton(joystickLeft, 1);
+
+	//Right Joystick Buttons
+	public Button rightButton_1 = new JoystickButton(joystickRight, 1);
 	
-	Button buttonTwoWheelFire = new JoystickButton(joystickGunner, 1);
-	Button buttonIntake = new JoystickButton(joystickGunner, 2);
-	
-	Button buttonPotentiometer = new JoystickButton(joystickGunner, 5);
-	
-	Button buttonRaiseArm = new JoystickButton(joystickGunner, 3);
-	Button buttonLowerArm = new JoystickButton(joystickGunner, 4);
-	Button buttonSetArmPosition = new JoystickButton(joystickGunner, 6);
-	
-	Button buttonRetractServo = new JoystickButton(joystickGunner, 7);
-	Button buttonExtendServo = new JoystickButton(joystickGunner, 8);
+	Button gunnerButton_1 = new JoystickButton(joystickGunner, 1);
+	Button gunnerButton_2 = new JoystickButton(joystickGunner, 2);
+	Button gunnerButton_3 = new JoystickButton(joystickGunner, 3);
+	Button gunnerButton_4 = new JoystickButton(joystickGunner, 4);
+	Button gunnerButton_5 = new JoystickButton(joystickGunner, 5);
+	Button gunnerButton_6 = new JoystickButton(joystickGunner, 6);
+	Button gunnerButton_7 = new JoystickButton(joystickGunner, 7);
+	Button gunnerButton_8 = new JoystickButton(joystickGunner, 8);
     
-    // There are a few additional built in buttons you can use. Additionally,
-    // by subclassing Button you can create custom triggers and bind those to
-    // commands the same as any other Button.
-    
-    //// TRIGGERING COMMANDS WITH BUTTONS
-    // Once you have a button, it's trivial to bind it to a button in one of
-    // three ways:
-    
-    // Start the command when the button is pressed and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenPressed(new ExampleCommand());
-    
-    // Run the command while the button is being held down and interrupt it once
-    // the button is released.
-    // button.whileHeld(new ExampleCommand());
-    
-    // Start the command when the button is released  and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenReleased(new ExampleCommand());
-	
 	public OI() {
-		buttonTwoWheelFire.whileHeld(new ShooterTwoWheelShoot());
-		buttonIntake.whileHeld(new ShooterIntake());
+		//Shooter - Intake
+		gunnerButton_1.whileHeld(new Shooter_Shoot());
+		gunnerButton_2.whileHeld(new Shooter_Intake());
+			
+		//Shooter Arm
+		gunnerButton_3.whileHeld(new ShooterArm_Raise());
+		gunnerButton_4.whileHeld(new ShooterArm_Lower());
+		//gunnerButton_6.whenPressed(new ShooterArm_Pickup());
 		
-		buttonPotentiometer.whileHeld(new ShooterArmGetPotentiometer());
-		
-		buttonRaiseArm.whileHeld(new ShooterArmRaise());
-		buttonLowerArm.whileHeld(new ShooterArmLower());
-		buttonSetArmPosition.whenPressed(new ShooterArmSetPosition());
-		
-		buttonRetractServo.whenPressed(new ShooterRetractServo());
-		buttonExtendServo.whenPressed(new ShooterExtendServo());
-		
+		//Shooter Servo
+		gunnerButton_7.whenPressed(new ShooterServo_Retract());
+		gunnerButton_8.whenPressed(new ShooterServo_Extend());
 	}
 }
 

@@ -3,26 +3,31 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class ShooterArmStop extends Command {
+public class Shooter_Intake extends Command {
 
-    public ShooterArmStop() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	requires(Robot.shooterArm);
+	double targetRPM = 0;
+	
+    public Shooter_Intake() {
+    	requires(Robot.shooter);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.stop();
+    	targetRPM = SmartDashboard.getNumber("Intake Speed");
+    	Robot.shooter.setRPM(targetRPM);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	//Getting RPM of each motor and outputting to dashboard for tracking
+    	//SmartDashboard.putNumber("Encoder RPM Left", Robot.shooter.getEncoderRPMLeft());
+    	//SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());	
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Logger extends FileIO {
@@ -15,27 +14,23 @@ public class Logger extends FileIO {
 	boolean useConsole;
 	boolean useFile;
 	int level;
-	String cls;
-
-	Timer timer = new Timer();
 	
+	private static final String path = "/home/lvuser/logs/";
+
 	public Logger(boolean useConsole, boolean useFile, int level) {
 		if(useFile) {
 			//Naming file with timestamp
 			Date now = new Date();
 			SimpleDateFormat fileTimeStamp = new SimpleDateFormat(FILE_DATE_FORMAT);
 			fileTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-			String filename = "logs/" + fileTimeStamp.format(now);
+			String filename = fileTimeStamp.format(now);
 			
-			String path = "logs/";
 			this.openFile(path, filename);
 		}
 		
 		this.useConsole = useConsole;
 		this.useFile = useFile;
 		this.level = level;
-		
-		timer.start();
 	}
 	
 	public void log(String message, int level) {
@@ -44,7 +39,7 @@ public class Logger extends FileIO {
 		
 		if(level <= this.level) {
 			//Getting and adding class name to log
-			cls = Thread.currentThread().getStackTrace()[2].getClassName();
+			String cls = Thread.currentThread().getStackTrace()[2].getClassName();
 			int i = cls.lastIndexOf(".") + 1;
 			cls = cls.substring(i);
 			
