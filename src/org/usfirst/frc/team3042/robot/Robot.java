@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team3042.robot;
 
+import org.usfirst.frc.team3042.robot.subsystems.Camera;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
@@ -26,6 +27,7 @@ public class Robot extends IterativeRobot {
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final ShooterArm shooterArm = new ShooterArm();
 	public static final DriveTrain driveTrain = new DriveTrain();
+	public static final Camera camera = new Camera();
 	public static OI oi;
 
     Command autonomousCommand;
@@ -54,6 +56,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("F-Gain Right", F_GAIN_RIGHT);
         SmartDashboard.putNumber("Potentiometer", POT_VAL);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
+        SmartDashboard.putNumber("Dummy distance from target", 8);
     }
 	
 	/**
