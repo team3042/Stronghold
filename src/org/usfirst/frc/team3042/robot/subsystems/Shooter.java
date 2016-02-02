@@ -25,11 +25,9 @@ public class Shooter extends Subsystem {
 	public Shooter() {
 		//Setting Talon settings
 		talonLeft.reverseOutput(true);
-		talonLeft.setInverted(true);
 		talonRight.reverseOutput(false);
-		talonRight.setInverted(false);
 		
-		//initEncoders();
+		initEncoders();
 		
 		setPIDF();
 	}
@@ -38,8 +36,7 @@ public class Shooter extends Subsystem {
 		talonLeft.setPID(P, I, D);
 		talonRight.setPID(P, I, D);
 
-		talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
-    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
+		
 	}
 	
 	void initEncoders() {
@@ -73,6 +70,9 @@ public class Shooter extends Subsystem {
     public void setRPM(double speed) {
     	talonLeft.changeControlMode(TalonControlMode.Speed);
     	talonRight.changeControlMode(TalonControlMode.Speed);
+    	
+    	talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
+    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
 
     	talonLeft.set(speed);
     	talonRight.set(speed);

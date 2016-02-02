@@ -3,11 +3,9 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.ShooterArm_Stop;
 
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  *
@@ -15,8 +13,6 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 public class ShooterArm extends Subsystem {
 	
 	private CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
-
-	Potentiometer pot = new AnalogPotentiometer(RobotMap.SHOOTER_ARM_POT, 270, 0);
 
 	private double rotateSpeed = .6;
 	private double upperLimit = 180;
@@ -76,7 +72,7 @@ public class ShooterArm extends Subsystem {
     }
     
     public double getPotentiometerVal() {
-    	return pot.get();
+    	return talonRotate.getAnalogInRaw();
     }
 }
 

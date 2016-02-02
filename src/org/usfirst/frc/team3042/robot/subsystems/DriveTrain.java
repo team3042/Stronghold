@@ -49,7 +49,6 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	void reverseMotor(CANTalon motor, boolean isReverse) {
-		motor.setInverted(isReverse);
 		motor.reverseOutput(isReverse);
 	}
 
