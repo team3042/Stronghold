@@ -17,7 +17,6 @@ public class RobotMap {
 	
 	//PWM ports
 	public static final int SHOOTER_SERVO = 1;
-	public static final int SHOOTER_ARM_POT = 0;
 	
 	//USB Ports
 	public static final int LEFT_JOYSTICK_USB_PORT_0 = 0;

@@ -20,12 +20,15 @@ public class Shooter extends Subsystem {
 	int talonLeftZero = 0, talonRightZero = 0;
 	
 	//Closed-Loop PIDF values
-	double P = 0.01, I = 0, D = 0, F = 0;
+	double P = 0.01, I = 0, D = 0;
+	double leftF = 0, rightF = 0;
 
 	public Shooter() {
 		//Setting Talon settings
 		talonLeft.reverseOutput(true);
+		talonLeft.setInverted(true);
 		talonRight.reverseOutput(false);
+		talonRight.setInverted(false);
 		
 		initEncoders();
 		
@@ -35,8 +38,9 @@ public class Shooter extends Subsystem {
 	public void setPIDF() {
 		talonLeft.setPID(P, I, D);
 		talonRight.setPID(P, I, D);
-
 		
+		talonLeft.setF(rightF);
+		talonRight.setF(leftF);
 	}
 	
 	void initEncoders() {

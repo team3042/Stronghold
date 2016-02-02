@@ -32,26 +32,14 @@ public class DriveTrain extends Subsystem {
     	rightMotorRear.set(rightMotorFront.getDeviceID());
     	
     	//Set the direction of the motors
-    	reverseLeft(false);
-    	reverseRight(true);
+    	leftMotorFront.reverseOutput(false);
+    	leftMotorFront.setInverted(false);
+    	rightMotorFront.reverseOutput(true);
+    	rightMotorFront.setInverted(true);
     	
     	initEncoders();
 	}
 	
-	void reverseLeft (boolean isReverse){
-    	reverseMotor(leftMotorFront, isReverse);
-    	reverseMotor(leftMotorRear, isReverse);
-	}
-	
-	void reverseRight(boolean isReverse) {
-    	reverseMotor(rightMotorFront, isReverse);
-    	reverseMotor(rightMotorRear, isReverse);
-	}
-	
-	void reverseMotor(CANTalon motor, boolean isReverse) {
-		motor.reverseOutput(isReverse);
-	}
-
 	void initEncoders() {
 		leftEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		rightEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
