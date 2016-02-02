@@ -31,12 +31,13 @@ public class DriveTrain extends Subsystem {
     	rightMotorRear.changeControlMode(TalonControlMode.Follower);
     	rightMotorRear.set(rightMotorFront.getDeviceID());
     	
+    	/* Commented out until we get a chance to test
     	//Set the direction of the motors
     	leftMotorFront.reverseOutput(false);
     	leftMotorFront.setInverted(false);
     	rightMotorFront.reverseOutput(true);
     	rightMotorFront.setInverted(true);
-    	
+    	*/
     	initEncoders();
 	}
 	
@@ -89,7 +90,7 @@ public class DriveTrain extends Subsystem {
     }
     
     private double scaleRight(double right) {
-    	return right;
+    	return -right;
     }
 
 	public void resetEncoders() {
