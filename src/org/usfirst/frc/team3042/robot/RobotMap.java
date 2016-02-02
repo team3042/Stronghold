@@ -6,14 +6,14 @@ package org.usfirst.frc.team3042.robot;
  * floating around.
  */
 public class RobotMap {
-	//Can Talons
+	//CAN Talons
 	public static final int DRIVETRAIN_TALON_LEFT_1 = 13;
 	public static final int DRIVETRAIN_TALON_LEFT_2 = 14;
 	public static final int DRIVETAIN_TALON_RIGHT_1 = 10;
 	public static final int DRIVETRAIN_TALON_RIGHT_2 = 11;
-	public static final int SHOOTER_TALON_LEFT = 2;
-	public static final int SHOOTER_TALON_RIGHT = 1;
-	public static final int SHOOTER_ARM_TALON = 3;
+	public static final int SHOOTER_TALON_LEFT = 3;
+	public static final int SHOOTER_TALON_RIGHT = 15;
+	public static final int SHOOTER_ARM_TALON = 16;
 	
 	//PWM ports
 	public static final int SHOOTER_SERVO = 1;

@@ -56,6 +56,9 @@ public class Auto_DriveStraight extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.initMotionProfile();
+    	for(int i = 0; i <= totalPoints; i++) {
+    		
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -76,9 +79,9 @@ public class Auto_DriveStraight extends Command {
     		filterSum1 = 1;
     	}
     	
-    	//Creating filterSum2 from the sum of the last 20 values of filterSum1
+    	//Creating filterSum2 from the sum of the last filterLength2 values of filterSum1
     	filterSums1[pointNumber] = filterSum1;
-    	int filter2Start = (pointNumber > 20) ? pointNumber - 20 : 0;
+    	int filter2Start = (int) ((pointNumber > filterLength2) ? pointNumber - filterLength2 : 0);
     	filterSum2 = 0;
     	for(int i = filter2Start; i <= pointNumber; i++) {
     		filterSum2 += filterSums1[i];
