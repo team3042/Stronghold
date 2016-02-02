@@ -3,14 +3,18 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import java.util.Comparator;
 import java.util.Vector;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
+import org.usfirst.frc.team3042.robot.subsystems.Camera.ParticleReport2;
 
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.RGBValue;
+import com.ni.vision.NIVision.ROI;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +34,7 @@ public class Camera extends Subsystem {
 		double convexHullArea;
 		public int particleIndex;
 		public int boundingBoxRight;
+		public Image image;
 		
 		public int compareTo(ParticleReport r)
 		{
@@ -52,8 +57,108 @@ public class Camera extends Subsystem {
 		
 	}
 	
-	//Value used in putting images on roborio
-	//NIVision.RGBValue value = new NIVision.
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	
+	//Get the center of the camera image minus the center of the particle/target
+	//effectively giving the camera's offset, which will equal zero when the robot is perfectly facing the particle/target
+	public double getParticleCenterOffset(){
+		//160 is half of the width of the camera
+		ParticleReport2 report = createTargetReport();
+		
+		if(report == null){
+		return 0;
+		}
+		
+		int width = NIVision.imaqGetImageSize(report.image).width;
+		System.out.println("img width: "+width);
+		
+		return (width/2) - (report.boundingBox.left+report.boundingBox.width *0.5);
+	}
+	
+	//How far away the robot is from the target.
+	public double getDistToTargetInFeet () {
+		ParticleReport2 report = createTargetReport();
+		
+		NIVision.GetImageSizeResult size;
+		size = NIVision.imaqGetImageSize(report.image);
+		double targetWidth = 20;//the width of the stronghold target is 1ft 8in
+		double normalizedWidth = 2*report.boundingBox.width/size.width;
+		
+		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+	}
+	
+	//Run all the filters for a stronghold target
+	public ParticleReport2 createTargetReport(){
+		TARGET_HUE_RANGE.minValue = (int)SmartDashboard.getNumber("Tote hue min", TARGET_HUE_RANGE.minValue);
+		TARGET_HUE_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote hue max", TARGET_HUE_RANGE.maxValue);
+		TARGET_SAT_RANGE.minValue = (int)SmartDashboard.getNumber("Tote sat min", TARGET_SAT_RANGE.minValue);
+		TARGET_SAT_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote sat max", TARGET_SAT_RANGE.maxValue);
+		TARGET_VAL_RANGE.minValue = (int)SmartDashboard.getNumber("Tote val min", TARGET_VAL_RANGE.minValue);
+		TARGET_VAL_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote val max", TARGET_VAL_RANGE.maxValue);
+    	
+    	Image binaryImage = Robot.camera.getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+    	
+    	Robot.camera.filterOutSmallParticles(binaryImage, 5, 100);
+    	Robot.camera.fillParticles(binaryImage);
+    	
+    	ParticleReport2 report = Robot.camera.getTarget(binaryImage,60);
+    	
+    	return report;
+	}
+	
+	//A method that will return a target if it finds one, otherwise returning null
+	//Sort of optimized for totes in some utilized methods, and in other methods optimized for the high goal in stronghold
+	//unclear if optimization for totes is also good for stronghold, deeper investigation required
+	public ParticleReport2 getTarget(Image image, double SCORE_MIN){
+		int numParticles = NIVision.imaqCountParticles(image, 1);
+		
+		if(numParticles > 0)
+		{
+			//Measure particles and sort by particle size
+			Vector<ParticleReport2> particles = new Vector<ParticleReport2>();
+			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
+			{
+				ParticleReport2 par = new ParticleReport2();
+				par.particleIndex = particleIndex;
+				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				par.convexHullArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				par.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				particles.add(par);
+			}
+			
+			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
+			particles.sort(null);
+		    
+			/*boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
+			this.aspectRatioScore(particles.get(0))>SCORE_MIN && 
+			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;*/
+			
+			boolean isTarget = this.TrapezoidScore(particles.get(0)) >= SCORE_MIN && 
+					this.aspectRatioScore(particles.get(0))>=SCORE_MIN;
+					//this.ConvexHullAreaScore(particles.get(0)) >= SCORE_MIN;
+			//Convex hull score was giving values of around 0.03, unable to pass any high score_mo
+			/*System.out.println("Trapezoid Score"+this.TrapezoidScore(particles.get(0)));
+			System.out.println("AspectRatioScore"+this.aspectRatioScore(particles.get(0)));
+			System.out.println("ConvexHullAreaScore"+this.ConvexHullAreaScore(particles.get(0)));*/
+			
+			if(isTarget){
+				particles.get(0).image = image;
+				return particles.get(0);
+			}
+		}
+		return null;
+	}
+	
+	public double getParticleWidth(ParticleReport2 report){
+		return report.boundingBoxRight - report.boundingBox.left;
+	}
 	
 	//Creates an image in the roborios tmp folder
 	public void outPutImagePNG(Image image, String name){
@@ -90,52 +195,9 @@ public class Camera extends Subsystem {
 		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
 	}
 	
-	//A method that will return a target if it finds one, otherwise returning null
-	//Sort of optimized for totes in some utilized methods, and in other methods optimized for the high goal in stronghold
-	//unclear if optimization for totes is also good for stronghold, deeper investigation required
-	public ParticleReport2 getTarget(Image image, double SCORE_MIN){
-		int numParticles = NIVision.imaqCountParticles(image, 1);
-		
-		if(numParticles > 0)
-		{
-			//Measure particles and sort by particle size
-			Vector<ParticleReport2> particles = new Vector<ParticleReport2>();
-			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
-			{
-				ParticleReport2 par = new ParticleReport2();
-				par.particleIndex = particleIndex;
-				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.convexHullArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-				par.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
-				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
-				particles.add(par);
-			}
-			
-			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
-			particles.sort(null);
-		    
-			/*boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
-			this.aspectRatioScore(particles.get(0))>SCORE_MIN && 
-			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;*/
-			
-			boolean isTarget = this.TrapezoidScore(particles.get(0)) >= SCORE_MIN && 
-					this.aspectRatioScore(particles.get(0))>=SCORE_MIN && 
-					this.ConvexHullAreaScore(particles.get(0)) >= SCORE_MIN;
-			
-			if(isTarget){
-				return particles.get(0);
-			}
-		}
-		return null;
-	}
-	
-	//returns distance to target, further investigation required to see if works properly
-	public double getDistanceToTarget(Image image, ParticleReport2 target){
-		return getDistToTargetInFeet(image, target);
+	public void fillParticles(Image image){
+		NIVision.imaqFillHoles(image, image, 1);
+		NIVision.imaqConvexHull(image, image, 1);
 	}
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger
@@ -178,14 +240,4 @@ public class Camera extends Subsystem {
 	{
 		return ratioToScore(((report.boundingBox.width)/(report.boundingBox.height))/WIDTH_HEIGHT_RATIO);
 	}
-	
-	public double getDistToTargetInFeet (Image image, ParticleReport2 report) {
-		NIVision.GetImageSizeResult size;
-		size = NIVision.imaqGetImageSize(image);
-		double targetWidth = 20;//the width of the stronghold target is 1ft 8in
-		double normalizedWidth = 2*report.boundingBox.width/size.width;
-		
-		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
-	}
-
 }

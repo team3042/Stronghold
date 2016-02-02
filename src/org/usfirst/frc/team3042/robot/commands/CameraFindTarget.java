@@ -24,39 +24,20 @@ public class CameraFindTarget extends Command {
     //165
     //65
     //40
-    public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(125, 255);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(125, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(125, 255);	//Range for green light
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		
-		TARGET_HUE_RANGE.minValue = (int)SmartDashboard.getNumber("Tote hue min", TARGET_HUE_RANGE.minValue);
-		TARGET_HUE_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote hue max", TARGET_HUE_RANGE.maxValue);
-		TARGET_SAT_RANGE.minValue = (int)SmartDashboard.getNumber("Tote sat min", TARGET_SAT_RANGE.minValue);
-		TARGET_SAT_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote sat max", TARGET_SAT_RANGE.maxValue);
-		TARGET_VAL_RANGE.minValue = (int)SmartDashboard.getNumber("Tote val min", TARGET_VAL_RANGE.minValue);
-		TARGET_VAL_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote val max", TARGET_VAL_RANGE.maxValue);
-    	
-    	Image binaryImage = Robot.camera.getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
-    	
-    	//Robot.camera.outPutImagePNG(binaryImage, "HSVFiltered_");
-    	
-    	Robot.camera.filterOutSmallParticles(binaryImage, 5, 100);
-    	
-    	//Robot.camera.outPutImagePNG(binaryImage, "SmallPartsFiltered_");
-    	
-    	ParticleReport2 report = Robot.camera.getTarget(binaryImage,0);
+    	ParticleReport2 report = Robot.camera.createTargetReport();
     	
     	if(report != null){
+        	Robot.camera.outPutImagePNG(report.image, "CameraFilteredReportImage");
     		SmartDashboard.putBoolean("FoundTarget", true);
-    		SmartDashboard.putNumber("DistanceToTarget (Ft)", Robot.camera.getDistanceToTarget(binaryImage, report));
-    		SmartDashboard.putNumber("DistanceToCenter", 160 - (report.boundingBox.left+report.boundingBox.width *0.25));
-    		SmartDashboard.putNumber("BBWidth", report.boundingBox.width);
+    		SmartDashboard.putNumber("DistanceToTarget (Ft)", Robot.camera.getDistToTargetInFeet());
+    		SmartDashboard.putNumber("DistanceToCenter", Robot.camera.getParticleCenterOffset());
     	}else{
         	SmartDashboard.putBoolean("FoundTarget", false);
     	}
     	
-    	//hasFinished = true;
+    	hasFinished = true;
     }
     
     boolean hasFinished = false;

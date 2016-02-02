@@ -46,12 +46,12 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
         
-        SmartDashboard.putNumber("Tote hue min", CameraFindTarget.TARGET_HUE_RANGE.minValue);
-		SmartDashboard.putNumber("Tote hue max", CameraFindTarget.TARGET_HUE_RANGE.maxValue);
-		SmartDashboard.putNumber("Tote sat min", CameraFindTarget.TARGET_SAT_RANGE.minValue);
-		SmartDashboard.putNumber("Tote sat max", CameraFindTarget.TARGET_SAT_RANGE.maxValue);
-		SmartDashboard.putNumber("Tote val min", CameraFindTarget.TARGET_VAL_RANGE.minValue);
-		SmartDashboard.putNumber("Tote val max", CameraFindTarget.TARGET_VAL_RANGE.maxValue);
+        SmartDashboard.putNumber("Tote hue min", Camera.TARGET_HUE_RANGE.minValue);
+		SmartDashboard.putNumber("Tote hue max", Camera.TARGET_HUE_RANGE.maxValue);
+		SmartDashboard.putNumber("Tote sat min", Camera.TARGET_SAT_RANGE.minValue);
+		SmartDashboard.putNumber("Tote sat max", Camera.TARGET_SAT_RANGE.maxValue);
+		SmartDashboard.putNumber("Tote val min", Camera.TARGET_VAL_RANGE.minValue);
+		SmartDashboard.putNumber("Tote val max", Camera.TARGET_VAL_RANGE.maxValue);
     }
 	
 	/**
