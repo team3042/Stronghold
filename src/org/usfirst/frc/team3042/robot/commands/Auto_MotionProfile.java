@@ -5,15 +5,15 @@ import edu.wpi.first.wpilibj.CANTalon;
 public class Auto_MotionProfile {
 	
 	//Current point
-	int pointNumber = 0;
+	int currentPoint = 0;
 
 	//Time between each point in ms
-	double itp;
+	int itp;
 		
 	//Time for each filter in ms
 	double time1, time2;
 		
-	//Maximum speed in RPM
+	//Maximum speed in rotations / min
 	double maxVelocity;
 		
 	//Distance traveled in rotations
@@ -24,23 +24,23 @@ public class Auto_MotionProfile {
 		
 	//Sum of each filter
 	double filterSum1 = 0, filterSum2 = 0, filterTotalSum = 0;
-		
+				
 	//Velocity and position at current point
-	double currentVelocity = 0, currentPosition = 0;
-		
+	double currentVelocity = 0, currentPosition = 0, oldVelocity = 0;
+				
 	//Time to decceleration in ms
 	double timeToDeccel;
 		
 	//Total time in ms
 	double totalTime;
-		
+				
 	//Total number of points
-	double totalPoints;
-		
+	int totalPoints;
+				
 	//Array with all values of filterSum1
 	double[] filterSums1;
 	
-	public Auto_MotionProfile(double itp, double time1, double time2, 
+	public Auto_MotionProfile(int itp, double time1, double time2, 
 			double maxVelocity, double distance) {
 		this.itp = itp;
 		this.time1 = time1;
@@ -51,48 +51,79 @@ public class Auto_MotionProfile {
 		//Calculating values from these values
 		filterLength1 = Math.ceil(time1 / itp);
 		filterLength2 = Math.ceil(time2 / itp);
-		timeToDeccel = distance / maxVelocity * 60 * 1000;
+		timeToDeccel = distance / maxVelocity * 1000;
 		totalTime = timeToDeccel + time1 + time2;
-		totalPoints = Math.ceil(totalTime / itp);
-		filterSums1 = new double[(int) totalPoints];
+		totalPoints = (int) Math.ceil(totalTime / itp);
+		filterSums1 = new double[totalPoints + 1];
 	}
 	
 	private void runFilters() {
 		//Running through first filter
-    	if (pointNumber * itp < time1 + time2) {
+    	if (currentPoint * itp < time1) {
     		//Accelerating filter 1
-    		filterSum1 = pointNumber / filterLength1;
+    		filterSum1 = currentPoint / filterLength1;
     	}
-    	else if (pointNumber * itp >= timeToDeccel) {
+    	else if (currentPoint >= totalPoints - filterLength2) {
+    		filterSum1 = 0;
+    	}
+    	else if (currentPoint * itp >= timeToDeccel) {
     		//Deccelerating filter 1
-    		filterSum1 = (pointNumber - timeToDeccel / itp)
-    				/ filterLength1;
+    		filterSum1 = (totalPoints - filterLength2 - currentPoint) / filterLength1;
     	}
     	else {
     		filterSum1 = 1;
     	}
     	
     	//Creating filterSum2 from the sum of the last filterLength2 values of filterSum1
-    	filterSums1[pointNumber] = filterSum1;
-    	int filter2Start = (int) ((pointNumber > filterLength2) ? pointNumber - filterLength2 : 0);
+    	filterSums1[currentPoint] = filterSum1;
+    	int filter2Start = (int) ((currentPoint > filterLength2) ? currentPoint - filterLength2 + 1 : 0);
     	filterSum2 = 0;
-    	for(int i = filter2Start; i <= pointNumber; i++) {
+    	for(int i = filter2Start; i <= currentPoint; i++) {
     		filterSum2 += filterSums1[i];
     	}
+    	
 	}
 	
 	private void calculatePosition() {
-		currentVelocity = (filterSum1 + filterSum2) / (filterLength2 + 1) * maxVelocity;
+		currentPosition += (oldVelocity + currentVelocity) / 2 * itp / 1000;
 	}
 	
 	private void calculateVelocity() {
-		
+		oldVelocity = currentVelocity;
+		currentVelocity = (filterSum1 + filterSum2) / (filterLength2 + 1) * maxVelocity;
 	}
 	
+	//Generating every point on the profile and putting them into an array
 	public CANTalon.TrajectoryPoint[] calculateProfile() {
 		
-		return null;
+		CANTalon.TrajectoryPoint[] trajectory = new CANTalon.TrajectoryPoint[totalPoints + 1];
 		
+		for(int i = 0; i <= totalPoints; i++) {
+			runFilters();
+			calculateVelocity();
+			calculatePosition();
+			
+			trajectory[i] = new CANTalon.TrajectoryPoint();
+			trajectory[i].timeDurMs = itp;
+			trajectory[i].position = currentPosition;
+			trajectory[i].velocity = currentVelocity * 60;
+			if(currentPoint == 0) {
+				trajectory[i].zeroPos = true;
+			}
+			else {
+				trajectory[i].zeroPos = false;
+			}
+			if(currentPoint == totalPoints) {
+				trajectory[i].isLastPoint = true;
+			}
+			else {
+				trajectory[i].isLastPoint = false;
+			}
+					
+			currentPoint++;
+		}
+				
+		return trajectory;
 	}
 
 }
