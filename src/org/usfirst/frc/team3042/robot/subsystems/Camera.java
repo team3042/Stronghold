@@ -73,7 +73,6 @@ public class Camera extends Subsystem {
 		
 		int width = NIVision.imaqGetImageSize(report.image).width;
 		System.out.println("img width: "+width);
-		
 		return (width/2) - (report.boundingBox.left+report.boundingBox.width *0.5);
 	}
 	
@@ -121,32 +120,37 @@ public class Camera extends Subsystem {
 			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				ParticleReport2 par = new ParticleReport2();
+				
+				//We only need to set the area and the index here, because we need area to sort them, and we wont
+				//have the index value later on. The rest of the values can be set after finding the largest particle.
 				par.particleIndex = particleIndex;
-				par.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.convexHullArea = NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-				par.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-				par.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-				par.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-				par.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
-				par.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 				particles.add(par);
 			}
 			
 			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
 			particles.sort(null);
-		    
-			/*boolean isTarget = this.TrapezoidScore(particles.get(0)) > SCORE_MIN && 
-			this.aspectRatioScore(particles.get(0))>SCORE_MIN && 
-			this.ConvexHullAreaScore(particles.get(0)) > SCORE_MIN;*/
+			//Get the largest particle, after the vector list has been sorted
+			ParticleReport2 report = particles.get(0);
 			
-			boolean isTarget = this.TrapezoidScore(particles.get(0)) >= SCORE_MIN && 
-					this.aspectRatioScore(particles.get(0))>=SCORE_MIN;
-					//this.ConvexHullAreaScore(particles.get(0)) >= SCORE_MIN;
-			//Convex hull score was giving values of around 0.03, unable to pass any high score_mo
-			/*System.out.println("Trapezoid Score"+this.TrapezoidScore(particles.get(0)));
+			//I only set these values after we find the largest particle.
+			report.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+			report.convexHullArea = NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+			report.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+			report.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+			
+			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
+			this.aspectRatioScore(report)>=SCORE_MIN &&
+			this.ConvexHullAreaScore(report) >= SCORE_MIN;
+			
+			//Convex hull score was giving values of around 0.03, I believe this is because I wasn't using MT_AREA for the area value of the particle.
+			//Remove these comments after testing to see if fixed.
+			System.out.println("Trapezoid Score"+this.TrapezoidScore(particles.get(0)));
 			System.out.println("AspectRatioScore"+this.aspectRatioScore(particles.get(0)));
-			System.out.println("ConvexHullAreaScore"+this.ConvexHullAreaScore(particles.get(0)));*/
+			System.out.println("ConvexHullAreaScore"+this.ConvexHullAreaScore(particles.get(0)));
 			
 			if(isTarget){
 				particles.get(0).image = image;
