@@ -4,6 +4,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -73,7 +74,7 @@ public class DriveTrain extends Subsystem {
     	
     	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
     	leftMotorFront.changeControlMode(TalonControlMode.PercentVbus);
-    	
+    	System.out.println(left);
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);		
 	}
@@ -120,9 +121,35 @@ public class DriveTrain extends Subsystem {
     	rightMotorFront.set(leftMotorFront.getDeviceID());
     }
     
-    public void streamMotionProfile(CANTalon.TrajectoryPoint point) {
+    public void pushPoint(CANTalon.TrajectoryPoint point) {
     	leftMotorFront.pushMotionProfileTrajectory(point);
+    }
+    
+    public void processMotionProfile() {
     	leftMotorFront.processMotionProfileBuffer();
+    }
+    
+    public MotionProfileStatus getMotionProfileStatus() {
+    	MotionProfileStatus motionProfileStatus = null;
+		leftMotorFront.getMotionProfileStatus(motionProfileStatus);
+		return motionProfileStatus;
+    }
+    
+    //Removing flag hasUnderrun if it has been logged
+    public void removeUnderrun() {
+    	leftMotorFront.clearMotionProfileHasUnderrun();
+    }
+    
+    public void enableMotionProfile() {
+    	leftMotorFront.set(CANTalon.SetValueMotionProfile.Enable.value);
+    }
+    
+    public void holdMotionProfile() {
+    	leftMotorFront.set(CANTalon.SetValueMotionProfile.Hold.value);
+    }
+    
+    public void disableMotionProfile() {
+    	leftMotorFront.set(CANTalon.SetValueMotionProfile.Disable.value);
     }
 
 }

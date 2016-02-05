@@ -37,21 +37,21 @@ public class ShooterArm extends Subsystem {
     }
     
     public void raise() {
-    	if (getPotentiometerVal() < upperLimit) {
+    	//if (getPotentiometerVal() < upperLimit) {
     		set(-rotateSpeed);
-    	}
-    	else {
-    		set(0);
-    	}
+    	//}
+    	//else {
+    	//	set(0);
+    	//}
     }
     
     public void lower() {
-    	if (getPotentiometerVal() > lowerLimit) {
+    	//if (getPotentiometerVal() > lowerLimit) {
     		set(rotateSpeed);
-    	}
-    	else {
-    		set(0);
-    	}
+    //	}
+    //	else {
+    //		set(0);
+    //	}
     }
     
     public void setPosition(double position) {

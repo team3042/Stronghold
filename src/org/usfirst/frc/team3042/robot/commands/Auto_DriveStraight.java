@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -13,7 +14,7 @@ public class Auto_DriveStraight extends Command {
 	int pointNumber = 0;
 
 	//Time between each point in ms
-	double itp = 30;
+	int itp = 30;
 	
 	//Time for each filter in ms
 	double time1 = 400, time2 = 200;
@@ -24,27 +25,7 @@ public class Auto_DriveStraight extends Command {
 	//Distance traveled in rotations
 	double distance = 10;
 	
-	//Length of each filter
-	double filterLength1 = Math.ceil(time1 / itp), 
-			filterLength2 = Math.ceil(time2 / itp);
-	
-	//Sum of each filter
-	double filterSum1 = 0, filterSum2 = 0, filterTotalSum = 0;
-	
-	//Velocity and position at current point
-	double currentVelocity = 0, currentPosition = 0;
-	
-	//Time to decceleration in ms
-	double timeToDeccel = distance / maxVelocity * 60 * 1000;
-	
-	//Total time in ms
-	double totalTime = timeToDeccel + time1 + time2;
-	
-	//Total number of points
-	double totalPoints = Math.ceil(totalTime / itp);
-	
-	//Array with all values of filterSum1
-	double[] filterSums1 = new double[(int) totalPoints];
+	Auto_MotionProfile motionProfile;
 	
     public Auto_DriveStraight() {
         // Use requires() here to declare subsystem dependencies
@@ -56,46 +37,34 @@ public class Auto_DriveStraight extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.initMotionProfile();
-    	for(int i = 0; i <= totalPoints; i++) {
-    		
+    	motionProfile = new Auto_MotionProfile(itp, time1, time2, maxVelocity, distance);
+    	CANTalon.TrajectoryPoint[] trajectory = motionProfile.calculateProfile();
+    	
+    	for(int i = 0; i < trajectory.length; i++) {
+    		Robot.driveTrain.pushPoint(trajectory[i]);
     	}
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
+    	Robot.driveTrain.processMotionProfile();
     	
-    	//Running through first filter
-    	if (pointNumber * itp < time1 + time2) {
-    		//Accelerating filter 1
-    		filterSum1 = pointNumber / filterLength1;
+    	MotionProfileStatus status = Robot.driveTrain.getMotionProfileStatus();
+    	
+    	if(status.btmBufferCnt > 5 &&
+    			status.outputEnable != CANTalon.SetValueMotionProfile.Enable) {
+    		Robot.driveTrain.enableMotionProfile();
     	}
-    	else if (pointNumber * itp >= timeToDeccel) {
-    		//Deccelerating filter 1
-    		filterSum1 = (pointNumber - timeToDeccel / itp)
-    				/ filterLength1;
-    	}
-    	else {
-    		filterSum1 = 1;
+    	else if(status.btmBufferCnt <= 5 &&
+    			status.outputEnable == CANTalon.SetValueMotionProfile.Enable) {
+    		Robot.driveTrain.holdMotionProfile();
     	}
     	
-    	//Creating filterSum2 from the sum of the last filterLength2 values of filterSum1
-    	filterSums1[pointNumber] = filterSum1;
-    	int filter2Start = (int) ((pointNumber > filterLength2) ? pointNumber - filterLength2 : 0);
-    	filterSum2 = 0;
-    	for(int i = filter2Start; i <= pointNumber; i++) {
-    		filterSum2 += filterSums1[i];
+    	if(status.hasUnderrun) {
+    		Robot.logger.log("Underrun", 2);
+    		Robot.driveTrain.removeUnderrun();
     	}
-    	
-    	currentVelocity = (filterSum1 + filterSum2) / (filterLength2 + 1) * maxVelocity;
-    	currentPosition += currentVelocity * itp;
-    	
-    	point.velocity = currentVelocity;
-    	point.position = currentPosition;
-    	point.zeroPos = (pointNumber == 0) ? true : false;
-    	point.isLastPoint = (pointNumber == totalPoints) ? true : false;
-    	Robot.driveTrain.streamMotionProfile(point);
-    	pointNumber++;
     }
 
     // Make this return true when this Command no longer needs to run execute()
