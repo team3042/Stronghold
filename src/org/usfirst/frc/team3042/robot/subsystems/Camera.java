@@ -25,7 +25,6 @@ public class Camera extends Subsystem {
 	
 	//Create the camera from an IP set in the robotMap
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
-	
 	//This particle report stores values for analyzed images
 	//We create an array (or "vector") to store many particle reports later on
 	//!!! It may extend comparator to allow it to sort what particles are most likely to be the target 
@@ -47,8 +46,8 @@ public class Camera extends Subsystem {
 		}
 	}
 	
-	double VIEW_ANGLE = 49.4; //default view angle for axis m1011
-	float WIDTH_HEIGHT_RATIO = 1.43f;//The target width: 20 inches, divided by the target height: 14 inches.
+	double VIEW_ANGLE = 64; //default view angle for axis m1013
+	float WIDTH_HEIGHT_RATIO = 1.6666f;//The target width: 20 inches, divided by the target height: 12 inches.
 	
 	//!!! Do not know what imaqError is, may not actually be needed anyways
 	//int imaqError;
