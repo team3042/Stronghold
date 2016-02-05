@@ -42,8 +42,8 @@ public class Shooter extends Subsystem {
 		talonLeft.setPID(P, I, D);
 		talonRight.setPID(P, I, D);
 		
-		talonLeft.setF(rightF);
-		talonRight.setF(leftF);
+		talonLeft.setF(leftF);
+		talonRight.setF(rightF);
 	}
 	
 	void initEncoders() {
