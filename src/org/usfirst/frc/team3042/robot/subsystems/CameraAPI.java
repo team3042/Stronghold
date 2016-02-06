@@ -108,7 +108,7 @@ public class CameraAPI extends Subsystem {
 		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
 		double distance = getDistToTargetInFeet(report);
 		
-		return Math.acos(distance/offset);
+		return Math.atan(offset/distance);
 	}
 	
 	//How far away the robot is from the target.
