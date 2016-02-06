@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.subsystems.Camera;
+import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final ShooterArm shooterArm = new ShooterArm();
 	public static final DriveTrain driveTrain = new DriveTrain();
-	public static final Camera camera = new Camera();
+	public static final CameraAPI camera = new CameraAPI();
 	public static OI oi;
 
     Command autonomousCommand;
