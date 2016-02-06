@@ -18,12 +18,13 @@ public class ShooterArm extends Subsystem {
 	private double upperLimit = 425;
 	private double lowerLimit = 1020;
 	
-	private double p = 1, i = 0, d = 0;
+	private double p = 10, i = 0, d = 0;
 	
 	public ShooterArm() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		
 		talonRotate.setPID(p, i ,d);
+		talonRotate.setAllowableClosedLoopErr(0);
 	}
 	
     public void initDefaultCommand() {
