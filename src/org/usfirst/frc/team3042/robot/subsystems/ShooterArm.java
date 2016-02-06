@@ -16,7 +16,7 @@ public class ShooterArm extends Subsystem {
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
 
 	private double rotateSpeed = .3;
-	private double upperLimit = 100;
+	private double raiseLimit = 100;
 	private double lowerLimit = 790;
 	private double storage = 200;
 	private double pickup = 765;
@@ -42,7 +42,6 @@ public class ShooterArm extends Subsystem {
     
     void setSpeed(double speed) {
     	talonRotate.changeControlMode(TalonControlMode.PercentVbus);
-    	Robot.logger.log("Speed in setSpeed: " + speed, 3);
     	talonRotate.set(speed);
     }
     
@@ -51,8 +50,7 @@ public class ShooterArm extends Subsystem {
     		setSpeed(-rotateSpeed);
     	}
     	else {
-    		Robot.logger.log("Raise: set speed to zero.", 3);
-    		setSpeed(0.0);
+    		setPosition(raiseLimit);
     	}
     }
     
@@ -61,13 +59,12 @@ public class ShooterArm extends Subsystem {
     		setSpeed(rotateSpeed);
     	}
     	else {
-    		Robot.logger.log("Lower: set speed to zero.", 3);
-    		setSpeed(0.0);
+    		setPosition(lowerLimit);
     	}
     }
     
     public boolean belowRaiseLimit() {
-    	return (getPotentiometerVal() > upperLimit);
+    	return (getPotentiometerVal() > raiseLimit);
     }
     
     public boolean aboveLowerLimit(){
@@ -90,8 +87,8 @@ public class ShooterArm extends Subsystem {
     }
     
     private double safetyTest(double position) {
-    	if (position < upperLimit) {
-    		position = upperLimit;
+    	if (position < raiseLimit) {
+    		position = raiseLimit;
     	}
     	else if (position > lowerLimit) {
     		position = lowerLimit;
