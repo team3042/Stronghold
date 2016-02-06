@@ -28,6 +28,8 @@ public class Shooter_Shoot extends Command {
     	//Getting RPM of each motor and outputting to dashboard for tracking
     	SmartDashboard.putNumber("Encoder RPM Left", Robot.shooter.getEncoderRPMLeft());
     	SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());
+    	SmartDashboard.putNumber("Encoder Position Left", Robot.shooter.getEncoderValLeft());
+    	SmartDashboard.putNumber("Encoder Position Right", Robot.shooter.getEncoderValRight());
     }
 
     // Make this return true when this Command no longer needs to run execute()

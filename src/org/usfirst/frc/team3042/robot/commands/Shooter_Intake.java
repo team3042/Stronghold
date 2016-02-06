@@ -14,12 +14,16 @@ public class Shooter_Intake extends Command {
 	
     public Shooter_Intake() {
     	requires(Robot.shooter);
+    	requires(Robot.shooterServo);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	targetRPM = SmartDashboard.getNumber("Intake Speed");
+    	
+    	Robot.shooterServo.setServoRetracted();
+    	
+    	targetRPM = -SmartDashboard.getNumber("Intake Speed");
     	Robot.shooter.setRPM(targetRPM);
     }
 

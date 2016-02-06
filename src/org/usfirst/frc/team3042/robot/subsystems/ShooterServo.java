@@ -19,11 +19,11 @@ public class ShooterServo extends Subsystem {
     
     //Setting the loading servo to various positions
     public void setServoRetracted() {
-    	servo.setAngle(135);
+    	servo.setAngle(90);
     }
     
     public void setServoExtended() {
-    	servo.setAngle(90);
+    	servo.setAngle(135);
     }
     
 }

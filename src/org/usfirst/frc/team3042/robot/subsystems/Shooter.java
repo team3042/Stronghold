@@ -19,19 +19,21 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
+	public double shootSpeed = 3000, intakeSpeed = 2000;
+	
+	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	double leftF = 0, rightF = 0;
+	public double leftF = 0.0283, rightF = 0.0283;
 
 	public Shooter() {
 		//Setting Talon settings
-		talonLeft.reverseOutput(true);
+		//talonLeft.reverseOutput(true);
 		talonRight.reverseOutput(false);
 		
-		/* Commented out until we get a chance to test
-		//talonLeft.setInverted(true);
-		//talonRight.setInverted(false);
-		*/
+		talonLeft.setInverted(true);
+		talonRight.setInverted(false);
+		
 		
 		initEncoders();
 		
@@ -52,6 +54,9 @@ public class Shooter extends Subsystem {
 
 		talonLeft.configEncoderCodesPerRev(1024);
 		talonRight.configEncoderCodesPerRev(1024);
+		
+		talonLeft.reverseSensor(true);
+		talonRight.reverseSensor(true);
 
 		encoderReset();
 	}
@@ -87,7 +92,7 @@ public class Shooter extends Subsystem {
     
     //Getting speed in RPM
     public double getEncoderRPMLeft() {
-    	return talonLeft.getSpeed();
+    	return -talonLeft.getSpeed();
     }
     public double getEncoderRPMRight() {
     	return talonRight.getSpeed();
