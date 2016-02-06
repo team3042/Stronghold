@@ -3,7 +3,6 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import java.util.Comparator;
 import java.util.Vector;
 
-import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
@@ -11,7 +10,6 @@ import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +30,9 @@ public class CameraAPI extends Subsystem {
 	
 	//Variables describing our target
 	float WIDTH_HEIGHT_RATIO = 1.6666f;//The target width: 20 inches, divided by the target height: 12 inches.
-	double SCORE_MIN = 60;
+	private double DEFAULT_SCORE_MIN = 60;
 	
 	public void initDefaultCommand() {
-		
 	}
 	
 	//This particle report stores values for analyzed images
@@ -59,21 +56,74 @@ public class CameraAPI extends Subsystem {
 	
 	//Get the center of the camera image minus the center of the particle/target
 	//effectively giving the camera's offset, which will equal zero when the robot is perfectly facing the particle/target
-	public double getParticleCenterOffset(){
-		ParticleReport2 report = createTargetReport(SCORE_MIN);
+	//returns the offset in feet
+	public double getParticleCenterOffsetX(){
+		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
 		if(report == null){
 		return 0;
 		}
 		
 		int width = NIVision.imaqGetImageSize(report.image).width;
-		return (width/2) - (report.boundingBox.left+report.boundingBox.width *0.5);
+		
+		// Width/2 gives the center of the image.
+		// bboxleft+bboxwidth/2 givers center of the target
+		// image center - target center gives the pixel offset
+		// 20 is the real world target width in inches
+		// pixel offset / real world target gives the offset in inches per pixel
+		// inches per pixel / 12 gives feet per pixel
+		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+	}
+	
+	public double getParticleCenterOffsetX(ParticleReport2 report){
+		if(report == null){
+		return 0;
+		}
+		
+		int width = NIVision.imaqGetImageSize(report.image).width;
+		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+	}
+	
+	//The degrees the robot needs to rotate to be on target
+	public double getRotationOffset(){
+		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
+		
+		if(report == null){
+		return 0;
+		}
+		
+		int width = NIVision.imaqGetImageSize(report.image).width;
+		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		double distance = getDistToTargetInFeet(report);
+		
+		return Math.acos(distance/offset);
+	}
+	
+	public double getRotationOffset(ParticleReport2 report){
+		if(report == null){
+		return 0;
+		}
+		
+		int width = NIVision.imaqGetImageSize(report.image).width;
+		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		double distance = getDistToTargetInFeet(report);
+		
+		return Math.atan(offset/distance);
 	}
 	
 	//How far away the robot is from the target.
 	public double getDistToTargetInFeet () {
-		ParticleReport2 report = createTargetReport(SCORE_MIN);
+		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
+		NIVision.GetImageSizeResult size;
+		size = NIVision.imaqGetImageSize(report.image);
+		double targetWidth = 20;//the width of the stronghold target is 1ft 8in
+		double normalizedWidth = 2*report.boundingBox.width/size.width;
+		
+		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+	}
+	
+	public double getDistToTargetInFeet(ParticleReport2 report){
 		NIVision.GetImageSizeResult size;
 		size = NIVision.imaqGetImageSize(report.image);
 		double targetWidth = 20;//the width of the stronghold target is 1ft 8in

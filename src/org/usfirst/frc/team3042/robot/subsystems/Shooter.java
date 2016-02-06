@@ -19,7 +19,7 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	public double shootSpeed = 3000, intakeSpeed = 2000;
+	public double shootSpeed = 5000, intakeSpeed = 2000;
 	
 	
 	//Closed-Loop PIDF values

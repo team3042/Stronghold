@@ -21,13 +21,7 @@ public class ShooterArm_Raise extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.logger.log(Robot.shooterArm.belowRaiseLimit() + "", 1);
-    	if(Robot.shooterArm.belowRaiseLimit()) {
-    		Robot.shooterArm.raise();
-    	}
-    	else {
-    		Robot.shooterArm.stop();
-    	}
+    	Robot.shooterArm.raise();
     }
 
     // Make this return true when this Command no longer needs to run execute()
