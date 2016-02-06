@@ -37,30 +37,32 @@ public class ShooterArm extends Subsystem {
     }
 
     public void stop() {
-    	set(0.0);
+    	setSpeed(0.0);
     }
     
-    void set(double speed) {
-    	Robot.logger.log(speed + "", 0);
+    void setSpeed(double speed) {
     	talonRotate.changeControlMode(TalonControlMode.PercentVbus);
+    	Robot.logger.log("Speed in setSpeed: " + speed, 3);
     	talonRotate.set(speed);
     }
     
     public void raise() {
-    	if (getPotentiometerVal() > upperLimit) {
-    		set(-rotateSpeed);
+    	if (belowRaiseLimit()) {
+    		setSpeed(-rotateSpeed);
     	}
     	else {
-    		set(0);
+    		Robot.logger.log("Raise: set speed to zero.", 3);
+    		setSpeed(0.0);
     	}
     }
     
     public void lower() {
-    	if (getPotentiometerVal() < lowerLimit) {
-    		set(rotateSpeed);
+    	if (aboveLowerLimit()) {
+    		setSpeed(rotateSpeed);
     	}
     	else {
-    		set(0);
+    		Robot.logger.log("Lower: set speed to zero.", 3);
+    		setSpeed(0.0);
     	}
     }
     
