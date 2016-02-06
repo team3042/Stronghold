@@ -3,7 +3,6 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import java.util.Comparator;
 import java.util.Vector;
 
-import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
@@ -57,7 +56,7 @@ public class CameraAPI extends Subsystem {
 	
 	//Get the center of the camera image minus the center of the particle/target
 	//effectively giving the camera's offset, which will equal zero when the robot is perfectly facing the particle/target
-	//returns feet
+	//returns the offset in feet
 	public double getParticleCenterOffsetX(){
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
@@ -72,7 +71,7 @@ public class CameraAPI extends Subsystem {
 		// image center - target center gives the pixel offset
 		// 20 is the real world target width in inches
 		// pixel offset / real world target gives the offset in inches per pixel
-		// inches per puxel / 12 gives feet per pixel
+		// inches per pixel / 12 gives feet per pixel
 		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
 	}
 	
@@ -95,11 +94,9 @@ public class CameraAPI extends Subsystem {
 		
 		int width = NIVision.imaqGetImageSize(report.image).width;
 		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
-		double theta = Robot.shooterArm.getPotentiometerVal();
 		double distance = getDistToTargetInFeet(report);
-		double x = distance * Math.cos(theta);
 		
-		return Math.atan(offset/x);
+		return Math.acos(distance/offset);
 	}
 	
 	public double getRotationOffset(ParticleReport2 report){
@@ -109,11 +106,9 @@ public class CameraAPI extends Subsystem {
 		
 		int width = NIVision.imaqGetImageSize(report.image).width;
 		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
-		double theta = Robot.shooterArm.getPotentiometerVal();
 		double distance = getDistToTargetInFeet(report);
-		double x = distance * Math.cos(theta);
 		
-		return Math.atan(offset/x);
+		return Math.acos(distance/offset);
 	}
 	
 	//How far away the robot is from the target.
