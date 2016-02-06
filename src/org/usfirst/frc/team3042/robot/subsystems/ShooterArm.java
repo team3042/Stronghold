@@ -42,6 +42,7 @@ public class ShooterArm extends Subsystem {
     
     void setSpeed(double speed) {
     	talonRotate.changeControlMode(TalonControlMode.PercentVbus);
+    	Robot.logger.log("Speed in setSpeed: " + speed, 3);
     	talonRotate.set(speed);
     }
     
@@ -50,6 +51,7 @@ public class ShooterArm extends Subsystem {
     		setSpeed(-rotateSpeed);
     	}
     	else {
+    		Robot.logger.log("Raise: set speed to zero.", 3);
     		setSpeed(0.0);
     	}
     }
@@ -59,6 +61,7 @@ public class ShooterArm extends Subsystem {
     		setSpeed(rotateSpeed);
     	}
     	else {
+    		Robot.logger.log("Lower: set speed to zero.", 3);
     		setSpeed(0.0);
     	}
     }
