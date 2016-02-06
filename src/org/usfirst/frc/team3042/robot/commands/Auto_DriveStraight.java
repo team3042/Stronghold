@@ -38,10 +38,11 @@ public class Auto_DriveStraight extends Command {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.initMotionProfile();
     	motionProfile = new Auto_MotionProfile(itp, time1, time2, maxVelocity, distance);
-    	CANTalon.TrajectoryPoint[] trajectory = motionProfile.calculateProfile();
+    	CANTalon.TrajectoryPoint[] leftTrajectory = motionProfile.calculateProfile();
+    	CANTalon.TrajectoryPoint[] rightTrajectory = motionProfile.calculateProfile();
     	
-    	for(int i = 0; i < trajectory.length; i++) {
-    		Robot.driveTrain.pushPoint(trajectory[i]);
+    	for(int i = 0; i < leftTrajectory.length; i++) {
+    		Robot.driveTrain.pushPoints(leftTrajectory[i], rightTrajectory[i]);
     	}
     	
     }
@@ -50,20 +51,24 @@ public class Auto_DriveStraight extends Command {
     protected void execute() {
     	Robot.driveTrain.processMotionProfile();
     	
-    	MotionProfileStatus status = Robot.driveTrain.getMotionProfileStatus();
+    	MotionProfileStatus[] status = Robot.driveTrain.getMotionProfileStatus();
     	
-    	if(status.btmBufferCnt > 5 &&
-    			status.outputEnable != CANTalon.SetValueMotionProfile.Enable) {
+    	if(status[0].btmBufferCnt > 5 &&
+    			status[0].outputEnable != CANTalon.SetValueMotionProfile.Enable) {
     		Robot.driveTrain.enableMotionProfile();
     	}
-    	else if(status.btmBufferCnt <= 5 &&
-    			status.outputEnable == CANTalon.SetValueMotionProfile.Enable) {
+    	else if(status[0].btmBufferCnt <= 5 &&
+    			status[0].outputEnable == CANTalon.SetValueMotionProfile.Enable) {
     		Robot.driveTrain.holdMotionProfile();
     	}
     	
-    	if(status.hasUnderrun) {
-    		Robot.logger.log("Underrun", 2);
-    		Robot.driveTrain.removeUnderrun();
+    	if(status[0].hasUnderrun) {
+    		Robot.logger.log("Left Underrun", 2);
+    		Robot.driveTrain.removeUnderrunLeft();
+    	}
+    	if(status[1].hasUnderrun) {
+    		Robot.logger.log("Right Underrun", 2);
+    		Robot.driveTrain.removeUnderrunRight();
     	}
     }
 

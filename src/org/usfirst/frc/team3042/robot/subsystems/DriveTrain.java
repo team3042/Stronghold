@@ -111,42 +111,55 @@ public class DriveTrain extends Subsystem {
 		return rightEncMotor.getSpeed();
 	}
 	
+	//Motion profile functions
     public void initMotionProfile() {
     	leftMotorFront.clearMotionProfileTrajectories();
+    	rightMotorFront.clearMotionProfileTrajectories();
+    	
     	leftMotorFront.changeControlMode(TalonControlMode.MotionProfile);
-    	rightMotorFront.changeControlMode(TalonControlMode.Follower);
-    	rightMotorFront.set(leftMotorFront.getDeviceID());
+    	rightMotorFront.changeControlMode(TalonControlMode.MotionProfile);
     }
     
-    public void pushPoint(CANTalon.TrajectoryPoint point) {
-    	leftMotorFront.pushMotionProfileTrajectory(point);
+    public void pushPoints(CANTalon.TrajectoryPoint leftPoint, CANTalon.TrajectoryPoint rightPoint) {
+    	leftMotorFront.pushMotionProfileTrajectory(leftPoint);
+    	rightMotorFront.pushMotionProfileTrajectory(rightPoint);
     }
     
     public void processMotionProfile() {
     	leftMotorFront.processMotionProfileBuffer();
+    	rightMotorFront.processMotionProfileBuffer();
     }
     
-    public MotionProfileStatus getMotionProfileStatus() {
-    	MotionProfileStatus motionProfileStatus = null;
-		leftMotorFront.getMotionProfileStatus(motionProfileStatus);
+    public MotionProfileStatus[] getMotionProfileStatus() {
+    	MotionProfileStatus[] motionProfileStatus = new MotionProfileStatus[2];
+		leftMotorFront.getMotionProfileStatus(motionProfileStatus[0]);
+		rightMotorFront.getMotionProfileStatus(motionProfileStatus[1]);
+		
 		return motionProfileStatus;
     }
     
     //Removing flag hasUnderrun if it has been logged
-    public void removeUnderrun() {
+    public void removeUnderrunLeft() {
     	leftMotorFront.clearMotionProfileHasUnderrun();
+    }
+    
+    public void removeUnderrunRight() {
+    	rightMotorFront.clearMotionProfileHasUnderrun();
     }
     
     public void enableMotionProfile() {
     	leftMotorFront.set(CANTalon.SetValueMotionProfile.Enable.value);
+    	rightMotorFront.set(CANTalon.SetValueMotionProfile.Enable.value);
     }
     
     public void holdMotionProfile() {
     	leftMotorFront.set(CANTalon.SetValueMotionProfile.Hold.value);
+    	rightMotorFront.set(CANTalon.SetValueMotionProfile.Hold.value);
     }
     
     public void disableMotionProfile() {
     	leftMotorFront.set(CANTalon.SetValueMotionProfile.Disable.value);
+    	rightMotorFront.set(CANTalon.SetValueMotionProfile.Disable.value);
     }
 
 }
