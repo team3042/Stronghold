@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final ShooterArm shooterArm = new ShooterArm();
 	public static final DriveTrain driveTrain = new DriveTrain();
-	//public static final CameraAPI camera = new CameraAPI();
+	public static final CameraAPI camera = new CameraAPI();
 	public static OI oi;
 
     Command autonomousCommand;
