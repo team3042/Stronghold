@@ -21,13 +21,27 @@ import java.io.IOException;
 
 //Compiled from two of the frc examples
 public class Camera extends Subsystem {
-	//!!! Needs testing/research to confirm
 	
 	//Create the camera from an IP set in the robotMap
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
+	
+	//Our ranges for HSV image acquisition 
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	
+	//Variables describing our camera
+	double VIEW_ANGLE = 64; //default view angle for axis m1013
+	
+	//Variables describing our target
+	float WIDTH_HEIGHT_RATIO = 1.6666f;//The target width: 20 inches, divided by the target height: 12 inches.
+	double SCORE_MIN = 60;
+	
+	public void initDefaultCommand() {
+		
+	}
+	
 	//This particle report stores values for analyzed images
-	//We create an array (or "vector") to store many particle reports later on
-	//!!! It may extend comparator to allow it to sort what particles are most likely to be the target 
 	public class ParticleReport2 extends ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
 		double percentAreaToImageArea;
 		double convexHullArea;
@@ -46,38 +60,22 @@ public class Camera extends Subsystem {
 		}
 	}
 	
-	double VIEW_ANGLE = 64; //default view angle for axis m1013
-	float WIDTH_HEIGHT_RATIO = 1.6666f;//The target width: 20 inches, divided by the target height: 12 inches.
-	
-	//!!! Do not know what imaqError is, may not actually be needed anyways
-	//int imaqError;
-	
-	public void initDefaultCommand() {
-		
-	}
-	
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(50, 255);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(50, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
-	
 	//Get the center of the camera image minus the center of the particle/target
 	//effectively giving the camera's offset, which will equal zero when the robot is perfectly facing the particle/target
 	public double getParticleCenterOffset(){
-		//160 is half of the width of the camera
-		ParticleReport2 report = createTargetReport();
+		ParticleReport2 report = createTargetReport(SCORE_MIN);
 		
 		if(report == null){
 		return 0;
 		}
 		
 		int width = NIVision.imaqGetImageSize(report.image).width;
-		System.out.println("img width: "+width);
 		return (width/2) - (report.boundingBox.left+report.boundingBox.width *0.5);
 	}
 	
 	//How far away the robot is from the target.
 	public double getDistToTargetInFeet () {
-		ParticleReport2 report = createTargetReport();
+		ParticleReport2 report = createTargetReport(SCORE_MIN);
 		
 		NIVision.GetImageSizeResult size;
 		size = NIVision.imaqGetImageSize(report.image);
@@ -88,7 +86,7 @@ public class Camera extends Subsystem {
 	}
 	
 	//Run all the filters for a stronghold target
-	public ParticleReport2 createTargetReport(){
+	public ParticleReport2 createTargetReport(double SCORE_MIN){
 		TARGET_HUE_RANGE.minValue = (int)SmartDashboard.getNumber("Tote hue min", TARGET_HUE_RANGE.minValue);
 		TARGET_HUE_RANGE.maxValue = (int)SmartDashboard.getNumber("Tote hue max", TARGET_HUE_RANGE.maxValue);
 		TARGET_SAT_RANGE.minValue = (int)SmartDashboard.getNumber("Tote sat min", TARGET_SAT_RANGE.minValue);
@@ -101,16 +99,9 @@ public class Camera extends Subsystem {
     	Robot.camera.filterOutSmallParticles(binaryImage, 5, 100);
     	Robot.camera.fillParticles(binaryImage);
     	
-    	ParticleReport2 report = Robot.camera.getTarget(binaryImage,60);
+    	ParticleReport2 targetReport = null;
     	
-    	return report;
-	}
-	
-	//A method that will return a target if it finds one, otherwise returning null
-	//Sort of optimized for totes in some utilized methods, and in other methods optimized for the high goal in stronghold
-	//unclear if optimization for totes is also good for stronghold, deeper investigation required
-	public ParticleReport2 getTarget(Image image, double SCORE_MIN){
-		int numParticles = NIVision.imaqCountParticles(image, 1);
+    	int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
 		
 		if(numParticles > 0)
 		{
@@ -123,7 +114,7 @@ public class Camera extends Subsystem {
 				//We only need to set the area and the index here, because we need area to sort them, and we wont
 				//have the index value later on. The rest of the values can be set after finding the largest particle.
 				par.particleIndex = particleIndex;
-				par.area = (int)NIVision.imaqMeasureParticle(image, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+				par.area = (int)NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 				particles.add(par);
 			}
 			
@@ -133,34 +124,25 @@ public class Camera extends Subsystem {
 			ParticleReport2 report = particles.get(0);
 			
 			//I only set these values after we find the largest particle.
-			report.percentAreaToImageArea = NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-			report.convexHullArea = NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-			report.boundingBox.top = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-			report.boundingBox.left = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
-			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(image, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+			report.percentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+			report.convexHullArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+			report.boundingBox.top = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+			report.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 			
 			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
 			this.aspectRatioScore(report)>=SCORE_MIN &&
 			this.ConvexHullAreaScore(report) >= SCORE_MIN;
 			
-			//Convex hull score was giving values of around 0.03, I believe this is because I wasn't using MT_AREA for the area value of the particle.
-			//Remove these comments after testing to see if fixed.
-			System.out.println("Trapezoid Score"+this.TrapezoidScore(particles.get(0)));
-			System.out.println("AspectRatioScore"+this.aspectRatioScore(particles.get(0)));
-			System.out.println("ConvexHullAreaScore"+this.ConvexHullAreaScore(particles.get(0)));
-			
 			if(isTarget){
-				particles.get(0).image = image;
-				return particles.get(0);
+				particles.get(0).image = binaryImage;
+				targetReport = particles.get(0);
 			}
 		}
-		return null;
-	}
-	
-	public double getParticleWidth(ParticleReport2 report){
-		return report.boundingBoxRight - report.boundingBox.left;
+    	
+    	return targetReport;
 	}
 	
 	//Creates an image in the roborios tmp folder
@@ -198,6 +180,7 @@ public class Camera extends Subsystem {
 		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
 	}
 	
+	//Fill out gaps in particles, including the U-shaped stronghold high-goal target
 	public void fillParticles(Image image){
 		NIVision.imaqFillHoles(image, image, 1);
 		NIVision.imaqConvexHull(image, image, 1);

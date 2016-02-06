@@ -26,7 +26,7 @@ public class CameraFindTarget extends Command {
     //40
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	ParticleReport2 report = Robot.camera.createTargetReport();
+    	ParticleReport2 report = Robot.camera.createTargetReport(60);
     	
     	if(report != null){
         	Robot.camera.outPutImagePNG(report.image, "CameraFilteredReportImage");
