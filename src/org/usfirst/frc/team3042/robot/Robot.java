@@ -27,15 +27,14 @@ public class Robot extends IterativeRobot {
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final ShooterArm shooterArm = new ShooterArm();
 	public static final DriveTrain driveTrain = new DriveTrain();
-	public static final CameraAPI camera = new CameraAPI();
+	//public static final CameraAPI camera = new CameraAPI();
 	public static OI oi;
 
     Command autonomousCommand;
     SendableChooser chooser;
     public static Logger logger;
     
-    private double SHOOTER_SPEED, INTAKE_SPEED;
-    private double F_GAIN_LEFT, F_GAIN_RIGHT = 0.0121;
+    private double INTAKE_SPEED;
     private double POT_VAL;
     
     private int LOGGER_LEVEL = 1;
@@ -50,10 +49,10 @@ public class Robot extends IterativeRobot {
         logger = new Logger(true, true, LOGGER_LEVEL);
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
-        SmartDashboard.putNumber("Shooter Speed", SHOOTER_SPEED);
-        SmartDashboard.putNumber("Intake Speed", INTAKE_SPEED);
-        SmartDashboard.putNumber("F-Gain Left", F_GAIN_LEFT);
-        SmartDashboard.putNumber("F-Gain Right", F_GAIN_RIGHT);
+        SmartDashboard.putNumber("Shooter Speed", shooter.shootSpeed);
+        SmartDashboard.putNumber("Intake Speed", shooter.intakeSpeed);
+        SmartDashboard.putNumber("F-Gain Left", shooter.leftF);
+        SmartDashboard.putNumber("F-Gain Right", shooter.rightF);
         SmartDashboard.putNumber("Potentiometer", POT_VAL);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
         SmartDashboard.putNumber("Dummy distance from target", 8);
@@ -117,7 +116,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();   
+        Scheduler.getInstance().run();  
+        
+        SmartDashboard.putNumber("Potentiometer Value", Robot.shooterArm.getPotentiometerVal());
     }
     
     /**

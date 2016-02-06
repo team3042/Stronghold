@@ -39,7 +39,8 @@ public class OI {
 		//Shooter Arm
 		gunnerButton_3.whileHeld(new ShooterArm_Raise());
 		gunnerButton_4.whileHeld(new ShooterArm_Lower());
-		//gunnerButton_6.whenPressed(new ShooterArm_Pickup());
+		gunnerButton_5.whenPressed(new ShooterArm_Storage());
+		gunnerButton_6.whenPressed(new ShooterArm_Pickup());
 		
 		//Shooter Servo
 		gunnerButton_7.whenPressed(new ShooterServo_Retract());

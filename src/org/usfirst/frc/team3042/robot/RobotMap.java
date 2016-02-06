@@ -7,10 +7,10 @@ package org.usfirst.frc.team3042.robot;
  */
 public class RobotMap {
 	//CAN Talons
-	public static final int DRIVETRAIN_TALON_LEFT_1 = 13;
-	public static final int DRIVETRAIN_TALON_LEFT_2 = 14;
-	public static final int DRIVETAIN_TALON_RIGHT_1 = 10;
-	public static final int DRIVETRAIN_TALON_RIGHT_2 = 11;
+	public static final int DRIVETRAIN_TALON_LEFT_1 = 14;
+	public static final int DRIVETRAIN_TALON_LEFT_2 = 13;
+	public static final int DRIVETAIN_TALON_RIGHT_1 = 11;
+	public static final int DRIVETRAIN_TALON_RIGHT_2 = 10;
 	public static final int SHOOTER_TALON_LEFT = 3;
 	public static final int SHOOTER_TALON_RIGHT = 15;
 	public static final int SHOOTER_ARM_TALON = 16;

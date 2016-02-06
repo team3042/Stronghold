@@ -18,7 +18,7 @@ public class DriveTrain_TankDrive extends Command {
     Timer time = new Timer();
     double[] oldTime = new double[] {0, 0};
     double[] currentPower = new double[] {0,0};
-    double maxAccel = 0.1; //motor power per second
+    double maxAccel = 4; //motor power per second
 	
     public DriveTrain_TankDrive() {
     	requires(Robot.driveTrain);
@@ -36,8 +36,8 @@ public class DriveTrain_TankDrive extends Command {
     	double leftPower = -Robot.oi.joystickLeft.getY() * speedScale;
         double rightPower = -Robot.oi.joystickRight.getY() * speedScale;
         
-        restrictAccel(leftPower, LEFT);
-        restrictAccel(rightPower, RIGHT);
+        leftPower = restrictAccel(leftPower, LEFT);
+        rightPower = restrictAccel(rightPower, RIGHT);
         
         if (Robot.oi.leftButton_1.get()){
             rightPower = leftPower;
