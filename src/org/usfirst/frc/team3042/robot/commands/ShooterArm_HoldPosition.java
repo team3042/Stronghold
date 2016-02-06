@@ -24,11 +24,7 @@ public class ShooterArm_HoldPosition extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.logger.log("getClosedLoopError " + Robot.shooterArm.talonRotate.getClosedLoopError(), 1);
-    	Robot.logger.log("getSetpoint " + Robot.shooterArm.talonRotate.getSetpoint(), 1);
-    	Robot.logger.log("pidGet " + Robot.shooterArm.talonRotate.pidGet(), 1);
-    	Robot.logger.log("GetIaccum " + Robot.shooterArm.talonRotate.GetIaccum(), 1);
-    	Robot.logger.log("get " + Robot.shooterArm.talonRotate.get() + "", 1);
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -84,10 +84,10 @@ public class CameraAPI extends Subsystem {
 	
 	//Run all the filters for a stronghold target
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
-    	Image binaryImage = Robot.camera.getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+    	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	Robot.camera.filterOutSmallParticles(binaryImage, 5, 100);
-    	Robot.camera.fillParticles(binaryImage);
+    	filterOutSmallParticles(binaryImage, 5, 100);
+    	fillParticles(binaryImage);
     	
     	ParticleReport2 targetReport = null;
     	

@@ -21,8 +21,12 @@ public class ShooterArm_Lower extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.shooterArm.lower();
-    	
+    	if(Robot.shooterArm.aboveLowerLimit()) {
+    		Robot.shooterArm.lower();
+    	}
+    	else {
+    		Robot.shooterArm.stop();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
