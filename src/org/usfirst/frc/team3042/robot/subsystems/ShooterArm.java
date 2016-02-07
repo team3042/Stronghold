@@ -18,7 +18,7 @@ public class ShooterArm extends Subsystem {
 	private double rotateSpeed = .3;
 	private double raiseLimit = 100;
 	private double lowerLimit = 790;
-	private double storage = 200;
+	private double storage = 150;
 	private double pickup = 765;
 	
 	private double p = 10, i = 0, d = 0;
