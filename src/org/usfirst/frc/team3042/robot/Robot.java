@@ -6,6 +6,8 @@ import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
+import org.usfirst.frc.team3042.robot.subsystems.TapeShooter;
+import org.usfirst.frc.team3042.robot.subsystems.Winch;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -26,6 +28,8 @@ public class Robot extends IterativeRobot {
 	public static final Shooter shooter = new Shooter();
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final ShooterArm shooterArm = new ShooterArm();
+	public static final TapeShooter tapeShooter = new TapeShooter();
+	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
 	public static OI oi;
