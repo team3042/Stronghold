@@ -14,6 +14,8 @@ public class RobotMap {
 	public static final int SHOOTER_TALON_LEFT = 3;
 	public static final int SHOOTER_TALON_RIGHT = 15;
 	public static final int SHOOTER_ARM_TALON = 16;
+	public static final int TAPE_SHOOTER_TALON = 4;
+	public static final int WINCH_TALON = 5;
 	
 	//PWM ports
 	public static final int SHOOTER_SERVO = 1;
