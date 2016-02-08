@@ -7,10 +7,8 @@ package org.usfirst.frc.team3042.robot;
  */
 public class RobotMap {
 	//Chose which robot is being used
-	private static enum ROBOT_MODEL {FENRIR, SKOLL;}
-	private static final ROBOT_MODEL model = ROBOT_MODEL.SKOLL;
+	public static boolean isSkoll = true;
 	
-	public static boolean isSkoll = model == ROBOT_MODEL.SKOLL;
 	//CAN Talons
 	public static final int DRIVETRAIN_TALON_LEFT_1 = (isSkoll)? 14 : 14;
 	public static final int DRIVETRAIN_TALON_LEFT_2 = (isSkoll)? 13 : 13;
@@ -19,8 +17,8 @@ public class RobotMap {
 	public static final int SHOOTER_TALON_LEFT = (isSkoll)? 3 : 3;
 	public static final int SHOOTER_TALON_RIGHT = (isSkoll)? 15 : 15;
 	public static final int SHOOTER_ARM_TALON = (isSkoll)? 16 : 16;
-	public static final int TAPE_SHOOTER_TALON = 4;
-	public static final int WINCH_TALON = 5;
+	public static final int TAPE_SHOOTER_TALON = (isSkoll)? 4 : 4;
+	public static final int WINCH_TALON = (isSkoll)? 5 : 5;
 	
 	//PWM ports
 	public static final int SHOOTER_SERVO = (isSkoll)? 1 : 1;

@@ -11,7 +11,6 @@ public class TapeShooter_Lower extends Command {
 
     public TapeShooter_Lower() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.tapeShooter);
     }
 

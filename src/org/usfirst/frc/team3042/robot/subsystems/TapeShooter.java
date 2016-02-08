@@ -13,34 +13,38 @@ public class TapeShooter extends Subsystem {
     
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
-	double tapeSpeed = 0.8;
+	double raiseSpeed = 0.8, lowerSpeed = 0.2;
 	
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
     	setDefaultCommand(new TapeShooter_Stop());
     }
     
     public void stop() {
-    	setSpeed(0);
+    	setSpeed(0.0);
     }
     
     public void raise() {
-    	setSpeed(tapeSpeed);
+    	resetEncoder();
+    	setSpeed(raiseSpeed);
     }
     
     public void lower() {
-    	setSpeed(-tapeSpeed);
+    	setSpeed(-lowerSpeed);
     }
     
     private void setSpeed(double speed) {
     	shooterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
     	shooterTalon.set(speed);
     }
-    
-    
+
+	public void resetEncoder() {
+		// TODO: Zero the encoder
+	}
+
+	public boolean encoderLimitReached() {
+		// TODO: determine if we have reached the encoder limit for raising the tape.
+		return false;
+	}  
 }
 

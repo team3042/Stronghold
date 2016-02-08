@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.commands.*;
-import org.usfirst.frc.team3042.robot.triggers.GamePadAxis;
 import org.usfirst.frc.team3042.robot.triggers.GamePadTrigger;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,39 +19,45 @@ public class OI {
 	public Joystick gamePadGunner = new Joystick(RobotMap.GUNNER_JOYSTICK_USB_PORT_2);
 	
 	//Left Joystick Buttons
-	public Button leftButton_1 = new JoystickButton(joystickLeft, 1);
+	public Button left_1 = new JoystickButton(joystickLeft, 1);
 
 	//Right Joystick Buttons
-	public Button rightButton_1 = new JoystickButton(joystickRight, 1);
+	public Button right_1 = new JoystickButton(joystickRight, 1);
 	
-	Button gunnerButton_A = new JoystickButton(gamePadGunner, 1);
-	Button gunnerButton_B = new JoystickButton(gamePadGunner, 2);
-	Button gunnerButton_X = new JoystickButton(gamePadGunner, 3);
-	Button gunnerButton_Y = new JoystickButton(gamePadGunner, 4);
-	Button gunnerButton_LB = new JoystickButton(gamePadGunner, 5);
-	Button gunnerButton_RB = new JoystickButton(gamePadGunner, 6);
-	Button gunnerButton_7 = new JoystickButton(gamePadGunner, 7);
-	Button gunnerButton_8 = new JoystickButton(gamePadGunner, 8);
-	
+	Button gunner_A = new JoystickButton(gamePadGunner, 1);
+	Button gunner_B = new JoystickButton(gamePadGunner, 2);
+	Button gunner_X = new JoystickButton(gamePadGunner, 3);
+	Button gunner_Y = new JoystickButton(gamePadGunner, 4);
+	Button gunner_LB = new JoystickButton(gamePadGunner, 5);
+	Button gunner_RB = new JoystickButton(gamePadGunner, 6);
+	Button gunner_Back = new JoystickButton(gamePadGunner, 7);
+	Button gunner_Start = new JoystickButton(gamePadGunner, 8);
+
+	//Triggers
 	Trigger gunner_LT = new GamePadTrigger(gamePadGunner,2);
 	Trigger gunner_RT = new GamePadTrigger(gamePadGunner,3);
-	Trigger gunner_LeftJoyUp = new GamePadAxis(gamePadGunner, 1, GamePadAxis.DIRECTION.UP);
-	Trigger gunner_LeftJoyDown = new GamePadAxis(gamePadGunner, 1, GamePadAxis.DIRECTION.DOWN);
+	Trigger gunner_LeftJoyUp = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.UP);
+	Trigger gunner_LeftJoyDown = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.DOWN);
 	
 	public OI() {
 		
 		//Shooter - Intake
 		gunner_LT.whileActive(new Shooter_Shoot());
-		gunnerButton_LB.whileHeld(new Shooter_Intake());
-		
+		gunner_LB.whileHeld(new Shooter_Intake());		
 		gunner_RT.whenActive(new ShooterServo_Extend());
 		
+		//Control Snout Position
 		gunner_LeftJoyUp.whileActive(new ShooterArm_Raise());
 		gunner_LeftJoyDown.whileActive(new ShooterArm_Lower());
-
-		gunnerButton_A.whenPressed(new ShooterArm_Pickup());
-		gunnerButton_X.whenPressed(new ShooterArm_Storage());
+		gunner_A.whenPressed(new ShooterArm_Pickup());
+		gunner_X.whenPressed(new ShooterArm_Storage());
 		
+		//Winch Controls
+		gunner_B.whileHeld(new Winch_Raise());
+		
+		//TapeShooter
+		gunner_Start.whenPressed(new TapeShooter_Raise());
+		gunner_Back.whileHeld(new TapeShooter_Lower());
 	}
 }
 

@@ -11,14 +11,12 @@ public class Winch_Stop extends Command {
 
     public Winch_Stop() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.winch);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
     	Robot.winch.stop();
     }
 

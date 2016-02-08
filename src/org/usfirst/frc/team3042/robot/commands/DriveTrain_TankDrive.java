@@ -39,10 +39,10 @@ public class DriveTrain_TankDrive extends Command {
         leftPower = restrictAccel(leftPower, LEFT);
         rightPower = restrictAccel(rightPower, RIGHT);
         
-        if (Robot.oi.leftButton_1.get()){
+        if (Robot.oi.left_1.get()){
             rightPower = leftPower;
         }
-        else if (Robot.oi.rightButton_1.get()){
+        else if (Robot.oi.right_1.get()){
             leftPower = rightPower;
         }
         
