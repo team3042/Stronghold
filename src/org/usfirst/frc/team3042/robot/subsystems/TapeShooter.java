@@ -22,7 +22,6 @@ public class TapeShooter extends Subsystem {
 		resetEncoder();
 	}
 	
-	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
     	setDefaultCommand(new TapeShooter_Stop());
@@ -47,13 +46,9 @@ public class TapeShooter extends Subsystem {
     }
 
 	public void resetEncoder() {
-		// TODO: Zero the encoder
 		talonZero = shooterTalon.getEncPosition();
-		
-		
 	}
 	public boolean encoderLimitReached() {
-		// TODO: determine if we have reached the encoder limit for raising the tape.
 		return getEncDistance() > encLimit;
 	} 
 	public int getEncDistance(){

@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("F-Gain Left", shooter.leftF);
         SmartDashboard.putNumber("F-Gain Right", shooter.rightF);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
-        SmartDashboard.putNumber("Dummy distance from target", 8);
+        SmartDashboard.putNumber("Camera Distance", 8);
     }
 	
 	/**
