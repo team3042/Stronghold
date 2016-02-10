@@ -26,7 +26,8 @@ public class CameraAPI_Test extends Command {
 	    	if(report != null){
 	    		Robot.logger.log("Created report at Score Min of "+(i*20), 5);
 	    		Robot.logger.log("Distance to target: "+Robot.camera.getDistToTargetInFeet(report), 5);
-	    		Robot.logger.log("Rotation to alignment: "+Robot.camera.getRotationOffset(report), 5);
+	    		Robot.logger.log("Rotation offset: "+Robot.camera.getRotationOffset(report), 5);
+	    		Robot.logger.log("Convex hull score: "+ Robot.camera.ConvexHullAreaScore(report), 5);
 	    	}else{
 	    		Robot.logger.log("!!!Failed to create report at Score Min of "+(i*20), 5);
 	    	}

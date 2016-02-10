@@ -11,6 +11,8 @@ import com.ni.vision.NIVision.ParticleReport;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
+
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
@@ -114,6 +116,10 @@ public class CameraAPI extends Subsystem {
 	//How far away the robot is from the target.
 	public double getDistToTargetInFeet () {
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
+		
+		if(report == null){
+			return 0;
+		}
 		
 		NIVision.GetImageSizeResult size;
 		size = NIVision.imaqGetImageSize(report.image);
@@ -245,7 +251,7 @@ public class CameraAPI extends Subsystem {
 	/**
 	 * Method to score convex hull area. This scores how "complete" the particle is. Particles with large holes will score worse than a filled in shape
 	 */
-	double ConvexHullAreaScore(ParticleReport2 report)
+	public double ConvexHullAreaScore(ParticleReport2 report)
 	{
 		return ratioToScore((report.area/report.convexHullArea)*1.18);
 	}
