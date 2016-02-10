@@ -29,7 +29,6 @@ public class Auto_DriveStraight extends Command {
 	
     public Auto_DriveStraight() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.driveTrain);
     }
 
