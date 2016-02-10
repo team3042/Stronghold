@@ -33,12 +33,15 @@ public class Auto_Rotate extends Command {
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
     		
+    		//when the offset is negative it means that the target is to the left
+    		//when the offset is positive it means that the target is to the right
+    		//this comes from (imagecenter - targetcenter) which is later converted into degrees for getRotationOffset
     		if(offset < OFFSET_ERROR.minValue){
-    			//Rotate right
-    			Robot.driveTrain.setMotors(rotateSpeed, -rotateSpeed);
-    		}else if(offset > OFFSET_ERROR.maxValue){
-    			//Rotate left
+    			//If the offset is negative, and less than the allowed negative error, then rotate to the left
     			Robot.driveTrain.setMotors(-rotateSpeed, rotateSpeed);
+    		}else if(offset > OFFSET_ERROR.maxValue){
+    			//If the offset is positive, and greater than the allowed positive error, then rotate to the right
+    			Robot.driveTrain.setMotors(rotateSpeed, -rotateSpeed);
     		}else{
     			//The robot is within the error range, meaning that we are on target
     			finished = true;
