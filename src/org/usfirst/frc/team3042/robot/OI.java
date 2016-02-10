@@ -60,7 +60,7 @@ public class OI {
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
-		gunner_Back.whileHeld(new TapeShooter_Lower());
+		gunner_Back.whenPressed(new TapeShooter_Retract());
 	}
 }
 
