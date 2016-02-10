@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
+import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.commands.TapeShooter_Stop;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -14,6 +15,13 @@ public class TapeShooter extends Subsystem {
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
 	double raiseSpeed = 0.8, lowerSpeed = 0.2;
+	int talonZero;
+	double encLimit = 36 * (4096 / 5.89);
+	
+	public TapeShooter() {
+		resetEncoder();
+	}
+	
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -40,11 +48,18 @@ public class TapeShooter extends Subsystem {
 
 	public void resetEncoder() {
 		// TODO: Zero the encoder
+		talonZero = shooterTalon.getEncPosition();
+		
+		
 	}
-
 	public boolean encoderLimitReached() {
 		// TODO: determine if we have reached the encoder limit for raising the tape.
-		return false;
-	}  
+		return getEncDistance() > encLimit;
+	} 
+	public int getEncDistance(){
+	
+		return shooterTalon.getEncPosition() - talonZero;
+		
+	}
 }
 
