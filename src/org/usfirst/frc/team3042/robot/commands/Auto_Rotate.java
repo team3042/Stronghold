@@ -51,6 +51,7 @@ public class Auto_Rotate extends Command {
     		report = Robot.camera.createTargetReport(60);
     	}else{
     		Robot.logger.log("Failed to acquire target!", 5);
+			Robot.driveTrain.setMotors(0.0,  0.0);
     		finished = true;
     	}
     }
