@@ -46,6 +46,7 @@ public class Auto_Rotate extends Command {
     			//The robot is within the error range, meaning that we are on target
     			Robot.driveTrain.setMotors(0.0,  0.0);
     			finished = true;
+    			return;
     		}
     		
     		report = Robot.camera.createTargetReport(60);
