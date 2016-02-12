@@ -55,7 +55,7 @@ public class DriveTrain_Calibration extends Command {
         file.writeToFile("Time\tLeft\tRight\tLeft Speed\tRight Speed");
         
         //Set the drivetrain to these speeds
-        Robot.driveTrain.setMotors(speed, speed);
+        Robot.driveTrain.setMotorsRaw(speed, speed);
         motorsEngaged = true;
     }
 

@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.commands.*;
 import org.usfirst.frc.team3042.robot.triggers.GamePadTrigger;
+import org.usfirst.frc.team3042.robot.triggers.POVButton;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -38,22 +39,24 @@ public class OI {
 	Trigger gunner_RT = new GamePadTrigger(gamePadGunner,3);
 	Trigger gunner_LeftJoyUp = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.UP);
 	Trigger gunner_LeftJoyDown = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.DOWN);
+	Trigger gunner_POVButton = new POVButton(gamePadGunner, 0);
 	
 	public OI() {
 		
-		//Shooter - Intake
-		gunner_LT.whileActive(new Shooter_Shoot());
-		gunner_LB.whileHeld(new Shooter_Intake());		
+		//Shooter - Intake	
 		gunner_RT.whenActive(new ShooterServo_Extend());
+		gunner_RB.whileHeld(new Shooter_Shoot());
+		
 		
 		//Control Snout Position
-		gunner_LeftJoyUp.whileActive(new ShooterArm_Raise());
-		gunner_LeftJoyDown.whileActive(new ShooterArm_Lower());
-		gunner_A.whenPressed(new ShooterArm_Pickup());
+		gunner_LeftJoyDown.whileActive(new ShooterArm_Raise());
+		gunner_LeftJoyUp.whileActive(new ShooterArm_Lower());
+		gunner_B.whenPressed(new ShooterArm_Pickup());
+		gunner_A.whenPressed(new Shooter_Intake());
 		gunner_X.whenPressed(new ShooterArm_Storage());
 		
 		//Winch Controls
-		gunner_B.whileHeld(new Winch_Raise());
+		gunner_POVButton.whileActive(new Winch_Raise());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
