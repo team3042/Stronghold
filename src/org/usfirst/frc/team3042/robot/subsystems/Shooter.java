@@ -33,8 +33,7 @@ public class Shooter extends Subsystem {
 		
 		talonLeft.setInverted(true);
 		talonRight.setInverted(false);
-		
-		
+			
 		initEncoders();
 		
 		setPIDF();

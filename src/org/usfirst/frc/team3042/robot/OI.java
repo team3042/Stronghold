@@ -50,7 +50,6 @@ public class OI {
 		gunner_RT.whenActive(new ShooterServo_Extend());
 		gunner_RB.whileHeld(new Shooter_Shoot());
 		
-		
 		//Control Snout Position
 		gunner_LeftJoyDown.whileActive(new ShooterArm_Raise());
 		gunner_LeftJoyUp.whileActive(new ShooterArm_Lower());
