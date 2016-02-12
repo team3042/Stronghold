@@ -119,6 +119,7 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();  
         
         SmartDashboard.putNumber("Potentiometer Value", Robot.shooterArm.getPotentiometerVal());
+        SmartDashboard.putNumber("Tape Shooter", Robot.tapeShooter.getEncDistance());
     }
     
     /**

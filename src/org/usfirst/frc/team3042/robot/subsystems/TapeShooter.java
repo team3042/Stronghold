@@ -13,11 +13,13 @@ public class TapeShooter extends Subsystem {
     
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
-	final double raiseSpeed = 0.8, lowerSpeed = 0.8;
+	final double raiseSpeed = 0.5, lowerSpeed = 0.3;
 	int encoderZero;
-	final double encLimit = 36 * (4096 / 5.89);
+	final double encLimit = 37300;
+	final double tolerance = 500;
 	
 	public TapeShooter() {
+		shooterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		resetEncoder();
 	}
 	
@@ -41,7 +43,7 @@ public class TapeShooter extends Subsystem {
     
     private void setSpeed(double speed) {
     	shooterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    	shooterTalon.set(speed);
+    	shooterTalon.set(-speed);
     }
 
 	public void resetEncoder() {
@@ -53,11 +55,11 @@ public class TapeShooter extends Subsystem {
 	} 
 	
 	public boolean encoderZeroReached() {
-		return getEncDistance() <= 0;
+		return getEncDistance() <= 0 + tolerance;
 	}
 
 	public int getEncDistance(){
-		return shooterTalon.getEncPosition() - encoderZero;
+		return -(shooterTalon.getEncPosition() - encoderZero);
 		
 	}
 }
