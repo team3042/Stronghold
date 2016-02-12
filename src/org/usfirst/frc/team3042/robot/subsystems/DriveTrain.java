@@ -6,6 +6,7 @@ import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -24,7 +25,19 @@ public class DriveTrain extends Subsystem {
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
+	
+	//PIDF values
+	double kP = 0, kI = 0, kD = 0, kF = 0;
 
+	class PeriodicRunnable implements java.lang.Runnable {
+		public void run() { 
+			leftMotorFront.processMotionProfileBuffer();
+			rightMotorFront.processMotionProfileBuffer();
+		}
+	}
+	
+	Notifier notifier = new Notifier (new PeriodicRunnable());
+	
 	public DriveTrain() {
 		//Put the rear motors in follower mode
 		leftMotorRear.changeControlMode(TalonControlMode.Follower);
@@ -38,6 +51,17 @@ public class DriveTrain extends Subsystem {
     	rightMotorFront.setInverted(true);
     	rightMotorFront.reverseOutput(true);
     	initEncoders();
+    	
+    	//Starting talons processing motion profile
+    	leftMotorFront.changeMotionControlFramePeriod(5);
+    	rightMotorFront.changeMotionControlFramePeriod(5);
+    	notifier.startPeriodic(0.005);
+    	
+    	//Initializing PIDF
+    	leftMotorFront.setPID(kP, kI, kD);
+    	rightMotorFront.setPID(kP,  kI,  kD);
+    	leftMotorFront.setF(kF);
+    	rightMotorFront.setF(kF);
 	}
 	
 	void initEncoders() {
@@ -118,6 +142,11 @@ public class DriveTrain extends Subsystem {
     	
     	leftMotorFront.changeControlMode(TalonControlMode.MotionProfile);
     	rightMotorFront.changeControlMode(TalonControlMode.MotionProfile);
+    	leftMotorFront.set(CANTalon.SetValueMotionProfile.Disable.value);
+    	rightMotorFront.set(CANTalon.SetValueMotionProfile.Disable.value);
+    	
+    	leftMotorFront.clearMotionProfileHasUnderrun();
+    	rightMotorFront.clearMotionProfileHasUnderrun();
     }
     
     public void pushPoints(CANTalon.TrajectoryPoint leftPoint, CANTalon.TrajectoryPoint rightPoint) {
