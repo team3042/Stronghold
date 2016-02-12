@@ -17,7 +17,7 @@ public class RobotMap {
 	public static final int SHOOTER_TALON_LEFT = (isSkoll)? 3 : 3;
 	public static final int SHOOTER_TALON_RIGHT = (isSkoll)? 15 : 15;
 	public static final int SHOOTER_ARM_TALON = (isSkoll)? 16 : 16;
-	public static final int TAPE_SHOOTER_TALON = (isSkoll)? 4 : 4;
+	public static final int TAPE_SHOOTER_TALON = (isSkoll)? 12 : 12;
 	public static final int WINCH_TALON = (isSkoll)? 5 : 5;
 	
 	//PWM ports
