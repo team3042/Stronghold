@@ -11,6 +11,8 @@ import com.ni.vision.NIVision.ParticleReport;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
+
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,7 +31,11 @@ public class CameraAPI extends Subsystem {
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
 	
 	//Variables describing our target
-	float WIDTH_HEIGHT_RATIO = 1.6666f;//The target width: 20 inches, divided by the target height: 12 inches.
+	float targetWidth = 20;//The width of our target
+	float targetHeight = 12;//The height of our target
+	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
+	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
+	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 60;
 	
 	public void initDefaultCommand() {
@@ -64,15 +70,22 @@ public class CameraAPI extends Subsystem {
 		return 0;
 		}
 		
-		int width = NIVision.imaqGetImageSize(report.image).width;
+		int width;
+		if(isSideways){
+			//If the camera is on it's side the height is now the width we need to find the offset
+			width = NIVision.imaqGetImageSize(report.image).height;
+			return (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
+		}
+		
+		width = NIVision.imaqGetImageSize(report.image).width;
 		
 		// Width/2 gives the center of the image.
 		// bboxleft+bboxwidth/2 givers center of the target
 		// image center - target center gives the pixel offset
-		// 20 is the real world target width in inches
+		// targetWidth is the real world target width in inches
 		// pixel offset / real world target gives the offset in inches per pixel
 		// inches per pixel / 12 gives feet per pixel
-		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
 	}
 	
 	public double getParticleCenterOffsetX(ParticleReport2 report){
@@ -80,8 +93,14 @@ public class CameraAPI extends Subsystem {
 		return 0;
 		}
 		
-		int width = NIVision.imaqGetImageSize(report.image).width;
-		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		int width;
+		if(isSideways){
+			width = NIVision.imaqGetImageSize(report.image).height;
+			return (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
+		}
+		
+		width = NIVision.imaqGetImageSize(report.image).width;
+		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
 	}
 	
 	//The degrees the robot needs to rotate to be on target
@@ -92,11 +111,19 @@ public class CameraAPI extends Subsystem {
 		return 0;
 		}
 		
-		int width = NIVision.imaqGetImageSize(report.image).width;
-		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		int width;
+		if(isSideways){
+			width = NIVision.imaqGetImageSize(report.image).height;
+			double offset = (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
+			double distance = getDistToTargetInFeet(report);
+			return Math.atan(offset/distance);
+		}
+		
+		width = NIVision.imaqGetImageSize(report.image).width;
+		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
 		double distance = getDistToTargetInFeet(report);
 		
-		return Math.acos(distance/offset);
+		return Math.atan(offset/distance);
 	}
 	
 	public double getRotationOffset(ParticleReport2 report){
@@ -104,8 +131,16 @@ public class CameraAPI extends Subsystem {
 		return 0;
 		}
 		
-		int width = NIVision.imaqGetImageSize(report.image).width;
-		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/20)/12;
+		int width;
+		if(isSideways){
+			width = NIVision.imaqGetImageSize(report.image).height;
+			double offset = (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
+			double distance = getDistToTargetInFeet(report);
+			return Math.atan(offset/distance);
+		}
+		
+		width = NIVision.imaqGetImageSize(report.image).width;
+		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
 		double distance = getDistToTargetInFeet(report);
 		
 		return Math.atan(offset/distance);
@@ -115,18 +150,35 @@ public class CameraAPI extends Subsystem {
 	public double getDistToTargetInFeet () {
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
+		if(report == null){
+			return 0;
+		}
+		
+		if(isSideways){
+			NIVision.GetImageSizeResult size;
+			size = NIVision.imaqGetImageSize(report.image);
+			double normalizedHeight = 2*report.boundingBox.height/size.height;
+			return  targetHeight/(normalizedHeight*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+		}
+		
 		NIVision.GetImageSizeResult size;
 		size = NIVision.imaqGetImageSize(report.image);
-		double targetWidth = 20;//the width of the stronghold target is 1ft 8in
 		double normalizedWidth = 2*report.boundingBox.width/size.width;
 		
 		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
 	}
 	
 	public double getDistToTargetInFeet(ParticleReport2 report){
+		
+		if(isSideways){
+			NIVision.GetImageSizeResult size;
+			size = NIVision.imaqGetImageSize(report.image);
+			double normalizedHeight = 2*report.boundingBox.height/size.height;
+			return  targetHeight/(normalizedHeight*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+		}
+		
 		NIVision.GetImageSizeResult size;
 		size = NIVision.imaqGetImageSize(report.image);
-		double targetWidth = 20;//the width of the stronghold target is 1ft 8in
 		double normalizedWidth = 2*report.boundingBox.width/size.width;
 		
 		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
@@ -245,7 +297,7 @@ public class CameraAPI extends Subsystem {
 	/**
 	 * Method to score convex hull area. This scores how "complete" the particle is. Particles with large holes will score worse than a filled in shape
 	 */
-	double ConvexHullAreaScore(ParticleReport2 report)
+	public double ConvexHullAreaScore(ParticleReport2 report)
 	{
 		return ratioToScore((report.area/report.convexHullArea)*1.18);
 	}
@@ -264,6 +316,10 @@ public class CameraAPI extends Subsystem {
 	 */
 	double aspectRatioScore(ParticleReport2 report)
 	{
+		//For the stronghold competition the camera is flipped 90 degrees which means we have to test with height to width
+		if(isSideways){
+			return ratioToScore(((report.boundingBox.height)/(report.boundingBox.width))/HEIGHT_WIDTH_RATIO);
+		}
 		return ratioToScore(((report.boundingBox.width)/(report.boundingBox.height))/WIDTH_HEIGHT_RATIO);
 	}
 }

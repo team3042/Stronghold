@@ -24,7 +24,9 @@ public class OI {
 
 	//Right Joystick Buttons
 	public Button right_1 = new JoystickButton(joystickRight, 1);
+	public Button right_3 = new JoystickButton(joystickRight, 3);
 	
+	//Gampad buttons
 	Button gunner_A = new JoystickButton(gamePadGunner, 1);
 	Button gunner_B = new JoystickButton(gamePadGunner, 2);
 	Button gunner_X = new JoystickButton(gamePadGunner, 3);
@@ -54,13 +56,14 @@ public class OI {
 		gunner_B.whenPressed(new ShooterArm_Pickup());
 		gunner_A.whenPressed(new Shooter_Intake());
 		gunner_X.whenPressed(new ShooterArm_Storage());
+		right_3.whenPressed(new ShooterArm_Adjust());
 		
 		//Winch Controls
 		gunner_POVButton.whileActive(new Winch_Raise());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
-		gunner_Back.whileHeld(new TapeShooter_Lower());
+		gunner_Back.whenPressed(new TapeShooter_Retract());
 	}
 }
 

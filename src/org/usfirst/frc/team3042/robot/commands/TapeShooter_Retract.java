@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TapeShooter_Lower extends Command {
+public class TapeShooter_Retract extends Command {
 
-    public TapeShooter_Lower() {
+    public TapeShooter_Retract() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.tapeShooter);
     }
@@ -18,7 +18,7 @@ public class TapeShooter_Lower extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.tapeShooter.lower();
+    	Robot.tapeShooter.retract();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,12 +27,13 @@ public class TapeShooter_Lower extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.tapeShooter.encoderZeroReached();
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	Robot.tapeShooter.stop();
     }
 
     // Called when another command which requires one or more of the same

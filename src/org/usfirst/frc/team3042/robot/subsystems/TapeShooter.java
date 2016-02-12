@@ -13,7 +13,13 @@ public class TapeShooter extends Subsystem {
     
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
-	double raiseSpeed = 0.8, lowerSpeed = 0.2;
+	final double raiseSpeed = 0.8, lowerSpeed = 0.8;
+	int encoderZero;
+	final double encLimit = 36 * (4096 / 5.89);
+	
+	public TapeShooter() {
+		resetEncoder();
+	}
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -29,7 +35,7 @@ public class TapeShooter extends Subsystem {
     	setSpeed(raiseSpeed);
     }
     
-    public void lower() {
+    public void retract() {
     	setSpeed(-lowerSpeed);
     }
     
@@ -39,12 +45,20 @@ public class TapeShooter extends Subsystem {
     }
 
 	public void resetEncoder() {
-		// TODO: Zero the encoder
+		encoderZero = shooterTalon.getEncPosition();
+	}
+	
+	public boolean encoderLimitReached() {
+		return getEncDistance() >= encLimit;
+	} 
+	
+	public boolean encoderZeroReached() {
+		return getEncDistance() <= 0;
 	}
 
-	public boolean encoderLimitReached() {
-		// TODO: determine if we have reached the encoder limit for raising the tape.
-		return false;
-	}  
+	public int getEncDistance(){
+		return shooterTalon.getEncPosition() - encoderZero;
+		
+	}
 }
 
