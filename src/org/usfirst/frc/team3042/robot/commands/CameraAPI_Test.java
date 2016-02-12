@@ -31,6 +31,7 @@ public class CameraAPI_Test extends Command {
 	    	}else{
 	    		Robot.logger.log("!!!Failed to create report at Score Min of "+(i*20), 5);
 	    	}
+	    	Robot.logger.log("Robot.Camera.isSideways IS SET TO: "+Robot.camera.isSideways, 5);
     	}
     	finish = true;
     }
