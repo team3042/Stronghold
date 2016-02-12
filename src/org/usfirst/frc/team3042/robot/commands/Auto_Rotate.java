@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class Auto_Rotate extends Command {
-
+	//I believe that this command does not need to be calibrated for the camera being sideways, but testing
+	//is required to prove this theory, which has only been tested on paper.
+	
 	//The degrees of error that the offset can follow
 	private NIVision.Range OFFSET_ERROR = new NIVision.Range(-5,5);
 	
