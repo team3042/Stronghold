@@ -21,13 +21,13 @@ public class RobotMap {
 	public static final int WINCH_TALON = (isSkoll)? 5 : 5;
 	
 	//PWM ports
-	public static final int SHOOTER_SERVO =  (isSkoll)? 1 : 1;
+	public static final int SHOOTER_SERVO = 1;
 	
 	//USB Ports
-	public static final int LEFT_JOYSTICK_USB_PORT_0 = (isSkoll)? 0 : 0;
-	public static final int RIGHT_JOYSTICK_USB_PORT_1 = (isSkoll)? 1 : 1;
-	public static final int GUNNER_JOYSTICK_USB_PORT_2 = (isSkoll)? 2 : 2;
+	public static final int LEFT_JOYSTICK_USB_PORT_0 = 0;
+	public static final int RIGHT_JOYSTICK_USB_PORT_1 = 1;
+	public static final int GUNNER_JOYSTICK_USB_PORT_2 = 2;
 	
 	//Robot Camera IP
-	public static final String CAMERA_IP = "10.30.42.17";
+	public static final String CAMERA_IP = "axis-camera";
 }

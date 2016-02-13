@@ -26,7 +26,8 @@ public class ShooterArm extends Subsystem {
 	public ShooterArm() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		talonRotate.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
-		talonRotate.reverseSensor(true);
+		talonRotate.reverseOutput(true);
+		talonRotate.setInverted(true);
 		
 		talonRotate.setPID(p, i ,d);
 		talonRotate.setAllowableClosedLoopErr(0);
@@ -34,8 +35,7 @@ public class ShooterArm extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new ShooterArm_HoldPosition());
-        setDefaultCommand(new ShooterArm_Stop());
+        setDefaultCommand(new ShooterArm_HoldPosition());
     }
 
     public void stop() {
@@ -49,21 +49,19 @@ public class ShooterArm extends Subsystem {
     
     public void raise() {
     	if (belowRaiseLimit()) {
-    		setSpeed(rotateSpeed);
+    		setSpeed(-rotateSpeed);
     	}
     	else {
-    		//setPosition(raiseLimit);
-    		stop();
+    		setPosition(raiseLimit);
     	}
     }
     
     public void lower() {
     	if (aboveLowerLimit()) {
-    		setSpeed(-rotateSpeed);
+    		setSpeed(rotateSpeed);
     	}
     	else {
-    		//setPosition(lowerLimit);
-    		stop();
+    		setPosition(lowerLimit);
     	}
     }
     

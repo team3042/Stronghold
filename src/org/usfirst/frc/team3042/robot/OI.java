@@ -22,6 +22,7 @@ public class OI {
 	//Left Joystick Buttons
 	public Button left_1 = new JoystickButton(joystickLeft, 1);
 	public Button left_3 = new JoystickButton(joystickLeft, 3);
+	public Button left_5 = new JoystickButton(joystickLeft, 5);
 
 	//Right Joystick Buttons
 	public Button right_1 = new JoystickButton(joystickRight, 1);
@@ -66,7 +67,10 @@ public class OI {
 		gunner_Back.whenPressed(new TapeShooter_Retract());
 		
 		//Auto
-		left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
+		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
+		
+		//Camera Testing
+		//left_5.whenPressed(new CameraAPI_Test());
 	}
 }
 
