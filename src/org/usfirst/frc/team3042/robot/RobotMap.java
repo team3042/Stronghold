@@ -21,7 +21,7 @@ public class RobotMap {
 	public static final int WINCH_TALON = (isSkoll)? 5 : 5;
 	
 	//PWM ports
-	public static final int SHOOTER_SERVO = (isSkoll)? 1 : 1;
+	public static final int SHOOTER_SERVO =  (isSkoll)? 1 : 1;
 	
 	//USB Ports
 	public static final int LEFT_JOYSTICK_USB_PORT_0 = (isSkoll)? 0 : 0;
