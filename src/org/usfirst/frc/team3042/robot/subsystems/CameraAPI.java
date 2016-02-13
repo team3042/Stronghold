@@ -178,8 +178,8 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	public double getDistToTargetInFeet(ParticleReport2 report){
-		double scaleFactor = 1;
-		return report.perimeter*scaleFactor;
+		double scaleFactor = 100;
+		return scaleFactor / report.perimeter;
 	}
 	
 	//Run all the filters for a stronghold target

@@ -14,7 +14,7 @@ public class ShooterArm extends Subsystem {
 	
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
 
-	private double rotateSpeed = .3;
+	private double rotateSpeed = .6;
 	private double raiseLimit = 100;
 	private double lowerLimit = 790;
 	private double storage = 150;
