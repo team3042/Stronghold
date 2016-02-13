@@ -23,6 +23,11 @@ public class CameraAPI extends Subsystem {
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
 	
 	//Our ranges for HSV image acquisition 
+	/* From the 2015 example
+	NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(101, 64);	
+	NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(88, 255);
+	NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(134, 255);
+	*/
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(50, 255);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(50, 255);	//Range for green light
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
