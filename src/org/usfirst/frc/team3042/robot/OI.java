@@ -70,7 +70,7 @@ public class OI {
 		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
 		
 		//Camera Testing
-		//left_5.whenPressed(new CameraAPI_Test());
+		left_5.whenPressed(new CameraAPI_Test());
 	}
 }
 

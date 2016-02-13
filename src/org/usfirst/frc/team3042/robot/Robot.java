@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     public static Logger logger;
         
-    private int LOGGER_LEVEL = 1;
+    private int LOGGER_LEVEL = 5;
 
     /**
      * This function is run when the robot is first started up and should be

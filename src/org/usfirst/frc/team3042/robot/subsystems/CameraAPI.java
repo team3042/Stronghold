@@ -2,7 +2,9 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import java.util.Comparator;
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
@@ -11,6 +13,10 @@ import com.ni.vision.NIVision.ParticleReport;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
+import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
+import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
+import edu.wpi.first.wpilibj.vision.AxisCamera.Rotation;
+import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -23,9 +29,17 @@ public class CameraAPI extends Subsystem {
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
 	
 	//Our ranges for HSV image acquisition 
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(50, 255);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(50, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(50, 255);	//Range for green light
+	/* From the 2015 example
+	NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(101, 64);	
+	NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(88, 255);
+	NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(134, 255);
+	*/
+	//0-180
+	//
+	//
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(96, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(98, 133);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -35,8 +49,17 @@ public class CameraAPI extends Subsystem {
 	float targetHeight = 12;//The height of our target
 	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
-	public boolean isSideways = false;//The boolean describing whether or not the camera is on it's side
+	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 60;
+	
+	public CameraAPI(){
+		camera.writeCompression(30);
+		camera.writeResolution(Resolution.k320x240);
+		//camera.writeRotation(Rotation.);
+		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
+		camera.writeBrightness(10);
+		camera.writeExposureControl(ExposureControl.kHold);
+	}
 	
 	public void initDefaultCommand() {
 	}
@@ -47,6 +70,7 @@ public class CameraAPI extends Subsystem {
 		double convexHullArea;
 		public int particleIndex;
 		public int boundingBoxRight;
+		public double perimeter;
 		public Image image;
 		
 		public int compareTo(ParticleReport r)
@@ -150,53 +174,27 @@ public class CameraAPI extends Subsystem {
 	public double getDistToTargetInFeet () {
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
-		if(report == null){
-			return 0;
-		}
-		
-		if(isSideways){
-			NIVision.GetImageSizeResult size;
-			size = NIVision.imaqGetImageSize(report.image);
-			double normalizedHeight = 2*report.boundingBox.height/size.height;
-			return  targetHeight/(normalizedHeight*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
-		}
-		
-		NIVision.GetImageSizeResult size;
-		size = NIVision.imaqGetImageSize(report.image);
-		double normalizedWidth = 2*report.boundingBox.width/size.width;
-		
-		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+		return getDistToTargetInFeet(report);
 	}
 	
 	public double getDistToTargetInFeet(ParticleReport2 report){
-		
-		if(isSideways){
-			NIVision.GetImageSizeResult size;
-			size = NIVision.imaqGetImageSize(report.image);
-			double normalizedHeight = 2*report.boundingBox.height/size.height;
-			return  targetHeight/(normalizedHeight*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
-		}
-		
-		NIVision.GetImageSizeResult size;
-		size = NIVision.imaqGetImageSize(report.image);
-		double normalizedWidth = 2*report.boundingBox.width/size.width;
-		
-		return  targetWidth/(normalizedWidth*12*Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+		double scaleFactor = 1;
+		return report.perimeter*scaleFactor;
 	}
 	
 	//Run all the filters for a stronghold target
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
+		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	this.outPutImagePNG(binaryImage, "FilteredHSV");
-    	
-    	filterOutSmallParticles(binaryImage, 5, 100);
+    	filterOutSmallParticles(binaryImage, 0, 100);
     	fillParticles(binaryImage);
+    	//this.outPutImagePNG(binaryImage, "FilteredParticle");
     	
     	ParticleReport2 targetReport = null;
     	
     	int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-		
+    	
 		if(numParticles > 0)
 		{
 			//Measure particles and sort by particle size
@@ -221,14 +219,18 @@ public class CameraAPI extends Subsystem {
 			report.percentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
 			report.convexHullArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
 			report.boundingBox.top = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+			report.perimeter = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_PERIMETER);
 			report.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
 			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
 			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
-			
+
 			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
-			this.aspectRatioScore(report)>=SCORE_MIN &&
-			this.ConvexHullAreaScore(report) >= SCORE_MIN;
+			this.aspectRatioScore(report)>=SCORE_MIN && this.ConvexHullAreaScore(report)>= SCORE_MIN;
+			Robot.logger.log("Perimeter: " + report.perimeter, 5);
+			/*Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
+			Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
+			Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);*/
 			
 			if(isTarget){
 				particles.get(0).image = binaryImage;
@@ -320,7 +322,7 @@ public class CameraAPI extends Subsystem {
 	{
 		//For the stronghold competition the camera is flipped 90 degrees which means we have to test with height to width
 		if(isSideways){
-			return ratioToScore(((report.boundingBox.height)/(report.boundingBox.width))/HEIGHT_WIDTH_RATIO);
+			return ratioToScore(((double)(report.boundingBox.width)/(report.boundingBox.height))/HEIGHT_WIDTH_RATIO);
 		}
 		return ratioToScore(((report.boundingBox.width)/(report.boundingBox.height))/WIDTH_HEIGHT_RATIO);
 	}
