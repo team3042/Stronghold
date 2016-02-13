@@ -35,7 +35,7 @@ public class CameraAPI extends Subsystem {
 	float targetHeight = 12;//The height of our target
 	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
-	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
+	public boolean isSideways = false;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 60;
 	
 	public void initDefaultCommand() {
@@ -187,6 +187,8 @@ public class CameraAPI extends Subsystem {
 	//Run all the filters for a stronghold target
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+    	
+    	this.outPutImagePNG(binaryImage, "FilteredHSV");
     	
     	filterOutSmallParticles(binaryImage, 5, 100);
     	fillParticles(binaryImage);

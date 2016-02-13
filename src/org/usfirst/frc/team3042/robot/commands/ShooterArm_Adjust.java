@@ -24,6 +24,8 @@ public class ShooterArm_Adjust extends Command {
 			{12,575}};
 			
 	static final double maxDist = 12, minDist = 3;
+	double potGoal;
+	double tolerance = 3;
 			
     public ShooterArm_Adjust() {
         // Use requires() here to declare subsystem dependencies
@@ -32,16 +34,17 @@ public class ShooterArm_Adjust extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.logger.log("Initialize", 1);
     	//double distance = Robot.camera.getDistToTargetInFeet();
     	double distance = SmartDashboard.getNumber("Camera Distance");
 
-		double potValue = Robot.shooterArm.getPotentiometerVal();
+		potGoal = Robot.shooterArm.getPotentiometerVal();
 
     	if ((distance < maxDist) && (distance > minDist)) {
         	int i = 1;
     		while (i < lookUpTable.length){
     			if (lookUpTable[i][0] > distance) {
-    				potValue = lookUpTable[i-1][1] + 
+    				potGoal = lookUpTable[i-1][1] + 
     						(distance - lookUpTable[i-1][0]) *
     	    				(lookUpTable[i][1] - lookUpTable[i-1][1]) /
     	    				(lookUpTable[i][0] - lookUpTable[i-1][0]);
@@ -50,7 +53,7 @@ public class ShooterArm_Adjust extends Command {
     			i++;
     		}
     	}
-    	Robot.shooterArm.setPosition(potValue);
+    	Robot.shooterArm.setPosition(potGoal);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -59,15 +62,17 @@ public class ShooterArm_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Math.abs(Robot.shooterArm.getPotentiometerVal() - potGoal) < tolerance;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.logger.log("End", 1);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.logger.log("Interrupt", 1);
     }
 }
