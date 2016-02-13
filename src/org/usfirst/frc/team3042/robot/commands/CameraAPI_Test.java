@@ -18,20 +18,24 @@ public class CameraAPI_Test extends Command {
     protected void initialize() {
     }
 
+    public int testStartLower = 50;
+    public int testStartUpper = 255;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.logger.log("--CameraAPI TEST--", 5);
     	Robot.logger.log("Robot.Camera.isSideways IS SET TO: "+Robot.camera.isSideways, 5);
-    	for(int i =0; i<4; i++){
-	    	ParticleReport2 report = Robot.camera.createTargetReport(i*20);
+    	for(int i = testStartLower; i<testStartUpper; i++){
+	    	ParticleReport2 report = Robot.camera.createTargetReport(20);
 	    	
 	    	if(report != null){
-	    		Robot.logger.log("|Created report at Score Min of "+(i*20)+"|", 5);
+	    		Robot.logger.log(""+i, 1);
+	    		
+	    		Robot.logger.log("|Created report at Score Min of "+(20)+"|", 5);
 	    		Robot.logger.log("Distance to target: "+Robot.camera.getDistToTargetInFeet(report), 5);
 	    		Robot.logger.log("Rotation offset: "+Robot.camera.getRotationOffset(report), 5);
 	    		Robot.logger.log("Convex hull score: "+ Robot.camera.ConvexHullAreaScore(report), 5);
 	    	}else{
-	    		Robot.logger.log("!!!Failed to create report at Score Min of "+(i*20), 5);
+	    		testStartLower++;
 	    	}
     	}
     	finish = true;
