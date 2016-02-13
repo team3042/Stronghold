@@ -11,6 +11,10 @@ import com.ni.vision.NIVision.ParticleReport;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
+import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
+import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
+import edu.wpi.first.wpilibj.vision.AxisCamera.Rotation;
+import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -42,6 +46,15 @@ public class CameraAPI extends Subsystem {
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
 	public boolean isSideways = false;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 60;
+	
+	public CameraAPI(){
+		camera.writeCompression(30);
+		camera.writeResolution(Resolution.k320x240);
+		//camera.writeRotation(Rotation.);
+		camera.writeWhiteBalance(WhiteBalance.kFixedIndoor);
+		camera.writeBrightness(5);
+		camera.writeExposureControl(ExposureControl.kHold);
+	}
 	
 	public void initDefaultCommand() {
 	}
