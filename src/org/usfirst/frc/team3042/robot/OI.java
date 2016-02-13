@@ -54,7 +54,7 @@ public class OI {
 		gunner_LeftJoyDown.whileActive(new ShooterArm_Raise());
 		gunner_LeftJoyUp.whileActive(new ShooterArm_Lower());
 		gunner_B.whenPressed(new ShooterArm_Pickup());
-		gunner_A.whenPressed(new Shooter_Intake());
+		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new ShooterArm_Storage());
 		right_3.whenPressed(new ShooterArm_Adjust());
 		
