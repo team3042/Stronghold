@@ -18,7 +18,7 @@ public class ShooterArm_Adjust extends Command {
 			{6,425},
 			{7,450},
 			{8,475},
-			{9,500},
+			{9, 546},// this value is tested.
 			{10,525},
 			{11,550},
 			{12,575}};
