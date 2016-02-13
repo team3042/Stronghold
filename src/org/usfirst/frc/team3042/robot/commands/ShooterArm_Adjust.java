@@ -53,6 +53,7 @@ public class ShooterArm_Adjust extends Command {
     			i++;
     		}
     	}
+    	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
     	Robot.shooterArm.setPosition(potGoal);
     }
