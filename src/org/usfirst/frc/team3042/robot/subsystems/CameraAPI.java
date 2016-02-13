@@ -131,23 +131,7 @@ public class CameraAPI extends Subsystem {
 	public double getRotationOffset(){
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
-		if(report == null){
-		return 0;
-		}
-		
-		int width;
-		if(isSideways){
-			width = NIVision.imaqGetImageSize(report.image).height;
-			double offset = (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
-			double distance = getDistToTargetInFeet(report);
-			return Math.atan(offset/distance);
-		}
-		
-		width = NIVision.imaqGetImageSize(report.image).width;
-		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
-		double distance = getDistToTargetInFeet(report);
-		
-		return Math.atan(offset/distance);
+		return getRotationOffset(report);
 	}
 	
 	public double getRotationOffset(ParticleReport2 report){
@@ -159,25 +143,25 @@ public class CameraAPI extends Subsystem {
 		if(isSideways){
 			width = NIVision.imaqGetImageSize(report.image).height;
 			double offset = (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
-			double distance = getDistToTargetInFeet(report);
+			double distance = getDistToTarget(report);
 			return Math.atan(offset/distance);
 		}
 		
 		width = NIVision.imaqGetImageSize(report.image).width;
 		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
-		double distance = getDistToTargetInFeet(report);
+		double distance = getDistToTarget(report);
 		
 		return Math.atan(offset/distance);
 	}
 	
 	//How far away the robot is from the target.
-	public double getDistToTargetInFeet () {
+	public double getDistToTarget () {
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
-		return getDistToTargetInFeet(report);
+		return getDistToTarget(report);
 	}
 	
-	public double getDistToTargetInFeet(ParticleReport2 report){
+	public double getDistToTarget(ParticleReport2 report){
 		double scaleFactor = 100;
 		return scaleFactor / report.perimeter;
 	}
