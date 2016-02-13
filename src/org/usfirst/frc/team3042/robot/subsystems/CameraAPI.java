@@ -51,8 +51,8 @@ public class CameraAPI extends Subsystem {
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		//camera.writeRotation(Rotation.);
-		camera.writeWhiteBalance(WhiteBalance.kFixedIndoor);
-		camera.writeBrightness(5);
+		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
+		camera.writeBrightness(10);
 		camera.writeExposureControl(ExposureControl.kHold);
 	}
 	

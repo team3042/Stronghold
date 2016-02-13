@@ -18,14 +18,14 @@ public class CameraAPI_Test extends Command {
     protected void initialize() {
     }
 
-    public int testStartLower = 50;
-    public int testStartUpper = 255;
+    public int testStartLower = 1;
+    public int testStartUpper = 4;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.logger.log("--CameraAPI TEST--", 5);
     	Robot.logger.log("Robot.Camera.isSideways IS SET TO: "+Robot.camera.isSideways, 5);
     	for(int i = testStartLower; i<testStartUpper; i++){
-	    	ParticleReport2 report = Robot.camera.createTargetReport(20);
+	    	ParticleReport2 report = Robot.camera.createTargetReport(i*20);
 	    	
 	    	if(report != null){
 	    		Robot.logger.log(""+i, 1);
