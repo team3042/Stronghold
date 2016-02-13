@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class TapeShooter extends Subsystem {
-    
+    	
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
 	final double raiseSpeed = 0.5, lowerSpeed = 0.3;

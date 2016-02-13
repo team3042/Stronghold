@@ -29,6 +29,8 @@ public class Auto_Drive extends Command {
 	Auto_MotionProfile motionProfileLeft;
 	Auto_MotionProfile motionProfileRight;
 	
+	MotionProfileStatus[] status;
+	
     public Auto_Drive(AutoType autoType, double distance, double maxSpeed, double radius) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -88,18 +90,13 @@ public class Auto_Drive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.driveTrain.processMotionProfile();
     	
-    	MotionProfileStatus[] status = Robot.driveTrain.getMotionProfileStatus();
+    	status = Robot.driveTrain.getMotionProfileStatus();
     	
-    	if(status[0].btmBufferCnt > 5 &&
-    			status[0].outputEnable != CANTalon.SetValueMotionProfile.Enable) {
-    		Robot.driveTrain.enableMotionProfile();
+    	if(status[0].btmBufferCnt > 5) {
+    		//Robot.driveTrain.enableMotionProfile();
     	}
-    	else if(status[0].btmBufferCnt <= 5 &&
-    			status[0].outputEnable == CANTalon.SetValueMotionProfile.Enable) {
-    		Robot.driveTrain.holdMotionProfile();
-    	}
+    	Robot.logger.log(status[0].btmBufferCnt + "", 3);
     	
     	if(status[0].hasUnderrun) {
     		Robot.logger.log("Left Underrun", 2);
@@ -113,18 +110,20 @@ public class Auto_Drive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return status[0].activePoint.isLastPoint;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	Robot.driveTrain.disableMotionProfile();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
+    	Robot.driveTrain.disableMotionProfile();
     }
     
     public enum AutoType {

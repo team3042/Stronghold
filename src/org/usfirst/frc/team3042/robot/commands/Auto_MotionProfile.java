@@ -107,18 +107,10 @@ public class Auto_MotionProfile {
 			trajectory[i].timeDurMs = itp;
 			trajectory[i].position = currentPosition;
 			trajectory[i].velocity = currentVelocity * 60;
-			if(currentPoint == 0) {
-				trajectory[i].zeroPos = true;
-			}
-			else {
-				trajectory[i].zeroPos = false;
-			}
-			if(currentPoint == totalPoints) {
-				trajectory[i].isLastPoint = true;
-			}
-			else {
-				trajectory[i].isLastPoint = false;
-			}
+			trajectory[i].profileSlotSelect = 0;
+			trajectory[i].velocityOnly = false;
+			trajectory[i].zeroPos = (currentPoint == 0);
+			trajectory[i].isLastPoint = (currentPoint == totalPoints);
 					
 			currentPoint++;
 		}

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TapeShooter_Raise extends Command {
 
+	//TODO: add a timeout for the command
+	
     public TapeShooter_Raise() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.tapeShooter);

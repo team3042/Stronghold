@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.ShooterArm_HoldPosition;
+import org.usfirst.frc.team3042.robot.commands.ShooterArm_Stop;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
@@ -25,6 +26,7 @@ public class ShooterArm extends Subsystem {
 	public ShooterArm() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		talonRotate.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
+		talonRotate.reverseSensor(true);
 		
 		talonRotate.setPID(p, i ,d);
 		talonRotate.setAllowableClosedLoopErr(0);
@@ -32,7 +34,8 @@ public class ShooterArm extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new ShooterArm_HoldPosition());
+        //setDefaultCommand(new ShooterArm_HoldPosition());
+        setDefaultCommand(new ShooterArm_Stop());
     }
 
     public void stop() {
@@ -46,19 +49,21 @@ public class ShooterArm extends Subsystem {
     
     public void raise() {
     	if (belowRaiseLimit()) {
-    		setSpeed(-rotateSpeed);
+    		setSpeed(rotateSpeed);
     	}
     	else {
-    		setPosition(raiseLimit);
+    		//setPosition(raiseLimit);
+    		stop();
     	}
     }
     
     public void lower() {
     	if (aboveLowerLimit()) {
-    		setSpeed(rotateSpeed);
+    		setSpeed(-rotateSpeed);
     	}
     	else {
-    		setPosition(lowerLimit);
+    		//setPosition(lowerLimit);
+    		stop();
     	}
     }
     
