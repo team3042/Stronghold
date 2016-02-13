@@ -25,7 +25,7 @@ public class ShooterArm_Adjust extends Command {
 			
 	static final double maxDist = 12, minDist = 3;
 	double potGoal;
-	double tolerance = 3;
+	double tolerance = 2;
 			
     public ShooterArm_Adjust() {
         // Use requires() here to declare subsystem dependencies
@@ -53,6 +53,7 @@ public class ShooterArm_Adjust extends Command {
     			i++;
     		}
     	}
+    	Robot.logger.log("potGoal = " + potGoal, 3);
     	Robot.shooterArm.setPosition(potGoal);
     }
 
@@ -62,7 +63,9 @@ public class ShooterArm_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Robot.shooterArm.getPotentiometerVal() - potGoal) < tolerance;
+    	double diff = Robot.shooterArm.getPotentiometerVal() - potGoal;
+    	Robot.logger.log("pot-goal = " + diff, 3);
+        return Math.abs(diff) < tolerance;
     }
 
     // Called once after isFinished returns true
