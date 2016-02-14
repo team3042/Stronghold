@@ -25,36 +25,37 @@ public class Auto_Rotate extends Command {
     ParticleReport2 report;
     // Called just before this Command runs the first time
     protected void initialize() {
-    	report = Robot.camera.createTargetReport(60);
+    	//report = Robot.camera.createTargetReport(60);
     }
 
     private double rotateSpeed = 0.3;
     private double offset;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+		report = Robot.camera.createTargetReport(60);
+    	
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
-    		
-    		//when the offset is negative it means that the target is to the left
-    		//when the offset is positive it means that the target is to the right
+    		Robot.logger.log("Offset: "+offset, 1);
+    		//when the offset is negative it means that the target is to the right
+    		//when the offset is positive it means that the target is to the left
     		//this comes from (imagecenter - targetcenter) which is later converted into degrees for getRotationOffset
     		if(offset < OFFSET_ERROR.minValue){
-    			//If the offset is negative, and less than the allowed negative error, then rotate to the left
-    			Robot.driveTrain.setMotors(-rotateSpeed, rotateSpeed);
+    			//If the offset is negative, and less than the allowed negative error, then rotate to the right
+    			//Robot.driveTrain.setMotors(rotateSpeed, -rotateSpeed);
     		}else if(offset > OFFSET_ERROR.maxValue){
-    			//If the offset is positive, and greater than the allowed positive error, then rotate to the right
-    			Robot.driveTrain.setMotors(rotateSpeed, -rotateSpeed);
+    			//If the offset is positive, and greater than the allowed positive error, then rotate to the left
+    			//Robot.driveTrain.setMotors(-rotateSpeed, rotateSpeed);
     		}else{
     			//The robot is within the error range, meaning that we are on target
-    			Robot.driveTrain.setMotors(0.0,  0.0);
+    			//Robot.driveTrain.setMotors(0.0,  0.0);
     			finished = true;
     			return;
     		}
     		
-    		report = Robot.camera.createTargetReport(60);
     	}else{
     		Robot.logger.log("Failed to acquire target!", 5);
-			Robot.driveTrain.setMotors(0.0,  0.0);
+			//Robot.driveTrain.setMotors(0.0,  0.0);
     		finished = true;
     	}
     }
@@ -62,7 +63,7 @@ public class Auto_Rotate extends Command {
     boolean finished = false;
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return finished;
+        return false;
     }
 
     // Called once after isFinished returns true

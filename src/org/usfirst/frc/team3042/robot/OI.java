@@ -74,7 +74,7 @@ public class OI {
 		right_5.whenPressed(new Auto_StopFollow());
 		
 		//Camera Testing
-		left_5.whenPressed(new CameraAPI_Test());
+		left_5.whenPressed(new Auto_Rotate());
 	}
 }
 

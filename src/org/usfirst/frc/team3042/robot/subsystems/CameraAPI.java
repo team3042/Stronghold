@@ -37,9 +37,9 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(96, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(98, 133);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 142);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(188, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(37, 122);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -128,10 +128,10 @@ public class CameraAPI extends Subsystem {
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
-    	
+    	this.outPutImagePNG(binaryImage, "HSVFiltered");
     	filterOutSmallParticles(binaryImage, 0, 100);
     	fillParticles(binaryImage);
-    	//this.outPutImagePNG(binaryImage, "FilteredParticle");
+    	this.outPutImagePNG(binaryImage, "FilteredParticle");
     	
     	ParticleReport2 targetReport = null;
     	
@@ -170,13 +170,19 @@ public class CameraAPI extends Subsystem {
 			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
 			this.aspectRatioScore(report)>=SCORE_MIN 
 			&& this.ConvexHullAreaScore(report)>= SCORE_MIN;
-			/*Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
-			Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
-			Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);*/
+			//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
+			//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
+			//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
 			
 			if(isTarget){
 				particles.get(0).image = binaryImage;
 				targetReport = particles.get(0);
+			}else{
+				Robot.logger.log("!!!------------------------------------", 5);
+				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
+				Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
+				Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
+				Robot.logger.log("-------------------------------------", 5);
 			}
 		}
     	
@@ -252,7 +258,7 @@ public class CameraAPI extends Subsystem {
 	 * Method to score if the particle appears to be a trapezoid. Compares the convex hull (filled in) area to the area of the bounding box.
 	 * The expectation is that the convex hull area is about 95.4% of the bounding box area for an ideal tote.
 	 */
-	double TrapezoidScore(ParticleReport2 report)
+	public double TrapezoidScore(ParticleReport2 report)
 	{
 		return ratioToScore(report.convexHullArea/((report.boundingBox.width)*(report.boundingBox.height)*.954));
 	}
@@ -260,7 +266,7 @@ public class CameraAPI extends Subsystem {
 	/**
 	 * Method to score if the aspect ratio of the particle appears to match the long side of a tote.
 	 */
-	double aspectRatioScore(ParticleReport2 report)
+	public double aspectRatioScore(ParticleReport2 report)
 	{
 		//For the stronghold competition the camera is flipped 90 degrees which means we have to test with height to width
 		if(isSideways){

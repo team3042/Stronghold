@@ -35,9 +35,9 @@ public class ShooterArm_Adjust extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	//double distance = Robot.camera.getDistToTarget();
-    	double distance = SmartDashboard.getNumber("Camera Distance");
-
+    	double distance = Robot.camera.getDistToTarget();
+    	//double distance = SmartDashboard.getNumber("Camera Distance");
+    	
 		potGoal = Robot.shooterArm.getPotentiometerVal();
 
     	if ((distance < maxDist) && (distance > minDist)) {
@@ -55,7 +55,7 @@ public class ShooterArm_Adjust extends Command {
     	}
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
-    	Robot.shooterArm.setPosition(potGoal);
+    	//Robot.shooterArm.setPosition(potGoal);
     }
 
     // Called repeatedly when this Command is scheduled to run
