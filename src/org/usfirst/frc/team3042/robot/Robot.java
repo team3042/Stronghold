@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3042.robot.subsystems.GRIPCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -32,6 +34,7 @@ public class Robot extends IterativeRobot {
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
+	public static final GRIPCamera gripCamera = new GRIPCamera();
 	public static OI oi;
 
     Command autonomousCommand;
@@ -39,6 +42,15 @@ public class Robot extends IterativeRobot {
     public static Logger logger;
         
     private int LOGGER_LEVEL = 5;
+    
+    public static NetworkTable table;
+    double[] defaultValues = new double[] {0};
+    double[] areas;
+    double[] heights;
+    double[] widths;
+    double[] xs;
+    double[] ys;
+    double[] solids;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -56,6 +68,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("F-Gain Right", shooter.rightF);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
         SmartDashboard.putNumber("Camera Distance", 8);
+        
+        table = NetworkTable.getTable("GRIP/myContoursReport");
     }
 	
 	/**
@@ -120,6 +134,19 @@ public class Robot extends IterativeRobot {
         
         SmartDashboard.putNumber("Potentiometer Value", Robot.shooterArm.getPotentiometerVal());
         SmartDashboard.putNumber("Tape Shooter", Robot.tapeShooter.getEncDistance());
+        
+        areas = table.getNumberArray("area", defaultValues);
+        heights = table.getNumberArray("height", defaultValues);
+        widths = table.getNumberArray("width", defaultValues);
+        xs = table.getNumberArray("centerX", defaultValues);
+        ys = table.getNumberArray("centerY", defaultValues);
+        solids = table.getNumberArray("solidity", defaultValues);
+      
+        SmartDashboard.putNumber("Area: ",areas[0]);
+        SmartDashboard.putNumber("Height: ",heights[0]);
+        SmartDashboard.putNumber("Width: ",widths[0]);
+        SmartDashboard.putNumber("X Center: ",xs[0]);
+        SmartDashboard.putNumber("Y Center: ",ys[0]);
     }
     
     /**
