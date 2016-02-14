@@ -3,40 +3,30 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Shooter_Intake extends Command {
+public class Auto_StopFollow extends Command {
 
-	double targetRPM = Robot.shooter.intakeSpeed;
-	
-    public Shooter_Intake() {
-    	requires(Robot.shooter);
-    	requires(Robot.shooterServo);
+    public Auto_StopFollow() {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
-    	Robot.shooterServo.setServoRetracted();
-    	
-    	targetRPM = -SmartDashboard.getNumber("Intake Speed");
-    	Robot.shooter.setRPM(targetRPM);
+    	Robot.driveTrain.stop();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Getting RPM of each motor and outputting to dashboard for tracking
-    	//SmartDashboard.putNumber("Encoder RPM Left", Robot.shooter.getEncoderRPMLeft());
-    	//SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
@@ -47,6 +37,6 @@ public class Shooter_Intake extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrupt", 1);
+    	Robot.logger.log("interrupted", 1);
     }
 }

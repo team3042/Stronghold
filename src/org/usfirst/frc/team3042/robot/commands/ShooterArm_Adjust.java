@@ -64,6 +64,7 @@ public class ShooterArm_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	//TODO: add a time out in case the potVal never reaches the goal.
     	double diff = Robot.shooterArm.getPotentiometerVal() - potGoal;
     	Robot.logger.log("pot-goal = " + diff, 3);
         return Math.abs(diff) < tolerance;

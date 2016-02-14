@@ -27,6 +27,8 @@ public class OI {
 	//Right Joystick Buttons
 	public Button right_1 = new JoystickButton(joystickRight, 1);
 	public Button right_3 = new JoystickButton(joystickRight, 3);
+	public Button right_4 = new JoystickButton(joystickRight, 4);
+	public Button right_5 = new JoystickButton(joystickRight, 5);
 	
 	//Gampad buttons
 	Button gunner_A = new JoystickButton(gamePadGunner, 1);
@@ -68,6 +70,8 @@ public class OI {
 		
 		//Auto
 		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
+		right_4.whenPressed(new Auto_Follow());
+		right_5.whenPressed(new Auto_StopFollow());
 		
 		//Camera Testing
 		left_5.whenPressed(new CameraAPI_Test());

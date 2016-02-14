@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Shooter_Shoot extends Command {
 
-	double targetRPM = 0;
+	double targetRPM = Robot.shooter.shootSpeed;
 	
     public Shooter_Shoot() {
     	requires(Robot.shooter);
@@ -30,6 +30,9 @@ public class Shooter_Shoot extends Command {
     	SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());
     	SmartDashboard.putNumber("Encoder Position Left", Robot.shooter.getEncoderValLeft());
     	SmartDashboard.putNumber("Encoder Position Right", Robot.shooter.getEncoderValRight());
+    	
+    	//TODO: add a extend the servo when RPM reaches a certain threshold
+    	//Maybe within 100 of the target.
     }
 
     // Make this return true when this Command no longer needs to run execute()
