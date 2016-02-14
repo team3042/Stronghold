@@ -37,9 +37,9 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 142);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(188, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(37, 122);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(48, 140);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(180, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(9, 122);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -56,7 +56,7 @@ public class CameraAPI extends Subsystem {
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(10);
+		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
 	}
 	
@@ -120,7 +120,7 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	public double getDistToTarget(ParticleReport2 report){
-		double scaleFactor = 100;
+		double scaleFactor = 1400;
 		return scaleFactor / report.perimeter;
 	}
 	
