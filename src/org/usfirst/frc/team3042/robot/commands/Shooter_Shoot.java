@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -14,6 +15,7 @@ public class Shooter_Shoot extends Command {
 	
     public Shooter_Shoot() {
     	requires(Robot.shooter);
+    	requires(Robot.shooterServo);
     }
 
     // Called just before this Command runs the first time
@@ -31,8 +33,10 @@ public class Shooter_Shoot extends Command {
     	SmartDashboard.putNumber("Encoder Position Left", Robot.shooter.getEncoderValLeft());
     	SmartDashboard.putNumber("Encoder Position Right", Robot.shooter.getEncoderValRight());
     	
-    	//TODO: add a extend the servo when RPM reaches a certain threshold
-    	//Maybe within 100 of the target.
+    	
+    	if(Robot.shooter.getEncoderRPMLeft() >= targetRPM - 100) {
+    		Robot.shooterServo.setServoExtended();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

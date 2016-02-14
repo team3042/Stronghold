@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,6 +27,9 @@ public class ShooterArm_Adjust extends Command {
 	static final double maxDist = 12, minDist = 3;
 	double potGoal;
 	double tolerance = 2;
+	
+	Timer time = new Timer();
+	double timeout = 1.5;
 			
     public ShooterArm_Adjust() {
         // Use requires() here to declare subsystem dependencies
@@ -55,7 +59,10 @@ public class ShooterArm_Adjust extends Command {
     	}
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
-    	//Robot.shooterArm.setPosition(potGoal);
+    	
+    	time.start();
+    	
+    	Robot.shooterArm.setPosition(potGoal);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -64,10 +71,9 @@ public class ShooterArm_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	//TODO: add a time out in case the potVal never reaches the goal.
     	double diff = Robot.shooterArm.getPotentiometerVal() - potGoal;
     	Robot.logger.log("pot-goal = " + diff, 3);
-        return Math.abs(diff) < tolerance;
+        return Math.abs(diff) < tolerance || time.get() > timeout;
     }
 
     // Called once after isFinished returns true
