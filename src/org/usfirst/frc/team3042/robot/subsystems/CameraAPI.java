@@ -50,12 +50,11 @@ public class CameraAPI extends Subsystem {
 	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
-	private double DEFAULT_SCORE_MIN = 60;
+	private double DEFAULT_SCORE_MIN = 80;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
-		//camera.writeRotation(Rotation.);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(10);
 		camera.writeExposureControl(ExposureControl.kHold);
@@ -87,49 +86,12 @@ public class CameraAPI extends Subsystem {
 	//Get the center of the camera image minus the center of the particle/target
 	//effectively giving the camera's offset, which will equal zero when the robot is perfectly facing the particle/target
 	//returns the offset in feet
-	public double getParticleCenterOffsetX(){
-		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
-		
-		if(report == null){
-		return 0;
-		}
-		
-		int width;
-		if(isSideways){
-			//If the camera is on it's side the height is now the width we need to find the offset
-			width = NIVision.imaqGetImageSize(report.image).height;
-			return (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
-		}
-		
-		width = NIVision.imaqGetImageSize(report.image).width;
-		
-		// Width/2 gives the center of the image.
-		// bboxleft+bboxwidth/2 givers center of the target
-		// image center - target center gives the pixel offset
-		// targetWidth is the real world target width in inches
-		// pixel offset / real world target gives the offset in inches per pixel
-		// inches per pixel / 12 gives feet per pixel
-		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
-	}
-	
-	public double getParticleCenterOffsetX(ParticleReport2 report){
-		if(report == null){
-		return 0;
-		}
-		
-		int width;
-		if(isSideways){
-			width = NIVision.imaqGetImageSize(report.image).height;
-			return (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
-		}
-		
-		width = NIVision.imaqGetImageSize(report.image).width;
-		return (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
-	}
-	
-	//The degrees the robot needs to rotate to be on target
 	public double getRotationOffset(){
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
+		
+		if(report == null){
+		return 0;
+		}
 		
 		return getRotationOffset(report);
 	}
@@ -139,19 +101,15 @@ public class CameraAPI extends Subsystem {
 		return 0;
 		}
 		
-		int width;
+		int height;
 		if(isSideways){
-			width = NIVision.imaqGetImageSize(report.image).height;
-			double offset = (((width/2) - (report.boundingBox.top-report.boundingBox.height *0.5))/targetHeight)/12;
-			double distance = getDistToTarget(report);
-			return Math.atan(offset/distance);
+			height = NIVision.imaqGetImageSize(report.image).height;
+			return ((report.boundingBox.top-report.boundingBox.height *0.5)-((double)height/2));
 		}
 		
+		int width;
 		width = NIVision.imaqGetImageSize(report.image).width;
-		double offset = (((width/2) - (report.boundingBox.left+report.boundingBox.width *0.5))/targetWidth)/12;
-		double distance = getDistToTarget(report);
-		
-		return Math.atan(offset/distance);
+		return ((report.boundingBox.left+report.boundingBox.width *0.5)-((double)width/2));
 	}
 	
 	//How far away the robot is from the target.
@@ -210,8 +168,8 @@ public class CameraAPI extends Subsystem {
 			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 
 			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
-			this.aspectRatioScore(report)>=SCORE_MIN && this.ConvexHullAreaScore(report)>= SCORE_MIN;
-			Robot.logger.log("Perimeter: " + report.perimeter, 5);
+			this.aspectRatioScore(report)>=SCORE_MIN 
+			&& this.ConvexHullAreaScore(report)>= SCORE_MIN;
 			/*Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
 			Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
 			Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);*/
