@@ -19,8 +19,8 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	public double shootSpeed = 5000, intakeSpeed = 2000;
-	
+	double shootSpeed = 5000, intakeSpeed = 2000;
+	double toleranceRPM = 100;
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
@@ -28,14 +28,10 @@ public class Shooter extends Subsystem {
 
 	public Shooter() {
 		//Setting Talon settings
-		//talonLeft.reverseOutput(true);
-		talonRight.reverseOutput(false);
-		
 		talonLeft.setInverted(true);
 		talonRight.setInverted(false);
 			
-		initEncoders();
-		
+		initEncoders();		
 		setPIDF();
 	}
 	
@@ -77,13 +73,22 @@ public class Shooter extends Subsystem {
     	talonRight.set(speed);
     }
     
+    public void spinToShoot() {
+    	setRPM(shootSpeed);
+    }
+    
+    public void spinToIntake() {
+    	setRPM(-intakeSpeed);
+    }
+    
+    public boolean readyToShoot() {
+    	return getEncoderRPMLeft() > (shootSpeed - toleranceRPM);
+    }
+    
     //Setting each flywheel to a target speed using PIDF through Talons
     public void setRPM(double speed) {
     	talonLeft.changeControlMode(TalonControlMode.Speed);
     	talonRight.changeControlMode(TalonControlMode.Speed);
-    	
-    	talonLeft.setF(SmartDashboard.getNumber("F-Gain Left"));
-    	talonRight.setF(SmartDashboard.getNumber("F-Gain Right"));
 
     	talonLeft.set(speed);
     	talonRight.set(speed);

@@ -68,7 +68,7 @@ public class OI {
 		//Auto
 		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
 		right_3.whenPressed(new Auto_Rotate());
-		right_4.whenPressed(new ShooterArm_Adjust());
+		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
 		left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
 	}

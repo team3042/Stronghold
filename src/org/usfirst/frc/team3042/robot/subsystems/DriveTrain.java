@@ -154,11 +154,6 @@ public class DriveTrain extends Subsystem {
     	rightMotorFront.pushMotionProfileTrajectory(rightPoint);
     }
     
-    public void processMotionProfile() {
-    	leftMotorFront.processMotionProfileBuffer();
-    	rightMotorFront.processMotionProfileBuffer();
-    }
-    
     public MotionProfileStatus[] getMotionProfileStatus() {
     	MotionProfileStatus[] motionProfileStatus = new MotionProfileStatus[2];
 		leftMotorFront.getMotionProfileStatus(motionProfileStatus[0]);

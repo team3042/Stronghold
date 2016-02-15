@@ -13,13 +13,15 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class ShooterArm extends Subsystem {
 	
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
-
-	private double rotateSpeed = .6;
-	private double raiseLimit = 100;
-	private double lowerLimit = 790;
-	private double storage = 150;
-	private double pickup = 765;
 	
+	//Pot Values
+	private double POT_ZERO = 790;
+	private double lowerLimit = 0;
+	private double raiseLimit = 690;
+	private double storage = 640;
+	private double pickup = 25; 
+	
+	private double rotateSpeed = .6;
 	private double p = 10, i = 0, d = 0;
 	
 	public ShooterArm() {
@@ -46,6 +48,35 @@ public class ShooterArm extends Subsystem {
     	talonRotate.set(speed);
     }
     
+    public double getPotentiometerVal() {
+    	return POT_ZERO - talonRotate.getAnalogInRaw();
+    }
+
+    public void setPosition(double position) {
+    	position = POT_ZERO - safetyTest(position);
+    	
+    	talonRotate.changeControlMode(TalonControlMode.Position);
+    	talonRotate.set(position);
+    }
+    
+    private double safetyTest(double position) {
+    	if (position > raiseLimit) {
+    		position = raiseLimit;
+    	}
+    	else if (position < lowerLimit) {
+    		position = lowerLimit;
+    	}
+    	return position;
+    }
+    
+    public boolean belowRaiseLimit() {
+    	return (getPotentiometerVal() < raiseLimit);
+    }
+    
+    public boolean aboveLowerLimit(){
+    	return (getPotentiometerVal() > lowerLimit);
+    }
+    
     public void raise() {
     	if (belowRaiseLimit()) {
     		setSpeed(-rotateSpeed);
@@ -64,21 +95,6 @@ public class ShooterArm extends Subsystem {
     	}
     }
     
-    public boolean belowRaiseLimit() {
-    	return (getPotentiometerVal() > raiseLimit);
-    }
-    
-    public boolean aboveLowerLimit(){
-    	return (getPotentiometerVal() < lowerLimit);
-    }
-    
-    public void setPosition(double position) {
-    	position = safetyTest(position);
-    	
-    	talonRotate.changeControlMode(TalonControlMode.Position);
-    	talonRotate.set(position);
-    }
-    
     public void goToPickup() {
     	setPosition(pickup);
     }
@@ -87,18 +103,8 @@ public class ShooterArm extends Subsystem {
     	setPosition(storage);
     }
     
-    private double safetyTest(double position) {
-    	if (position < raiseLimit) {
-    		position = raiseLimit;
-    	}
-    	else if (position > lowerLimit) {
-    		position = lowerLimit;
-    	}
-    	return position;
-    }
-    
-    public double getPotentiometerVal() {
-    	return talonRotate.getAnalogInRaw();
-    }
+    public void holdPosition() {
+    	setPosition(getPotentiometerVal());
+    }    
 }
 

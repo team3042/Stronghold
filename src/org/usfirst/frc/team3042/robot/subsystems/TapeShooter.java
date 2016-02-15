@@ -55,7 +55,7 @@ public class TapeShooter extends Subsystem {
 	} 
 	
 	public boolean encoderZeroReached() {
-		return getEncDistance() <= 0 + tolerance;
+		return getEncDistance() <= tolerance;
 	}
 
 	public int getEncDistance(){

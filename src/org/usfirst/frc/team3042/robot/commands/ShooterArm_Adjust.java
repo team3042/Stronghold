@@ -2,7 +2,6 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,25 +12,21 @@ public class ShooterArm_Adjust extends Command {
 	
 	double[][] lookUpTable = new double[][]{
 		//Currently in pot values, these are temporary fillers.
-			{3,350},
-			{4,375},
-			{5,400},
-			{6,425},
-			{7,450},
-			{8,475},
-			{9, 546},// this value is tested.
-			{10,525},
-			{11,550},
-			{12,575}};
+			{3,575},
+			{4,550},
+			{5,525},
+			{6,500},
+			{7,475},
+			{8,450},
+			{9,425},
+			{10,400},
+			{11,375},
+			{12,350}};
 			
 	static final double maxDist = 12, minDist = 3;
 	double potGoal;
-	double tolerance = 2;
-	
-	Timer time = new Timer();
-	double timeout = 1.5;
-			
-    public ShooterArm_Adjust() {
+
+	public ShooterArm_Adjust() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.shooterArm);
     }
@@ -60,21 +55,17 @@ public class ShooterArm_Adjust extends Command {
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
     	
-    	time.reset();
-    	time.start();
-    	
     	Robot.shooterArm.setPosition(potGoal);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.logger.log("Diff = " + (Robot.shooterArm.getPotentiometerVal()-potGoal), 3);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	double diff = Robot.shooterArm.getPotentiometerVal() - potGoal;
-    	Robot.logger.log("pot-goal = " + diff, 3);
-        return Math.abs(diff) < tolerance || time.get() > timeout;
+        return false;
     }
 
     // Called once after isFinished returns true

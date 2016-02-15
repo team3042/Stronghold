@@ -50,10 +50,6 @@ public class Robot extends IterativeRobot {
         logger = new Logger(true, true, LOGGER_LEVEL);
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
-        SmartDashboard.putNumber("Shooter Speed", shooter.shootSpeed);
-        SmartDashboard.putNumber("Intake Speed", shooter.intakeSpeed);
-        SmartDashboard.putNumber("F-Gain Left", shooter.leftF);
-        SmartDashboard.putNumber("F-Gain Right", shooter.rightF);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
         SmartDashboard.putNumber("Camera Distance", 8);
     }
@@ -117,8 +113,6 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();  
-        
-        SmartDashboard.putNumber("Potentiometer Value", Robot.shooterArm.getPotentiometerVal());
     }
     
     /**

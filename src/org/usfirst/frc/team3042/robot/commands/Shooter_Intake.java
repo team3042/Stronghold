@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Shooter_Intake extends Command {
-
-	double targetRPM = Robot.shooter.intakeSpeed;
 	
     public Shooter_Intake() {
     	requires(Robot.shooter);
@@ -22,16 +20,11 @@ public class Shooter_Intake extends Command {
     	Robot.logger.log("Initialize", 1);
     	
     	Robot.shooterServo.setServoRetracted();
-    	
-    	targetRPM = -SmartDashboard.getNumber("Intake Speed");
-    	Robot.shooter.setRPM(targetRPM);
+    	Robot.shooter.spinToIntake();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Getting RPM of each motor and outputting to dashboard for tracking
-    	//SmartDashboard.putNumber("Encoder RPM Left", Robot.shooter.getEncoderRPMLeft());
-    	//SmartDashboard.putNumber("Encoder RPM Right", Robot.shooter.getEncoderRPMRight());	
     }
 
     // Make this return true when this Command no longer needs to run execute()

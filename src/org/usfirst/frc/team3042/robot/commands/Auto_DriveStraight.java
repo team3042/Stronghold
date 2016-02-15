@@ -47,9 +47,7 @@ public class Auto_DriveStraight extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	Robot.driveTrain.processMotionProfile();
-    	
+    protected void execute() {    	
     	MotionProfileStatus[] status = Robot.driveTrain.getMotionProfileStatus();
     	
     	if(status[0].btmBufferCnt > 5 &&
