@@ -22,6 +22,7 @@ public class Auto_Rotate extends Command {
 	
 	private double p = 0.1;
 	private Timer timer = new Timer();
+	double timeout = 4.0;
 	
     public Auto_Rotate() {
         requires(Robot.camera);
@@ -78,7 +79,7 @@ public class Auto_Rotate extends Command {
     boolean finished = false;
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return timer.get() > 4 || finished;
+        return timer.get() > timeout || finished;
     }
 
     // Called once after isFinished returns true

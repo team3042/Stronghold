@@ -41,21 +41,24 @@ public class Auto_Follow extends Command {
     		rotation -= ROTATION_ZERO;
     		distance -= TARGET_DISTANCE;
     	
+    		double distanceScale = Math.min(1, P * Math.abs(distance));
     		if (distance > distanceTolerance) {
-    			leftSpeed += driveSpeed * Math.min(1, P * Math.abs(distance));
-    			rightSpeed += driveSpeed * Math.min(1, P * Math.abs(distance));
+    			leftSpeed += driveSpeed * distanceScale;
+    			rightSpeed += driveSpeed * distanceScale;
     		}
     		else if (distance < -distanceTolerance) {
-    			leftSpeed -= driveSpeed * Math.min(1, P * Math.abs(distance));
-    			rightSpeed -= driveSpeed * Math.min(1, P * Math.abs(distance));
+    			leftSpeed -= driveSpeed * distanceScale;
+    			rightSpeed -= driveSpeed * distanceScale;
     		}
+    		
+    		double rotationScale = Math.min(1, P * Math.abs(rotation));
     		if (rotation > rotationTolerance) {
-    			leftSpeed -= turnSpeed * Math.min(1, P * Math.abs(rotation));
-    			rightSpeed += turnSpeed * Math.min(1, P * Math.abs(rotation));
+    			leftSpeed -= turnSpeed * rotationScale;
+    			rightSpeed += turnSpeed * rotationScale;
     		}
     		else if (rotation < -rotationTolerance) {
-    			leftSpeed += turnSpeed * Math.min(1, P * Math.abs(rotation));
-    			rightSpeed -= turnSpeed * Math.min(1, P * Math.abs(rotation));
+    			leftSpeed += turnSpeed * rotationScale;
+    			rightSpeed -= turnSpeed * rotationScale;
     		}
     	}
     	
