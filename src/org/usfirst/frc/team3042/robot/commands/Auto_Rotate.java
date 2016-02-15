@@ -23,16 +23,13 @@ public class Auto_Rotate extends Command {
 	private double p = 0.1;
 	private Timer timer = new Timer();
 	
-	
     public Auto_Rotate() {
         requires(Robot.camera);
         requires(Robot.driveTrain);
     }
 
-    ParticleReport2 report;
     // Called just before this Command runs the first time
     protected void initialize() {
-    	//report = Robot.camera.createTargetReport(60);
     	Robot.logger.log("Initialize", 1);
     	finished = false;
     	timer.reset();
@@ -40,16 +37,16 @@ public class Auto_Rotate extends Command {
     }
 
     private double rotateSpeed = 0.12;
-    private double offset;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		report = Robot.camera.createTargetReport(60);
+    	ParticleReport2 report = Robot.camera.createTargetReport(60);
     	
+	    double offset = 0.0;
 		double leftSpeed = 0, rightSpeed = 0;
 		
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
-    		offset-=OFFSET_ZERO;
+    		offset -= OFFSET_ZERO;
     		Robot.logger.log("Offset: "+offset, 1);
     		//when the offset is negative it means that the target is to the right
     		//when the offset is positive it means that the target is to the left

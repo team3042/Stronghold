@@ -22,13 +22,12 @@ public class OI {
 	//Left Joystick Buttons
 	public Button left_1 = new JoystickButton(joystickLeft, 1);
 	public Button left_3 = new JoystickButton(joystickLeft, 3);
-	public Button left_5 = new JoystickButton(joystickLeft, 5);
+	public Button left_4 = new JoystickButton(joystickLeft, 4);
 
 	//Right Joystick Buttons
 	public Button right_1 = new JoystickButton(joystickRight, 1);
 	public Button right_3 = new JoystickButton(joystickRight, 3);
 	public Button right_4 = new JoystickButton(joystickRight, 4);
-	public Button right_5 = new JoystickButton(joystickRight, 5);
 	
 	//Gampad buttons
 	Button gunner_A = new JoystickButton(gamePadGunner, 1);
@@ -58,7 +57,6 @@ public class OI {
 		gunner_B.whenPressed(new ShooterArm_Pickup());
 		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new ShooterArm_Storage());
-		right_3.whenPressed(new ShooterArm_Adjust());
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Raise());
@@ -69,11 +67,10 @@ public class OI {
 		
 		//Auto
 		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
-		right_4.whenPressed(new Auto_Follow());
-		right_5.whenPressed(new Auto_StopFollow());
-		
-		//Camera Testing
-		left_5.whenPressed(new Auto_Rotate());
+		right_3.whenPressed(new Auto_Rotate());
+		right_4.whenPressed(new ShooterArm_Adjust());
+		left_3.whenPressed(new Auto_Follow());
+		left_4.whenPressed(new Auto_StopFollow());
 	}
 }
 

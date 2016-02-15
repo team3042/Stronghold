@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
+import org.usfirst.frc.team3042.robot.subsystems.CameraAPI.ParticleReport2;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -9,11 +10,13 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Auto_Follow extends Command {
 
-	private double driveSpeed = 0.4;
-	private double turnSpeed = 0.2;
-	private double targetDistance = 8.0;
-	private double rotationTolerance = 0.0;
-	private double distanceTolerance = 0.0;
+	private double driveSpeed = 0.3;
+	private double turnSpeed = 0.15;
+	private double TARGET_DISTANCE = 5.0;
+	private double rotationTolerance = 1.0;
+	private double distanceTolerance = 2.0;
+	private double ROTATION_ZERO = -16.5;
+	private double P = 0.1;
 	
     public Auto_Follow() {
         // Use requires() here to declare subsystem dependencies
@@ -28,25 +31,32 @@ public class Auto_Follow extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double distance = Robot.camera.getDistToTarget();
-    	double rotation = Robot.camera.getRotationOffset();
-    	double leftSpeed = 0.0, rightSpeed = 0.0;
+    	ParticleReport2 report = Robot.camera.createTargetReport(60);
+		double leftSpeed = 0.0, rightSpeed = 0.0;
+
+    	if (report != null) {
+    		double distance = Robot.camera.getDistToTarget(report);
+    		double rotation = Robot.camera.getRotationOffset(report);
     	
-    	if (distance > (targetDistance + distanceTolerance)) {
-    		leftSpeed += driveSpeed;
-    		rightSpeed += driveSpeed;
-    	}
-    	else if (distance < (targetDistance - distanceTolerance)) {
-    		leftSpeed -= driveSpeed;
-    		rightSpeed -= driveSpeed;
-    	}
-    	if (rotation < -rotationTolerance) {
-    		leftSpeed += turnSpeed;
-    		rightSpeed -= turnSpeed;
-    	}
-    	else if (rotation > rotationTolerance) {
-    		leftSpeed -= turnSpeed;
-    		rightSpeed += turnSpeed;
+    		rotation -= ROTATION_ZERO;
+    		distance -= TARGET_DISTANCE;
+    	
+    		if (distance > distanceTolerance) {
+    			leftSpeed += driveSpeed * Math.min(1, P * Math.abs(distance));
+    			rightSpeed += driveSpeed * Math.min(1, P * Math.abs(distance));
+    		}
+    		else if (distance < -distanceTolerance) {
+    			leftSpeed -= driveSpeed * Math.min(1, P * Math.abs(distance));
+    			rightSpeed -= driveSpeed * Math.min(1, P * Math.abs(distance));
+    		}
+    		if (rotation > rotationTolerance) {
+    			leftSpeed -= turnSpeed * Math.min(1, P * Math.abs(rotation));
+    			rightSpeed += turnSpeed * Math.min(1, P * Math.abs(rotation));
+    		}
+    		else if (rotation < -rotationTolerance) {
+    			leftSpeed += turnSpeed * Math.min(1, P * Math.abs(rotation));
+    			rightSpeed -= turnSpeed * Math.min(1, P * Math.abs(rotation));
+    		}
     	}
     	
     	Robot.driveTrain.setMotors (leftSpeed, rightSpeed);
