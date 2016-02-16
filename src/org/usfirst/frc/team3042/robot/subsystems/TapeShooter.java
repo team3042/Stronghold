@@ -20,7 +20,6 @@ public class TapeShooter extends Subsystem {
 	
 	public TapeShooter() {
 		shooterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
-		resetEncoder();
 	}
 	
     public void initDefaultCommand() {
