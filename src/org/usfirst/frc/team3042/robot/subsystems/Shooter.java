@@ -28,6 +28,8 @@ public class Shooter extends Subsystem {
 
 	public Shooter() {
 		//Setting Talon settings
+		talonLeft.reverseOutput(true);
+		talonRight.reverseOutput(false);
 		talonLeft.setInverted(true);
 		talonRight.setInverted(false);
 			

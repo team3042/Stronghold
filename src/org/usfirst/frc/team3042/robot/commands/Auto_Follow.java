@@ -56,7 +56,7 @@ public class Auto_Follow extends Command {
     			leftSpeed -= turnSpeed * rotationScale;
     			rightSpeed += turnSpeed * rotationScale;
     		}
-    		else if (rotation < -rotationTolerance) {
+    		else if (rotation < -rotationTolerance) { 
     			leftSpeed += turnSpeed * rotationScale;
     			rightSpeed -= turnSpeed * rotationScale;
     		}
