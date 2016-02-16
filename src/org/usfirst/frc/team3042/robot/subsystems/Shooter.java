@@ -28,6 +28,8 @@ public class Shooter extends Subsystem {
 
 	public Shooter() {
 		//Setting Talon settings
+		talonLeft.reverseOutput(true);
+		talonRight.reverseOutput(false);
 		talonLeft.setInverted(true);
 		talonRight.setInverted(false);
 			
@@ -82,7 +84,7 @@ public class Shooter extends Subsystem {
     }
     
     public boolean readyToShoot() {
-    	return getEncoderRPMLeft() > (shootSpeed - toleranceRPM);
+    	return getEncoderRPMRight() > (shootSpeed - toleranceRPM);
     }
     
     //Setting each flywheel to a target speed using PIDF through Talons
