@@ -24,6 +24,10 @@ public class Auto_Rotate extends Command {
 	private Timer timer = new Timer();
 	double timeout = 4.0;
 	
+	//Some variables to track motion if camera is not keeping up
+	double encStart;
+	double firstOffset = 0.0;
+	
     public Auto_Rotate() {
         requires(Robot.camera);
         requires(Robot.driveTrain);
@@ -35,6 +39,7 @@ public class Auto_Rotate extends Command {
     	finished = false;
     	timer.reset();
     	timer.start();
+    	encStart = Robot.driveTrain.getLeftEncoder();
     }
 
     private double rotateSpeed = 0.12;
@@ -48,22 +53,21 @@ public class Auto_Rotate extends Command {
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
     		offset -= OFFSET_ZERO;
-    		Robot.logger.log("Offset: "+offset, 1);
-    		//when the offset is negative it means that the target is to the right
+    		if (firstOffset == 0.0) firstOffset = offset;
+   			//when the offset is negative it means that the target is to the right
     		//when the offset is positive it means that the target is to the left
     		//this comes from (imagecenter - targetcenter) which is later converted into degrees for getRotationOffset
     		if(offset < OFFSET_ERROR.minValue){
-    			//If the offset is negative, and less than the allowed negative error, then rotate to the right
-    			leftSpeed = rotateSpeed;
-    			rightSpeed = -rotateSpeed;
+   				//If the offset is negative, and less than the allowed negative error, then rotate to the right
+   				leftSpeed = rotateSpeed;
+   				rightSpeed = -rotateSpeed;
     		}else if(offset > OFFSET_ERROR.maxValue){
     			//If the offset is positive, and greater than the allowed positive error, then rotate to the left
     			leftSpeed = -rotateSpeed;
-    			rightSpeed = rotateSpeed;
-    		}else{
-    			//The robot is within the error range, meaning that we are on target
+   				rightSpeed = rotateSpeed;
+   			}else{
+   				//The robot is within the error range, meaning that we are on target
     			finished = true;
-    			return;
     		}
     	}else{
     		Robot.logger.log("Failed to acquire target!", 5);
@@ -85,6 +89,8 @@ public class Auto_Rotate extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	double encPerPixel = (Robot.driveTrain.getLeftEncoder()-encStart)/firstOffset;
+    	Robot.logger.log("Encoder Counts Per Pixel = "+encPerPixel, 3);
     }
 
     // Called when another command which requires one or more of the same
