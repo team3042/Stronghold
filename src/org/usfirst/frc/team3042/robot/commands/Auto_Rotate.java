@@ -23,8 +23,9 @@ public class Auto_Rotate extends Command {
 	private double p = 0.1;
 	private Timer timer = new Timer();
 	double timeout = 4.0;
-	int lastOffset = 0;
+	double lastOffset = 0.0;
 	int stillCycles = 0;
+	int cyclesTolerance = 4;
 	
 	//Some variables to track motion if camera is not keeping up
 	double encStart;
@@ -58,6 +59,17 @@ public class Auto_Rotate extends Command {
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
     		offset -= OFFSET_ZERO;
+    		
+    		if(lastOffset == offset){
+    			stillCycles++;
+    			if(stillCycles >= cyclesTolerance){
+    				finished = true;
+    			}
+    		}else{
+    			stillCycles =0;
+    		}
+    		lastOffset = offset;
+    		
     		if (firstOffset == 0.0) firstOffset = offset;
    			//when the offset is negative it means that the target is to the right
     		//when the offset is positive it means that the target is to the left
