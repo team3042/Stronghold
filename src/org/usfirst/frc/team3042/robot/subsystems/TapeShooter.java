@@ -15,7 +15,7 @@ public class TapeShooter extends Subsystem {
 	
 	final double raiseSpeed = 0.5, lowerSpeed = 0.3;
 	int encoderZero;
-	final double encLimit = 37300;
+	final double encLimit = 41000;
 	final double tolerance = 500;
 	
 	public TapeShooter() {

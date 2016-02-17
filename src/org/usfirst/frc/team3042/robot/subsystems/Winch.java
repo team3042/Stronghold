@@ -14,6 +14,7 @@ public class Winch extends Subsystem {
 	CANTalon winchTalon = new CANTalon(RobotMap.WINCH_TALON);
 	
 	double winchSpeed = 1;
+	double releaseSpeed = 0.5;
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.    	
@@ -26,6 +27,10 @@ public class Winch extends Subsystem {
     
     public void raise() {
     	setSpeed(-winchSpeed);
+    }
+    
+    public void release() {
+    	setSpeed(releaseSpeed);
     }
     
     private void setSpeed(double speed) {

@@ -23,6 +23,7 @@ public class OI {
 	public Button left_1 = new JoystickButton(joystickLeft, 1);
 	public Button left_3 = new JoystickButton(joystickLeft, 3);
 	public Button left_4 = new JoystickButton(joystickLeft, 4);
+	public Button left_8 = new JoystickButton(joystickLeft, 8);
 
 	//Right Joystick Buttons
 	public Button right_1 = new JoystickButton(joystickRight, 1);
@@ -60,6 +61,7 @@ public class OI {
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Raise());
+		left_8.whileActive(new Winch_Release());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());

@@ -37,9 +37,9 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(48, 140);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(180, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(9, 122);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 154);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(140, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(89, 216);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
