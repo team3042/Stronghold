@@ -23,7 +23,7 @@ public class ShooterServo extends Subsystem {
     }
     
     public void setServoExtended() {
-    	servo.setAngle(135);
+    	servo.setAngle(150);
     }
     
 }

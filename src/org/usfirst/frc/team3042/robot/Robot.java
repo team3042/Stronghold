@@ -113,6 +113,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();  
+        SmartDashboard.putNumber("left enc", shooter.getEncoderRPMLeft());
+        SmartDashboard.putNumber("right enc", shooter.getEncoderRPMRight());
     }
     
     /**

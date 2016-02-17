@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Auto_Follow extends Command {
 
 	private double driveSpeed = 0.3;
-	private double turnSpeed = 0.15;
-	private double TARGET_DISTANCE = 5.0;
+	private double turnSpeed = 0.12;
+	private double TARGET_DISTANCE = 10.0;
 	private double rotationTolerance = 1.0;
 	private double distanceTolerance = 2.0;
 	private double ROTATION_ZERO = -16.5;
@@ -43,12 +43,16 @@ public class Auto_Follow extends Command {
     	
     		double distanceScale = Math.min(1, P * Math.abs(distance));
     		if (distance > distanceTolerance) {
+    			Robot.logger.log(distance + "", 1);
     			leftSpeed += driveSpeed * distanceScale;
     			rightSpeed += driveSpeed * distanceScale;
     		}
     		else if (distance < -distanceTolerance) {
+    			Robot.logger.log(distance + "", 1);
     			leftSpeed -= driveSpeed * distanceScale;
     			rightSpeed -= driveSpeed * distanceScale;
+    			Robot.logger.log("Left Speed: " + leftSpeed +
+    					"\tRight Speed: " + rightSpeed, 1);
     		}
     		
     		double rotationScale = Math.min(1, P * Math.abs(rotation));

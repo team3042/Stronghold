@@ -83,7 +83,7 @@ public class Shooter extends Subsystem {
     }
     
     public boolean readyToShoot() {
-    	return getEncoderRPMLeft() > (shootSpeed - toleranceRPM);
+    	return getEncoderRPMRight() > (shootSpeed - toleranceRPM);
     }
     
     //Setting each flywheel to a target speed using PIDF through Talons
