@@ -61,7 +61,6 @@ public class OI {
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Raise());
-		left_8.whileActive(new Winch_Release());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());

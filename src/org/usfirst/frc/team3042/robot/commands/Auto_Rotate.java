@@ -45,7 +45,6 @@ public class Auto_Rotate extends Command {
     	encStart = Robot.driveTrain.getLeftEncoder();
     	lastOffset = 0;
     	stillCycles = 0;
-    	
     }
 
     private double rotateSpeed = 0.12;

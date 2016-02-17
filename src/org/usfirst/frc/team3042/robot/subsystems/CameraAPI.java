@@ -89,27 +89,21 @@ public class CameraAPI extends Subsystem {
 	public double getRotationOffset(){
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
 		
-		if(report == null){
-		return 0;
-		}
-		
 		return getRotationOffset(report);
 	}
 	
 	public double getRotationOffset(ParticleReport2 report){
-		if(report == null){
-		return 0;
+		double offset = 0.0;
+		if (report != null) {
+			if(isSideways){
+				int height = NIVision.imaqGetImageSize(report.image).height;
+				offset = ((report.boundingBox.top-report.boundingBox.height *0.5)-((double)height/2));
+			} else {
+				int width = NIVision.imaqGetImageSize(report.image).width;
+				offset = ((report.boundingBox.left+report.boundingBox.width *0.5)-((double)width/2));
+			}
 		}
-		
-		int height;
-		if(isSideways){
-			height = NIVision.imaqGetImageSize(report.image).height;
-			return ((report.boundingBox.top-report.boundingBox.height *0.5)-((double)height/2));
-		}
-		
-		int width;
-		width = NIVision.imaqGetImageSize(report.image).width;
-		return ((report.boundingBox.left+report.boundingBox.width *0.5)-((double)width/2));
+		return offset;
 	}
 	
 	//How far away the robot is from the target.
@@ -119,9 +113,13 @@ public class CameraAPI extends Subsystem {
 		return getDistToTarget(report);
 	}
 	
+	double scaleFactor = 1400;
 	public double getDistToTarget(ParticleReport2 report){
-		double scaleFactor = 1400;
-		return scaleFactor / report.perimeter;
+		double distance = 0.0;
+		if (report != null){
+			distance =  scaleFactor / report.perimeter;
+		}
+		return distance;
 	}
 	
 	//Run all the filters for a stronghold target

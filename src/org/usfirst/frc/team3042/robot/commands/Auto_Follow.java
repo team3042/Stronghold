@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Auto_Follow extends Command {
 
 	private double driveSpeed = 0.3;
-	private double turnSpeed = 0.12;
-	private double TARGET_DISTANCE = 10.0;
+	private double turnSpeed = 0.15;
+	private double TARGET_DISTANCE = 8.0;
 	private double rotationTolerance = 1.0;
-	private double distanceTolerance = 2.0;
+	private double distanceTolerance = 0.5;
 	private double ROTATION_ZERO = -16.5;
-	private double P = 0.1;
+	private double rotateP = 0.2, driveP = 0.5;
+	double pixelsPerEnc = 0.01;
+	double leftEncStart, rightEncStart, rotationStart;
 	
     public Auto_Follow() {
         // Use requires() here to declare subsystem dependencies
@@ -27,6 +29,9 @@ public class Auto_Follow extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
+    	rotationStart = 0.0;
+    	leftEncStart = Robot.driveTrain.getLeftEncoder();
+    	rightEncStart = Robot.driveTrain.getRightEncoder();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -35,27 +40,33 @@ public class Auto_Follow extends Command {
 		double leftSpeed = 0.0, rightSpeed = 0.0;
 
     	if (report != null) {
-    		double distance = Robot.camera.getDistToTarget(report);
-    		double rotation = Robot.camera.getRotationOffset(report);
+    		double distance = Robot.camera.getDistToTarget(report) - TARGET_DISTANCE;
+    		double rotation = Robot.camera.getRotationOffset(report) - ROTATION_ZERO;
+    		
+    		Robot.logger.log("Camera Rotation = "+rotation, 3);
+    		if (rotation == rotationStart){
+    			double leftEnc = Robot.driveTrain.getLeftEncoder() - leftEncStart;
+    			double rightEnc = Robot.driveTrain.getRightEncoder() - rightEncStart;
+    			double encDiff = 0.5*(leftEnc - rightEnc);
+    			
+    			rotation += encDiff * pixelsPerEnc;
+    		}else{
+    			leftEncStart = Robot.driveTrain.getLeftEncoder();
+    			rightEncStart = Robot.driveTrain.getRightEncoder();
+        		rotationStart = rotation;    		
+    		}
     	
-    		rotation -= ROTATION_ZERO;
-    		distance -= TARGET_DISTANCE;
-    	
-    		double distanceScale = Math.min(1, P * Math.abs(distance));
+    		double distanceScale = Math.min(1, driveP * Math.abs(distance));
     		if (distance > distanceTolerance) {
-    			Robot.logger.log(distance + "", 1);
     			leftSpeed += driveSpeed * distanceScale;
     			rightSpeed += driveSpeed * distanceScale;
     		}
     		else if (distance < -distanceTolerance) {
-    			Robot.logger.log(distance + "", 1);
     			leftSpeed -= driveSpeed * distanceScale;
     			rightSpeed -= driveSpeed * distanceScale;
-    			Robot.logger.log("Left Speed: " + leftSpeed +
-    					"\tRight Speed: " + rightSpeed, 1);
     		}
     		
-    		double rotationScale = Math.min(1, P * Math.abs(rotation));
+    		double rotationScale = Math.min(1, rotateP * Math.abs(rotation));
     		if (rotation > rotationTolerance) {
     			leftSpeed -= turnSpeed * rotationScale;
     			rightSpeed += turnSpeed * rotationScale;
