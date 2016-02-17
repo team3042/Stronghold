@@ -18,7 +18,8 @@ public class Auto_Follow extends Command {
 	private double ROTATION_ZERO = -16.5;
 	private double rotateP = 0.2, driveP = 0.5;
 	double pixelsPerEnc = 0.01;
-	double leftEncStart, rightEncStart, rotationStart;
+	double leftEncStart, rightEncStart, rotationStart, lastRotation;
+	double cycleRotationReduction = 0.5;
 	
     public Auto_Follow() {
         // Use requires() here to declare subsystem dependencies
@@ -30,8 +31,8 @@ public class Auto_Follow extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	rotationStart = 0.0;
-    	leftEncStart = Robot.driveTrain.getLeftEncoder();
-    	rightEncStart = Robot.driveTrain.getRightEncoder();
+    	//leftEncStart = Robot.driveTrain.getLeftEncoder();
+    	//rightEncStart = Robot.driveTrain.getRightEncoder();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -45,16 +46,19 @@ public class Auto_Follow extends Command {
     		
     		Robot.logger.log("Camera Rotation = "+rotation, 3);
     		if (rotation == rotationStart){
-    			double leftEnc = Robot.driveTrain.getLeftEncoder() - leftEncStart;
-    			double rightEnc = Robot.driveTrain.getRightEncoder() - rightEncStart;
-    			double encDiff = 0.5*(leftEnc - rightEnc);
-    			
-    			rotation += encDiff * pixelsPerEnc;
+    			//double leftEnc = Robot.driveTrain.getLeftEncoder() - leftEncStart;
+    			//double rightEnc = Robot.driveTrain.getRightEncoder() - rightEncStart;
+    			//double encDiff = 0.5*(leftEnc - rightEnc);
+    			//rotation += encDiff * pixelsPerEnc;
+
+    			//A very simple way to account for no camera feedback
+    			rotation = lastRotation * cycleRotationReduction;
     		}else{
-    			leftEncStart = Robot.driveTrain.getLeftEncoder();
-    			rightEncStart = Robot.driveTrain.getRightEncoder();
-        		rotationStart = rotation;    		
+    			//leftEncStart = Robot.driveTrain.getLeftEncoder();
+    			//rightEncStart = Robot.driveTrain.getRightEncoder();
+    			rotationStart = rotation;    		
     		}
+    		lastRotation = rotation;
     	
     		double distanceScale = Math.min(1, driveP * Math.abs(distance));
     		if (distance > distanceTolerance) {
