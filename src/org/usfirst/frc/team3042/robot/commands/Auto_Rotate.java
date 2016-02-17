@@ -20,6 +20,7 @@ public class Auto_Rotate extends Command {
 	private NIVision.Range OFFSET_ERROR = new NIVision.Range(-1,1);
 	private double OFFSET_ZERO = -16.5;
 	
+    private double rotateSpeed = 0.12;
 	private double p = 0.1;
 	private Timer timer = new Timer();
 	double timeout = 4.0;
@@ -51,7 +52,6 @@ public class Auto_Rotate extends Command {
     	stillCycles = 0;
     }
 
-    private double rotateSpeed = 0.12;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	ParticleReport2 report = Robot.camera.createTargetReport(60);
@@ -67,7 +67,7 @@ public class Auto_Rotate extends Command {
     			if (stillCycles >= cyclesTolerance) {
     				finished = true;
     			}
-    			offset = lastOffset * cycleOffsetReduction;
+    			//offset = lastOffset * cycleOffsetReduction;
     		}else{
     			stillCycles =0;
     			startOffset = offset;

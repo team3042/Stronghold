@@ -94,8 +94,8 @@ public class DriveTrain extends Subsystem {
     	left = safetyTest(left);
     	right = safetyTest(right);
     	
-    	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
     	leftMotorFront.changeControlMode(TalonControlMode.PercentVbus);
+    	rightMotorFront.changeControlMode(TalonControlMode.PercentVbus);
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);		
 	}
@@ -105,6 +105,17 @@ public class DriveTrain extends Subsystem {
         motorValue = (motorValue > 1) ? 1 : motorValue;
         
         return motorValue;
+    }
+    
+    public void setPosition(double left, double right) {
+    	leftMotorFront.changeControlMode(TalonControlMode.Position);
+    	rightMotorFront.changeControlMode(TalonControlMode.Position);
+    	
+    	left += leftEncoderZero;
+    	right += rightEncoderZero;
+    	
+    	leftMotorFront.set(left);
+    	rightMotorFront.set(right);
     }
     
     private double scaleLeft(double left) {
