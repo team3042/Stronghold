@@ -128,6 +128,7 @@ public class CameraAPI extends Subsystem {
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+    	
     	this.outPutImagePNG(binaryImage, "HSVFiltered");
     	filterOutSmallParticles(binaryImage, 0, 100);
     	fillParticles(binaryImage);
@@ -166,7 +167,7 @@ public class CameraAPI extends Subsystem {
 			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
 			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
-
+			
 			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
 			this.aspectRatioScore(report)>=SCORE_MIN 
 			&& this.ConvexHullAreaScore(report)>= SCORE_MIN;
