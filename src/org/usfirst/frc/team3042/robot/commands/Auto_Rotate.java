@@ -23,6 +23,8 @@ public class Auto_Rotate extends Command {
 	private double p = 0.1;
 	private Timer timer = new Timer();
 	double timeout = 4.0;
+	int lastOffset = 0;
+	int stillCycles = 0;
 	
 	//Some variables to track motion if camera is not keeping up
 	double encStart;
@@ -40,6 +42,9 @@ public class Auto_Rotate extends Command {
     	timer.reset();
     	timer.start();
     	encStart = Robot.driveTrain.getLeftEncoder();
+    	lastOffset = 0;
+    	stillCycles = 0;
+    	
     }
 
     private double rotateSpeed = 0.12;
