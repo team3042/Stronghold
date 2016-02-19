@@ -39,6 +39,9 @@ public class Robot extends IterativeRobot {
     public static Logger logger;
         
     private int LOGGER_LEVEL = 5;
+    String CALIBRATION_FILE_NAME = "calibration";
+    double CALIBRATION_SPEED = 0;
+    double CALIBRATION_LENGTH = 0;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -52,6 +55,10 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
         SmartDashboard.putNumber("Camera Distance", 8);
+        
+        SmartDashboard.putString("Calibration File Name", CALIBRATION_FILE_NAME);
+        SmartDashboard.putNumber("Calibration Motor Speed", CALIBRATION_SPEED);
+        SmartDashboard.putNumber("Calibration Length In Seconds", CALIBRATION_LENGTH);
     }
 	
 	/**
