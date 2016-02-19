@@ -7,16 +7,16 @@ package org.usfirst.frc.team3042.robot;
  */
 public class RobotMap {
 	//Chose which robot is being used
-	public static boolean isSkoll = true;
+	public static boolean isSkoll = false;
 	
 	//CAN Talons
-	public static final int DRIVETRAIN_TALON_LEFT_1 = (isSkoll)? 14 : 14;
-	public static final int DRIVETRAIN_TALON_LEFT_2 = (isSkoll)? 13 : 13;
-	public static final int DRIVETAIN_TALON_RIGHT_1 = (isSkoll)? 11 : 11;
-	public static final int DRIVETRAIN_TALON_RIGHT_2 = (isSkoll)? 10 : 10;
-	public static final int SHOOTER_TALON_LEFT = (isSkoll)? 3 : 3;
-	public static final int SHOOTER_TALON_RIGHT = (isSkoll)? 15 : 15;
-	public static final int SHOOTER_ARM_TALON = (isSkoll)? 16 : 16;
+	public static final int DRIVETRAIN_TALON_LEFT_1 = (isSkoll)? 14 : 18;
+	public static final int DRIVETRAIN_TALON_LEFT_2 = (isSkoll)? 13 : 6;
+	public static final int DRIVETAIN_TALON_RIGHT_1 = (isSkoll)? 11 : 4;
+	public static final int DRIVETRAIN_TALON_RIGHT_2 = (isSkoll)? 10 : 2;
+	public static final int SHOOTER_TALON_LEFT = (isSkoll)? 3 : 17;
+	public static final int SHOOTER_TALON_RIGHT = (isSkoll)? 15 : 5;
+	public static final int SHOOTER_ARM_TALON = (isSkoll)? 16 : 7;
 	public static final int TAPE_SHOOTER_TALON = (isSkoll)? 12 : 12;
 	public static final int WINCH_TALON = (isSkoll)? 9 : 9;
 	

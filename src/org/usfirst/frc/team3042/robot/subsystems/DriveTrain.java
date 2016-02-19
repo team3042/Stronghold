@@ -119,10 +119,22 @@ public class DriveTrain extends Subsystem {
     }
     
     private double scaleLeft(double left) {
+    	if(RobotMap.isSkoll) {
+    		left = left;
+    	}
+    	else {
+    		left = left;
+    	}
     	return left;
     }
     
     private double scaleRight(double right) {
+    	if(RobotMap.isSkoll) {
+    		right = right;
+    	}
+    	else {
+    		right = right;
+    	}
     	return right;
     }
 

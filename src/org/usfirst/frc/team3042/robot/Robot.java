@@ -115,6 +115,7 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();  
         SmartDashboard.putNumber("left enc", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("right enc", shooter.getEncoderRPMRight());
+        SmartDashboard.putNumber("Potentiometer", Robot.shooterArm.getPotentiometerVal());
     }
     
     /**

@@ -23,7 +23,8 @@ public class Shooter extends Subsystem {
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	public double leftF = 0.0283, rightF = 0.0283;
+	public double leftF = (RobotMap.isSkoll)? 0.0283: 0.0283, 
+			rightF = (RobotMap.isSkoll)? 0.0283: 0.0283;
 
 	public Shooter() {
 		//Setting Talon settings

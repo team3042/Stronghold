@@ -70,8 +70,14 @@ public class Auto_Drive extends Command {
     		rightMaxSpeed = rightScale * maxSpeed;
     	}
     }
+   /* 
+    public Auto_Drive(AutoType autoType, double distance, double maxSpeed) {
+    	Auto_Drive(autoType, distance, maxSpeed, 0.0);
+    }
+*/
+    
 
-    // Called just before this Command runs the first time
+	// Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
