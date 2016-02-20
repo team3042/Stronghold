@@ -10,6 +10,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
+import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -176,7 +177,6 @@ public class CameraAPI extends Subsystem {
 			//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
 			
 			if(isTarget){
-				CameraServer.getInstance().setImage(binaryImage);
 				particles.get(0).image = binaryImage;
 				targetReport = particles.get(0);
 			}else{
@@ -232,20 +232,49 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqConvexHull(image, image, 1);
 	}
 	
-	public void drawOverlay(ParticleReport2 report){
-		/*//Draw four lines around the particle found by the camera
-		Image image = report.image;
-		int boundingBoxBottom = report.boundingBox.top-(report.boundingBox.top-report.boundingBox.height);
-		//Draw a line across the top of the particle
-		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,report.boundingBox.top), new NIVision.Point(report.boundingBoxRight,report.boundingBox.top), NIVision.RGB_RED, null);
-		//Draw a line down along the right side of the particle
-		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBoxRight,report.boundingBox.top), new NIVision.Point(report.boundingBoxRight,boundingBoxBottom), NIVision.RGB_RED, null);
-		//Draw a line along the bottom of the particle
-		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,boundingBoxBottom), new NIVision.Point(report.boundingBoxRight,boundingBoxBottom), NIVision.RGB_RED, null);
-		//Draw a line down along the left side of the particle
-		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,report.boundingBox.top), new NIVision.Point(report.boundingBox.left,boundingBoxBottom), NIVision.RGB_RED, null);
+	
+	// ***** The overlay for the camera
+	
+	//Boolean describing if the report was refreshed or if it is was already used.
+	private boolean reportIsStale = true;
+	//The particle report used to draw parts of the dashboard if it is not stale
+	private ParticleReport2 overlayReport;
+	//The size of the oval at the center of the image
+	private int centerOvalSize = 4;
+	
+	//There is an oval drawn at the center of the overlay, this sets it's size
+	public void setOvalSize(int size){
+		centerOvalSize = size;
+	}
+	
+	public void setOverlayReport(ParticleReport2 report){
+		//Set the overlay report to this report
+		overlayReport = report;
+		//Check to see if the report is null, the report is stale if it is null
+		reportIsStale = (report == null);
+	}
+	
+	public void drawOverlay(NIVision.RGBValue color){
+		//This pointer is here to make sure we are not messing up the actual report image
+		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		camera.getImage(image);
+		
+		if(!reportIsStale){
+			//Draw a box around the target
+			NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
+		}
+		
+		//Create a point that designates the center of the image
+		NIVision.Point center = new NIVision.Point(NIVision.imaqGetImageSize(image).width/2,NIVision.imaqGetImageSize(image).height/2);
+		
+		//Draw an oval at the center point
+		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.DRAW_VALUE);
+		
 		//Send the image to the camera server
-		CameraServer.getInstance().setImage(image);*/
+		CameraServer.getInstance().setImage(image);
+		
+		//The report is now stale
+		reportIsStale = true;
 	}
 	
 	
