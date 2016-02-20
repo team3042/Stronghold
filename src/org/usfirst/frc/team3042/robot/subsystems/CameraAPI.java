@@ -61,6 +61,7 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
+		
 	}
 	
 	//This particle report stores values for analyzed images

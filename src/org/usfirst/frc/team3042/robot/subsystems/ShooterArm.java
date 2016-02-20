@@ -15,7 +15,7 @@ public class ShooterArm extends Subsystem {
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
 	
 	//Pot Values
-	private double POT_ZERO = (RobotMap.isSkoll)? 790: 1010;
+	private double POT_ZERO = (RobotMap.isSkoll)? 790: 870;
 	private double lowerLimit = 0;
 	private double raiseLimit = 690;
 	private double storage = 640;
@@ -36,7 +36,7 @@ public class ShooterArm extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new ShooterArm_HoldPosition());
+      //  setDefaultCommand(new ShooterArm_HoldPosition());
     }
 
     public void stop() {
@@ -56,7 +56,7 @@ public class ShooterArm extends Subsystem {
     	position = POT_ZERO - safetyTest(position);
     	
     	talonRotate.changeControlMode(TalonControlMode.Position);
-    	talonRotate.set(position);
+    	//talonRotate.set(position);
     }
     
     private double safetyTest(double position) {
@@ -82,7 +82,7 @@ public class ShooterArm extends Subsystem {
     		setSpeed(-rotateSpeed);
     	}
     	else {
-    		setPosition(raiseLimit);
+    		//setPosition(raiseLimit);
     	}
     }
     
@@ -91,7 +91,7 @@ public class ShooterArm extends Subsystem {
     		setSpeed(rotateSpeed);
     	}
     	else {
-    		setPosition(lowerLimit);
+    		//setPosition(lowerLimit);
     	}
     }
     
