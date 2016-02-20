@@ -26,8 +26,8 @@ public class Auto_LowBar extends CommandGroup {
         // arm.
     	
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 5, 1));
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 3, 1));
-    	addSequential(new ShooterArm_SetPosition(330));
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 0.35, 1));
+    	addSequential(new ShooterArm_SetPosition(280));
     	addSequential(new Auto_Rotate());
     	addParallel(new ShooterArm_Adjust());
     	addSequential(new Auto_Shoot());

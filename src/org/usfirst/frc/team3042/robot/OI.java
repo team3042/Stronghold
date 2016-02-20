@@ -68,7 +68,7 @@ public class OI {
 		gunner_Back.whenPressed(new TapeShooter_Retract());
 		
 		//Auto
-		left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 6, 1, 4));
+		left_3.whenPressed(new Auto_LowBar());
 		right_3.whenPressed(new Auto_Rotate());
 		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
