@@ -3,35 +3,38 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Shooter_Shoot extends Command {
+public class ShooterArm_SetPosition extends Command {
 	
-    public Shooter_Shoot() {
-    	requires(Robot.shooter);
-    	requires(Robot.shooterServo);
+	double position;
+	double tolerance = 10;
+
+    public ShooterArm_SetPosition(double position) {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	requires(Robot.shooterArm);
+    	
+    	this.position = position;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooter.spinToShoot();
-    	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
+    	
+    	Robot.shooterArm.setPosition(position);
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {  	
-    	if (Robot.shooter.readyToShoot()) {
-    		Robot.shooterServo.setServoExtended();
-    	}
+    protected void execute() {
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (Math.abs(Robot.shooterArm.getPotentiometerVal() - position) 
+        		< tolerance);
     }
 
     // Called once after isFinished returns true

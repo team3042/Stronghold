@@ -23,6 +23,7 @@ public class OI {
 	public Button left_1 = new JoystickButton(joystickLeft, 1);
 	public Button left_3 = new JoystickButton(joystickLeft, 3);
 	public Button left_4 = new JoystickButton(joystickLeft, 4);
+	public Button left_5 = new JoystickButton(joystickLeft, 5);
 	public Button left_8 = new JoystickButton(joystickLeft, 8);
 
 	//Right Joystick Buttons
@@ -67,10 +68,10 @@ public class OI {
 		gunner_Back.whenPressed(new TapeShooter_Retract());
 		
 		//Auto
-		//left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 3, 1, 0));
+		left_3.whenPressed(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 6, 1, 4));
 		right_3.whenPressed(new Auto_Rotate());
 		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
-		left_3.whenPressed(new Auto_Follow());
+		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
 	}
 }

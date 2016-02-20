@@ -24,7 +24,7 @@ public class ShooterArm extends Subsystem {
 	private double toleranceMin = 350, toleranceMax = (RobotMap.isSkoll)? 800: 500;
 	private int allowableError = (RobotMap.isSkoll)? 35: 20;
 	
-	private double rotateSpeed = .6;
+	private double rotateSpeed = .3;
 	private double p = 10, i = 0, d = 0;
 	
 	public ShooterArm() {

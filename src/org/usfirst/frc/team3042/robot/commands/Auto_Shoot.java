@@ -2,15 +2,18 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Shooter_Shoot extends Command {
+public class Auto_Shoot extends Command {
+
+	Timer timer = new Timer();
+	double timeToShoot = 0.5;
 	
-    public Shooter_Shoot() {
+	public Auto_Shoot() {
     	requires(Robot.shooter);
     	requires(Robot.shooterServo);
     }
@@ -25,13 +28,14 @@ public class Shooter_Shoot extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {  	
     	if (Robot.shooter.readyToShoot()) {
+    		timer.start();
     		Robot.shooterServo.setServoExtended();
     	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (timer.get() > timeToShoot);
     }
 
     // Called once after isFinished returns true

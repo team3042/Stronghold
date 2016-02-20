@@ -24,7 +24,7 @@ public class Auto_Drive extends Command {
 	//Time for each filter in ms
 	double time1 = 400, time2 = 200;
 	
-	double wheelbaseWidth = 2;
+	double wheelbaseWidth = 2.4;
 	
 	Auto_MotionProfile motionProfileLeft;
 	Auto_MotionProfile motionProfileRight;
@@ -47,9 +47,19 @@ public class Auto_Drive extends Command {
     		double leftRadius = radius - wheelbaseWidth / 2;
     		double rightRadius = radius + wheelbaseWidth / 2;
     		
+    		double leftScale, rightScale;
     		//Creating scale for each side in relation to center
-    		double leftScale = leftRadius / radius;
-    		double rightScale = rightRadius /radius;
+    		if(radius != 0) {
+    			leftScale = leftRadius / radius;
+    			rightScale = rightRadius / radius;
+    		}
+    		else {
+    			leftScale = leftRadius;
+    			rightScale = rightRadius;
+    		}
+    		
+    		leftScale /= Math.max(leftScale,  rightScale);
+    		rightScale /= Math.max(leftScale,  rightScale);
     		
     		leftDistance = leftScale * distance;
     		rightDistance = rightScale * distance;
@@ -60,9 +70,19 @@ public class Auto_Drive extends Command {
     		double leftRadius = radius + wheelbaseWidth / 2;
     		double rightRadius = radius - wheelbaseWidth / 2;
     		
+    		double leftScale, rightScale;
     		//Creating scale for each side in relation to center
-    		double leftScale = leftRadius / radius;
-    		double rightScale = rightRadius /radius;
+    		if(radius != 0) {
+    			leftScale = leftRadius / radius;
+    			rightScale = rightRadius / radius;
+    		}
+    		else {
+    			leftScale = leftRadius;
+    			rightScale = rightRadius;
+    		}
+    		
+    		leftScale /= Math.max(leftScale,  rightScale);
+    		rightScale /= Math.max(leftScale,  rightScale);
     		
     		leftDistance = leftScale * distance;
     		rightDistance = rightScale * distance;
@@ -70,11 +90,11 @@ public class Auto_Drive extends Command {
     		rightMaxSpeed = rightScale * maxSpeed;
     	}
     }
-   /* 
+    
     public Auto_Drive(AutoType autoType, double distance, double maxSpeed) {
-    	Auto_Drive(autoType, distance, maxSpeed, 0.0);
+    	this(autoType, distance, maxSpeed, 0.0);
     }
-*/
+
     
 
 	// Called just before this Command runs the first time
@@ -90,7 +110,18 @@ public class Auto_Drive extends Command {
     	CANTalon.TrajectoryPoint[] rightTrajectory = motionProfileRight.calculateProfile();
     	
     	for(int i = 0; i < leftTrajectory.length; i++) {
-    		Robot.driveTrain.pushPoints(leftTrajectory[i], rightTrajectory[i]);
+    		if(i < rightTrajectory.length) {
+    			Robot.driveTrain.pushPoints(leftTrajectory[i], rightTrajectory[i]);
+    		}
+    		else {
+    			CANTalon.TrajectoryPoint zeroPoint = new CANTalon.TrajectoryPoint();
+    			zeroPoint.isLastPoint = true;
+    			zeroPoint.position = rightTrajectory[i - 1].position;
+    			zeroPoint.timeDurMs = itp;
+    			zeroPoint.velocity = 0;
+    			zeroPoint.zeroPos = false;
+    			Robot.driveTrain.pushPoints(leftTrajectory[i], zeroPoint);
+    		}
     	}
     }
 
@@ -100,7 +131,7 @@ public class Auto_Drive extends Command {
     	status = Robot.driveTrain.getMotionProfileStatus();
     	
     	if(status[0].btmBufferCnt > 5) {
-    		//Robot.driveTrain.enableMotionProfile();
+    		Robot.driveTrain.enableMotionProfile();
     	}
     	Robot.logger.log(status[0].btmBufferCnt + "", 3);
     	

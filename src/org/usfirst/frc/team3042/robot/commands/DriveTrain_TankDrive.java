@@ -4,6 +4,7 @@ import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -33,6 +34,7 @@ public class DriveTrain_TankDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     	double leftPower = -Robot.oi.joystickLeft.getY() * speedScale;
         double rightPower = -Robot.oi.joystickRight.getY() * speedScale;
         
