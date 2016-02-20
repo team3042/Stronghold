@@ -2,20 +2,21 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Auto_File extends Command {
+public class Auto_LowBarSideGoal extends Command {
 	
-	Auto_MotionProfile motionProfileLeft;
-	Auto_MotionProfile motionProfileRight;
+	double[][] leftPoints = AutoTrajectory_LowBarSideGoal.getLeftTrajectory();
+	double[][] rightPoints = AutoTrajectory_LowBarSideGoal.getRightTrajectory();
 	
 	MotionProfileStatus[] status;
 
-    public Auto_File() {
+    public Auto_LowBarSideGoal() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);
@@ -25,6 +26,31 @@ public class Auto_File extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.initMotionProfile();
+    	
+    	for(int i = 0; i < leftPoints.length; i++) {
+    		CANTalon.TrajectoryPoint currentLeftPoint = new CANTalon.TrajectoryPoint();
+    		CANTalon.TrajectoryPoint currentRightPoint = new CANTalon.TrajectoryPoint();
+    		
+    		currentLeftPoint.position = leftPoints[i][0];
+    		currentRightPoint.position = rightPoints[i][0];
+    		
+    		currentLeftPoint.velocity = leftPoints[i][1];
+    		currentRightPoint.velocity = rightPoints[i][1];
+    		
+    		currentLeftPoint.timeDurMs = (int) leftPoints[i][2];
+    		currentRightPoint.timeDurMs = (int) rightPoints[i][2];
+    		
+    		currentLeftPoint.profileSlotSelect = 0;
+    		currentRightPoint.profileSlotSelect = 0;
+    		
+    		currentLeftPoint.zeroPos = (i == 0);
+    		currentRightPoint.zeroPos = (i == 0);
+    		
+    		currentLeftPoint.isLastPoint = (i == leftPoints.length - 1);
+    		currentRightPoint.isLastPoint = (i == leftPoints.length - 1);
+    		
+    		Robot.driveTrain.pushPoints(currentLeftPoint, currentRightPoint);
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -63,4 +89,6 @@ public class Auto_File extends Command {
     	Robot.logger.log("Interrupt", 1);
     	Robot.driveTrain.disableMotionProfile();
     }
+    
+	
 }
