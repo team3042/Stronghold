@@ -55,16 +55,15 @@ public class ShooterArm extends Subsystem {
     }
 
     public void setPosition(double position) {
-    	position = POT_ZERO - safetyTest(position);
-    	
     	if(position > toleranceMin && position < toleranceMax) {
-    		//talonRotate.setAllowableClosedLoopErr(allowableError);
-    		talonRotate.setAllowableClosedLoopErr(0);
+    		talonRotate.setAllowableClosedLoopErr(allowableError);
     	}
     	else {
     		talonRotate.setAllowableClosedLoopErr(0);
     	}
     	
+    	position = POT_ZERO - safetyTest(position);
+
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	talonRotate.set(position);
     }
