@@ -11,6 +11,7 @@ import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ParticleReport;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
@@ -175,6 +176,7 @@ public class CameraAPI extends Subsystem {
 			//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
 			
 			if(isTarget){
+				CameraServer.getInstance().setImage(binaryImage);
 				particles.get(0).image = binaryImage;
 				targetReport = particles.get(0);
 			}else{
@@ -229,6 +231,23 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqFillHoles(image, image, 1);
 		NIVision.imaqConvexHull(image, image, 1);
 	}
+	
+	public void drawOverlay(ParticleReport2 report){
+		/*//Draw four lines around the particle found by the camera
+		Image image = report.image;
+		int boundingBoxBottom = report.boundingBox.top-(report.boundingBox.top-report.boundingBox.height);
+		//Draw a line across the top of the particle
+		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,report.boundingBox.top), new NIVision.Point(report.boundingBoxRight,report.boundingBox.top), NIVision.RGB_RED, null);
+		//Draw a line down along the right side of the particle
+		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBoxRight,report.boundingBox.top), new NIVision.Point(report.boundingBoxRight,boundingBoxBottom), NIVision.RGB_RED, null);
+		//Draw a line along the bottom of the particle
+		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,boundingBoxBottom), new NIVision.Point(report.boundingBoxRight,boundingBoxBottom), NIVision.RGB_RED, null);
+		//Draw a line down along the left side of the particle
+		NIVision.imaqOverlayLine(image, new NIVision.Point(report.boundingBox.left,report.boundingBox.top), new NIVision.Point(report.boundingBox.left,boundingBoxBottom), NIVision.RGB_RED, null);
+		//Send the image to the camera server
+		CameraServer.getInstance().setImage(image);*/
+	}
+	
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger
 	static boolean CompareParticleSizes(ParticleReport2 particle1, ParticleReport2 particle2)
