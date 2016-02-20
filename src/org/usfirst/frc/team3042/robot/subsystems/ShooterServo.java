@@ -12,6 +12,8 @@ public class ShooterServo extends Subsystem {
 	
 	Servo servo = new Servo(RobotMap.SHOOTER_SERVO);
 	
+	double extendAngle = (RobotMap.isSkoll)? 30: 150;
+	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -23,7 +25,7 @@ public class ShooterServo extends Subsystem {
     }
     
     public void setServoExtended() {
-    	servo.setAngle(150);
+    	servo.setAngle(extendAngle);
     }
     
 }

@@ -18,7 +18,7 @@ public class Shooter_Shoot extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.shooter.spinToShoot();
-    	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
+    	//Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
     	Robot.logger.log("Pot Value = "+Robot.shooterArm.getPotentiometerVal(), 2);
     }
 

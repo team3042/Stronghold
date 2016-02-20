@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Shooter_Stop;
@@ -23,8 +24,8 @@ public class Shooter extends Subsystem {
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	public double leftF = (RobotMap.isSkoll)? 0.0283: 0.0283, 
-			rightF = (RobotMap.isSkoll)? 0.0283: 0.0283;
+	public double leftF = (RobotMap.isSkoll)? 0.0283: 0.0272, 
+			rightF = (RobotMap.isSkoll)? 0.0283: 0.0272;
 
 	public Shooter() {
 		//Setting Talon settings
@@ -76,6 +77,7 @@ public class Shooter extends Subsystem {
     }
     
     public void spinToShoot() {
+    	shootSpeed = SmartDashboard.getNumber("Shooter Speed");
     	setRPM(shootSpeed);
     }
     
