@@ -29,5 +29,6 @@ public class RobotMap {
 	public static final int GUNNER_JOYSTICK_USB_PORT_2 = 2;
 	
 	//Robot Camera IP
-	public static final String CAMERA_IP = (isSkoll)? "10.30.42.17": "axis-camera";
+	public static final String CAMERA_IP = "axis-camera";
+	public static final String DRIVER_CAMERA_IP = "axis-drivercamera";
 }

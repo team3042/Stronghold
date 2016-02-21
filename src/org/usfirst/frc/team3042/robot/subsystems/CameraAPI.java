@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
 import edu.wpi.first.wpilibj.vision.AxisCamera.Rotation;
 import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
@@ -56,22 +55,11 @@ public class CameraAPI extends Subsystem {
 	private double DEFAULT_SCORE_MIN = 55;
 	
 	public CameraAPI(){
-		/*
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
-		*/
-	}
-	
-	public void checkCameraServer(){
-		if(CameraServer.getInstance() != null){
-			Robot.logger.log("Camera Server found! ", 1);
-			Robot.logger.log("Camera server autocapture is: "+CameraServer.getInstance().isAutoCaptureStarted(), 1);
-		}else{
-			Robot.logger.log("Camera Server not found! ", 1);
-		}
 	}
 	
 	public void initDefaultCommand() {
@@ -246,100 +234,6 @@ public class CameraAPI extends Subsystem {
 	public void fillParticles(Image image){
 		NIVision.imaqFillHoles(image, image, 1);
 		NIVision.imaqConvexHull(image, image, 1);
-	}
-	
-	
-	// ***** The overlay for the camera
-	
-	//Boolean describing if the report was refreshed or if it is was already used.
-	private boolean reportIsStale = true;
-	//The particle report used to draw parts of the dashboard if it is not stale
-	private ParticleReport2 overlayReport;
-	//The size of the oval at the center of the image
-	private int centerOvalSize = 4;
-	//The default text to display
-	private String defaultText = "Overlay";
-	
-	// ***** Information that is displayed based on the timer
-	
-	//A timer for displaying information
-	private Timer timer = new Timer();
-	//How long to display certain information
-	private float timedDisplay;
-	//The color information to display
-	private NIVision.RGBValue timedColor;
-	//The text information to display
-	private String timedText;
-	
-	//Set up onTarget feedback for the overlay, uses the timer
-	public void setTimedInformation(NIVision.RGBValue color, String text, float time){
-		//Reset the timer to 0 and then start it so that it counts up
-		timer.reset();
-		timer.start();
-		//Tell the overlay what color it should display
-		this.timedColor = color;
-		//Tell the overlay what text to display
-		this.timedText = text;
-		//Set the time to use this color
-		timedDisplay = time;
-	}
-	
-	//There is an oval drawn at the center of the overlay, this sets it's size
-	public void setOvalSize(int size){
-		centerOvalSize = size;
-	}
-	
-	public void setOverlayReport(ParticleReport2 report){
-		//Set the overlay report to this report
-		overlayReport = report;
-		//Check to see if the report is null, the report is stale if it is null
-		reportIsStale = (report == null);
-	}
-	
-	public void drawOverlay(NIVision.RGBValue paramColor){
-		//The pointer for the image to send to the camera server
-		Image image;
-		//The pointer for the color to draw with
-		NIVision.RGBValue color = paramColor;
-		//The text to draw
-		String text = defaultText;
-		
-		//See if we are supposed to be coloring the image based on our timedColor
-		if(timedColor!=null && timedText!= null && timer.get()<timedDisplay){
-			color = timedColor;
-			text = timedText;
-		}
-		
-		//Check to see if we have a new report to use or not
-		if(!reportIsStale){
-			//Set the image to the overlay reports unfiltered image
-			image = overlayReport.unfilteredImage;
-			//Draw a box around the target
-			NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
-		}else{
-			image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-			camera.getImage(image);
-		}
-		
-		//Create a point that designates the center of the image
-		NIVision.Point center = new NIVision.Point(NIVision.imaqGetImageSize(image).width/2,NIVision.imaqGetImageSize(image).height/2);
-		
-		//Create a point for the text
-		NIVision.Point top = new NIVision.Point(center.x,NIVision.imaqGetImageSize(image).height-10);
-		
-		//Draw text at the top of the image
-		//NIVision.OverlayTextOptions options = new NIVision.OverlayTextOptions(fontName, fontSize, bold, italic, underline, strikeout, horizontalTextAlignment, verticalTextAlignment, backgroundColor, angle)
-		//NIVision.imaqOverlayText(image, top, text, color, options, group);
-		
-		
-		//Draw an oval at the center point
-		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.DRAW_VALUE);
-		
-		//Send the image to the camera server
-		CameraServer.getInstance().setImage(image);
-		
-		//The report is now stale
-		reportIsStale = true;
 	}
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger

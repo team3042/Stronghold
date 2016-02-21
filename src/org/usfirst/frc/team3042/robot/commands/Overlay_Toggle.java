@@ -14,7 +14,7 @@ public class Overlay_Toggle extends Command {
     public Overlay_Toggle() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.camera);
+    	requires(Robot.driverCamera);
     }
 
     // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class Overlay_Toggle extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.camera.drawOverlay(NIVision.RGB_YELLOW);
+    	Robot.driverCamera.drawOverlay(NIVision.RGB_YELLOW);
     }
 
     // Make this return true when this Command no longer needs to run execute()

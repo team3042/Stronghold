@@ -16,6 +16,7 @@ public class Overlay_CheckTarget extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.camera);
+    	requires(Robot.driverCamera);
     }
 
     // Called just before this Command runs the first time
@@ -37,15 +38,15 @@ public class Overlay_CheckTarget extends Command {
     	//Making sure that create target report found a target and returned it, the report will be null if it didn't.
     	if(report != null){
     		//Send the report to the overlay to be drawn
-    		Robot.camera.setOverlayReport(report);
+    		Robot.driverCamera.setOverlayReport(report);
     		//Get the offset from the target
     		double offset = Robot.camera.getRotationOffset(report) - offsetZero;
     		
     		if(offset>offsetMin && offset<offsetMax){
-    			Robot.camera.setTimedInformation(NIVision.RGB_GREEN, "On Target", 1.0f);
+    			Robot.driverCamera.setTimedInformation(NIVision.RGB_GREEN, "On Target", 1.0f);
     			Robot.logger.log("Overlay target is in y range", 1);
     		}else{
-    			Robot.camera.setTimedInformation(NIVision.RGB_RED, "Off Target", 1.0f);
+    			Robot.driverCamera.setTimedInformation(NIVision.RGB_RED, "Off Target", 1.0f);
     			Robot.logger.log("Overlay target isnt in y range", 1);
     		}
     	}else{
