@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3042.robot.subsystems.DriverCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
+	public static final DriverCamera driverCamera = new DriverCamera();
 	public static OI oi;
 
     Command autonomousCommand;
@@ -60,6 +62,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Calibration Length In Seconds", CALIBRATION_LENGTH);
         SmartDashboard.putNumber("Shooter Speed", 5000);
         SmartDashboard.putNumber("Shoot Test", 330);
+        driverCamera.checkCameraServer();
     }
 	
 	/**

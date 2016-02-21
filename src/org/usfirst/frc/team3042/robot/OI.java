@@ -24,6 +24,7 @@ public class OI {
 	public Button left_3 = new JoystickButton(joystickLeft, 3);
 	public Button left_4 = new JoystickButton(joystickLeft, 4);
 	public Button left_5 = new JoystickButton(joystickLeft, 5);
+	public Button left_6 = new JoystickButton(joystickLeft, 6);
 	public Button left_8 = new JoystickButton(joystickLeft, 8);
 
 	//Right Joystick Buttons
@@ -73,6 +74,8 @@ public class OI {
 		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
+		left_5.toggleWhenPressed(new Overlay_Toggle());
+		left_6.whenPressed(new Overlay_CheckTarget());
 	}
 }
 

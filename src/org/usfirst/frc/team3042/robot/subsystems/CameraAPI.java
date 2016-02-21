@@ -13,6 +13,7 @@ import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
@@ -20,7 +21,6 @@ import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
 import edu.wpi.first.wpilibj.vision.AxisCamera.Rotation;
 import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
@@ -55,13 +55,11 @@ public class CameraAPI extends Subsystem {
 	private double DEFAULT_SCORE_MIN = 55;
 	
 	public CameraAPI(){
-		
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
-		
 	}
 	
 	public void initDefaultCommand() {
@@ -75,6 +73,7 @@ public class CameraAPI extends Subsystem {
 		public int particleIndex;
 		public int boundingBoxRight;
 		public double perimeter;
+		public Image unfilteredImage;
 		public Image image;
 		
 		public int compareTo(ParticleReport r)
@@ -180,6 +179,7 @@ public class CameraAPI extends Subsystem {
 			
 			if(isTarget){
 				particles.get(0).image = binaryImage;
+				particles.get(0).unfilteredImage = unfilteredImage;
 				targetReport = particles.get(0);
 			}else{
 				Robot.logger.log("!!!------------------------------------", 5);
@@ -204,12 +204,14 @@ public class CameraAPI extends Subsystem {
 		}
 	}
 	
+	private Image unfilteredImage;
 	//A method that allows other classes to utilize the camera classes ability to anazlyze frames
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
 		
 		//Get an image from the camera
 		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		camera.getImage(unfilteredFrame);
+		unfilteredImage = unfilteredFrame;
 		
 		//Filter the image from the camera through an HSV filter
 		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
@@ -233,52 +235,6 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqFillHoles(image, image, 1);
 		NIVision.imaqConvexHull(image, image, 1);
 	}
-	
-	
-	// ***** The overlay for the camera
-	
-	//Boolean describing if the report was refreshed or if it is was already used.
-	private boolean reportIsStale = true;
-	//The particle report used to draw parts of the dashboard if it is not stale
-	private ParticleReport2 overlayReport;
-	//The size of the oval at the center of the image
-	private int centerOvalSize = 4;
-	
-	//There is an oval drawn at the center of the overlay, this sets it's size
-	public void setOvalSize(int size){
-		centerOvalSize = size;
-	}
-	
-	public void setOverlayReport(ParticleReport2 report){
-		//Set the overlay report to this report
-		overlayReport = report;
-		//Check to see if the report is null, the report is stale if it is null
-		reportIsStale = (report == null);
-	}
-	
-	public void drawOverlay(NIVision.RGBValue color){
-		//This pointer is here to make sure we are not messing up the actual report image
-		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		camera.getImage(image);
-		
-		if(!reportIsStale){
-			//Draw a box around the target
-			NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
-		}
-		
-		//Create a point that designates the center of the image
-		NIVision.Point center = new NIVision.Point(NIVision.imaqGetImageSize(image).width/2,NIVision.imaqGetImageSize(image).height/2);
-		
-		//Draw an oval at the center point
-		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.DRAW_VALUE);
-		
-		//Send the image to the camera server
-		CameraServer.getInstance().setImage(image);
-		
-		//The report is now stale
-		reportIsStale = true;
-	}
-	
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger
 	static boolean CompareParticleSizes(ParticleReport2 particle1, ParticleReport2 particle2)
