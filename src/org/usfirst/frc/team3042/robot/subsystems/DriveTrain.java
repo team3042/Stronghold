@@ -68,11 +68,16 @@ public class DriveTrain extends Subsystem {
 		leftEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		rightEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 
-		leftEncMotor.configEncoderCodesPerRev(360);
-		rightEncMotor.configEncoderCodesPerRev(360);
-		
-		leftEncMotor.reverseSensor(false);
-		rightEncMotor.reverseSensor(true);
+		leftEncMotor.configEncoderCodesPerRev(300);
+		rightEncMotor.configEncoderCodesPerRev(300);
+		if(RobotMap.isSkoll) {
+			leftEncMotor.reverseSensor(true);
+			rightEncMotor.reverseSensor(false);
+		}
+		else {
+			leftEncMotor.reverseSensor(false);
+			rightEncMotor.reverseSensor(true);
+		}
 		
 		resetEncoders();
 	}

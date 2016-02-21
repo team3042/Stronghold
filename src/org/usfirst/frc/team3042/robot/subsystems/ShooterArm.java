@@ -20,6 +20,7 @@ public class ShooterArm extends Subsystem {
 	private double raiseLimit = 690;
 	private double storage = 640;
 	private double pickup = 10; 
+	private double shoot = 276;
 	
 	private double toleranceMin = 350, toleranceMax = (RobotMap.isSkoll)? 800: 500;
 	private int allowableError = (RobotMap.isSkoll)? 35: 20;
@@ -110,6 +111,10 @@ public class ShooterArm extends Subsystem {
     
     public void goToStorage() {
     	setPosition(storage);
+    }
+    
+    public void goToShoot() {
+    	setPosition(shoot);
     }
     
     public void holdPosition() {

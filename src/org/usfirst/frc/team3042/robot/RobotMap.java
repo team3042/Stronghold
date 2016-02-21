@@ -7,7 +7,7 @@ package org.usfirst.frc.team3042.robot;
  */
 public class RobotMap {
 	//Chose which robot is being used
-	public static boolean isSkoll = false;
+	public static boolean isSkoll = true;
 	
 	//CAN Talons
 	public static final int DRIVETRAIN_TALON_LEFT_1 = (isSkoll)? 14 : 18;
@@ -29,5 +29,5 @@ public class RobotMap {
 	public static final int GUNNER_JOYSTICK_USB_PORT_2 = 2;
 	
 	//Robot Camera IP
-	public static final String CAMERA_IP = (isSkoll)? "10.30.42.17": "axis-camera";
+	public static final String CAMERA_IP = "axis-camera";
 }
