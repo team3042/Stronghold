@@ -16,15 +16,15 @@ public class ShooterArm extends Subsystem {
 	
 	//Pot Values
 	private double POT_ZERO = (RobotMap.isSkoll)? 790: 865;
-	private double lowerLimit = 25;
+	private double lowerLimit = 10;
 	private double raiseLimit = 690;
 	private double storage = 640;
-	private double pickup = 25; 
+	private double pickup = 10; 
 	
 	private double toleranceMin = 350, toleranceMax = (RobotMap.isSkoll)? 800: 500;
 	private int allowableError = (RobotMap.isSkoll)? 35: 20;
 	
-	private double rotateSpeed = .6;
+	private double rotateSpeed = .3;
 	private double p = 10, i = 0, d = 0;
 	
 	public ShooterArm() {

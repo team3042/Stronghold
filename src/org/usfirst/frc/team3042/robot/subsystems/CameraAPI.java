@@ -53,14 +53,16 @@ public class CameraAPI extends Subsystem {
 	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
-	private double DEFAULT_SCORE_MIN = 80;
+	private double DEFAULT_SCORE_MIN = 55;
 	
 	public CameraAPI(){
+		/*
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
+		*/
 	}
 	
 	public void checkCameraServer(){

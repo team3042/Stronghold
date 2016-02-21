@@ -27,7 +27,7 @@ public class DriveTrain extends Subsystem {
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
 	
 	//PIDF values
-	double kP = 0, kI = 0, kD = 0, kF = 0;
+	double kP = 2, kI = 0, kD = 0, kF = 0.9;
 
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
@@ -68,8 +68,11 @@ public class DriveTrain extends Subsystem {
 		leftEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		rightEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 
-		leftEncMotor.configEncoderCodesPerRev(1024);
-		rightEncMotor.configEncoderCodesPerRev(1024);
+		leftEncMotor.configEncoderCodesPerRev(360);
+		rightEncMotor.configEncoderCodesPerRev(360);
+		
+		leftEncMotor.reverseSensor(false);
+		rightEncMotor.reverseSensor(true);
 		
 		resetEncoders();
 	}
@@ -148,12 +151,13 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public int getRightEncoder() {
-		return rightEncMotor.getEncPosition() - rightEncoderZero;
+		return -(rightEncMotor.getEncPosition() - rightEncoderZero);
 	}
 
 	public double getLeftSpeed() {
 		return leftEncMotor.getSpeed();
-	}    
+	} 
+	
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
 	}
@@ -179,6 +183,8 @@ public class DriveTrain extends Subsystem {
     
     public MotionProfileStatus[] getMotionProfileStatus() {
     	MotionProfileStatus[] motionProfileStatus = new MotionProfileStatus[2];
+    	motionProfileStatus[0] = new MotionProfileStatus();
+    	motionProfileStatus[1] = new MotionProfileStatus();
 		leftMotorFront.getMotionProfileStatus(motionProfileStatus[0]);
 		rightMotorFront.getMotionProfileStatus(motionProfileStatus[1]);
 		

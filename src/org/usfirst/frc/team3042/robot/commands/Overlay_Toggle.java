@@ -2,31 +2,29 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import com.ni.vision.NIVision;
+
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Shooter_Shoot extends Command {
-	
-    public Shooter_Shoot() {
-    	requires(Robot.shooter);
-    	requires(Robot.shooterServo);
+public class Overlay_Toggle extends Command {
+
+    public Overlay_Toggle() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	requires(Robot.camera);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooter.spinToShoot();
-    	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {  	
-    	if (Robot.shooter.readyToShoot()) {
-    		Robot.shooterServo.setServoExtended();
-    	}
+    protected void execute() {
+    	Robot.camera.drawOverlay(NIVision.RGB_YELLOW);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -42,6 +40,6 @@ public class Shooter_Shoot extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrupt", 1);
+    	Robot.logger.log("Interrupted", 1);
     }
 }

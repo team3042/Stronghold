@@ -54,13 +54,12 @@ public class Robot extends IterativeRobot {
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
-        SmartDashboard.putNumber("Camera Distance", 8);
         
         SmartDashboard.putString("Calibration File Name", CALIBRATION_FILE_NAME);
         SmartDashboard.putNumber("Calibration Motor Speed", CALIBRATION_SPEED);
         SmartDashboard.putNumber("Calibration Length In Seconds", CALIBRATION_LENGTH);
         SmartDashboard.putNumber("Shooter Speed", 5000);
-        
+        SmartDashboard.putNumber("Shoot Test", 330);
         camera.checkCameraServer();
     }
 	
@@ -126,6 +125,13 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("left enc", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("right enc", shooter.getEncoderRPMRight());
         SmartDashboard.putNumber("Potentiometer", Robot.shooterArm.getPotentiometerVal());
+        
+        SmartDashboard.putNumber("Left Drive Speed", driveTrain.getLeftSpeed());
+    	SmartDashboard.putNumber("Right Drive Speed", driveTrain.getRightSpeed());
+    	SmartDashboard.putNumber("Left Drive Position", driveTrain.getLeftEncoder());
+    	SmartDashboard.putNumber("Right Drive Position", driveTrain.getRightEncoder());
+    	
+    	SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
     }
     
     /**

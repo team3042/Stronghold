@@ -12,18 +12,17 @@ public class ShooterArm_Adjust extends Command {
 	
 	double[][] lookUpTable = new double[][]{
 		//Currently in pot values, these are temporary fillers.
-			{3,575},
-			{4,550},
-			{5,525},
-			{6,500},
-			{7,475},
-			{8,450},
-			{9,425},
-			{10,400},
-			{11,375},
-			{12,350}};
+			{7.9, 345},
+			{8.25, 330},
+			{8.5, 322},
+			{8.9, 307},
+			{9.5, 292},
+			{10.1, 280},
+			{11.3, 278},
+			{11.65, 276},
+			{13, 276}};
 			
-	static final double maxDist = 12, minDist = 3;
+	static final double maxDist = 13, minDist = 7.9;
 	double potGoal;
 
 	public ShooterArm_Adjust() {
@@ -34,8 +33,7 @@ public class ShooterArm_Adjust extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	//double distance = Robot.camera.getDistToTarget();
-    	double distance = SmartDashboard.getNumber("Camera Distance");
+    	double distance = Robot.camera.getDistToTarget();
     	
 		potGoal = Robot.shooterArm.getPotentiometerVal();
 
@@ -60,7 +58,6 @@ public class ShooterArm_Adjust extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.logger.log("Diff = " + (Robot.shooterArm.getPotentiometerVal()-potGoal), 3);
     }
 
     // Make this return true when this Command no longer needs to run execute()
