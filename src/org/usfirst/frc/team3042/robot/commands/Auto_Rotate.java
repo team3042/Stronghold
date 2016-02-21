@@ -54,7 +54,7 @@ public class Auto_Rotate extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	ParticleReport2 report = Robot.camera.createTargetReport(60);
+    	ParticleReport2 report = Robot.camera.createTargetReport(55);
     	
 	    double offset = 0.0;
 		double leftSpeed = 0, rightSpeed = 0;

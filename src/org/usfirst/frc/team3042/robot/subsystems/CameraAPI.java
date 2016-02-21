@@ -39,9 +39,9 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 154);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(140, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(89, 216);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(64, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(165, 255);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -52,7 +52,7 @@ public class CameraAPI extends Subsystem {
 	float WIDTH_HEIGHT_RATIO = targetWidth/targetHeight;//The target width: 20 inches, divided by the target height: 12 inches.
 	float HEIGHT_WIDTH_RATIO = targetHeight/targetWidth;//Use when camera is on it's side
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
-	private double DEFAULT_SCORE_MIN = 80;
+	private double DEFAULT_SCORE_MIN = 55;
 	
 	public CameraAPI(){
 		/*
