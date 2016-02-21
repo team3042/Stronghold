@@ -13,6 +13,7 @@ import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
@@ -39,9 +40,9 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 154);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(140, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(89, 216);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(64, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(165, 255);	//Range for green light
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -62,6 +63,15 @@ public class CameraAPI extends Subsystem {
 		camera.writeExposureControl(ExposureControl.kHold);
 	}
 	
+	public void checkCameraServer(){
+		if(CameraServer.getInstance() != null){
+			Robot.logger.log("Camera Server found! ", 1);
+			Robot.logger.log("Camera server autocapture is: "+CameraServer.getInstance().isAutoCaptureStarted(), 1);
+		}else{
+			Robot.logger.log("Camera Server not found! ", 1);
+		}
+	}
+	
 	public void initDefaultCommand() {
 		
 	}
@@ -73,6 +83,7 @@ public class CameraAPI extends Subsystem {
 		public int particleIndex;
 		public int boundingBoxRight;
 		public double perimeter;
+		public Image unfilteredImage;
 		public Image image;
 		
 		public int compareTo(ParticleReport r)
@@ -178,6 +189,7 @@ public class CameraAPI extends Subsystem {
 			
 			if(isTarget){
 				particles.get(0).image = binaryImage;
+				particles.get(0).unfilteredImage = unfilteredImage;
 				targetReport = particles.get(0);
 			}else{
 				Robot.logger.log("!!!------------------------------------", 5);
@@ -202,12 +214,14 @@ public class CameraAPI extends Subsystem {
 		}
 	}
 	
+	private Image unfilteredImage;
 	//A method that allows other classes to utilize the camera classes ability to anazlyze frames
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
 		
 		//Get an image from the camera
 		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		camera.getImage(unfilteredFrame);
+		unfilteredImage = unfilteredFrame;
 		
 		//Filter the image from the camera through an HSV filter
 		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
@@ -241,6 +255,32 @@ public class CameraAPI extends Subsystem {
 	private ParticleReport2 overlayReport;
 	//The size of the oval at the center of the image
 	private int centerOvalSize = 4;
+	//The default text to display
+	private String defaultText = "Overlay";
+	
+	// ***** Information that is displayed based on the timer
+	
+	//A timer for displaying information
+	private Timer timer = new Timer();
+	//How long to display certain information
+	private float timedDisplay;
+	//The color information to display
+	private NIVision.RGBValue timedColor;
+	//The text information to display
+	private String timedText;
+	
+	//Set up onTarget feedback for the overlay, uses the timer
+	public void setTimedInformation(NIVision.RGBValue color, String text, float time){
+		//Reset the timer to 0 and then start it so that it counts up
+		timer.reset();
+		timer.start();
+		//Tell the overlay what color it should display
+		this.timedColor = color;
+		//Tell the overlay what text to display
+		this.timedText = text;
+		//Set the time to use this color
+		timedDisplay = time;
+	}
 	
 	//There is an oval drawn at the center of the overlay, this sets it's size
 	public void setOvalSize(int size){
@@ -254,18 +294,41 @@ public class CameraAPI extends Subsystem {
 		reportIsStale = (report == null);
 	}
 	
-	public void drawOverlay(NIVision.RGBValue color){
-		//This pointer is here to make sure we are not messing up the actual report image
-		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		camera.getImage(image);
+	public void drawOverlay(NIVision.RGBValue paramColor){
+		//The pointer for the image to send to the camera server
+		Image image;
+		//The pointer for the color to draw with
+		NIVision.RGBValue color = paramColor;
+		//The text to draw
+		String text = defaultText;
 		
+		//See if we are supposed to be coloring the image based on our timedColor
+		if(timedColor!=null && timedText!= null && timer.get()<timedDisplay){
+			color = timedColor;
+			text = timedText;
+		}
+		
+		//Check to see if we have a new report to use or not
 		if(!reportIsStale){
+			//Set the image to the overlay reports unfiltered image
+			image = overlayReport.unfilteredImage;
 			//Draw a box around the target
 			NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
+		}else{
+			image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+			camera.getImage(image);
 		}
 		
 		//Create a point that designates the center of the image
 		NIVision.Point center = new NIVision.Point(NIVision.imaqGetImageSize(image).width/2,NIVision.imaqGetImageSize(image).height/2);
+		
+		//Create a point for the text
+		NIVision.Point top = new NIVision.Point(center.x,NIVision.imaqGetImageSize(image).height-10);
+		
+		//Draw text at the top of the image
+		//NIVision.OverlayTextOptions options = new NIVision.OverlayTextOptions(fontName, fontSize, bold, italic, underline, strikeout, horizontalTextAlignment, verticalTextAlignment, backgroundColor, angle)
+		//NIVision.imaqOverlayText(image, top, text, color, options, group);
+		
 		
 		//Draw an oval at the center point
 		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.DRAW_VALUE);
@@ -276,7 +339,6 @@ public class CameraAPI extends Subsystem {
 		//The report is now stale
 		reportIsStale = true;
 	}
-	
 	
 	//Comparator function for sorting particles. Returns true if particle 1 is larger
 	static boolean CompareParticleSizes(ParticleReport2 particle1, ParticleReport2 particle2)

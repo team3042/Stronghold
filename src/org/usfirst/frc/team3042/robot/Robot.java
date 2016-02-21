@@ -60,6 +60,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Calibration Motor Speed", CALIBRATION_SPEED);
         SmartDashboard.putNumber("Calibration Length In Seconds", CALIBRATION_LENGTH);
         SmartDashboard.putNumber("Shooter Speed", 5000);
+        
+        camera.checkCameraServer();
     }
 	
 	/**
