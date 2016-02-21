@@ -55,11 +55,13 @@ public class CameraAPI extends Subsystem {
 	private double DEFAULT_SCORE_MIN = 80;
 	
 	public CameraAPI(){
+		/*
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
+		*/
 	}
 	
 	public void initDefaultCommand() {

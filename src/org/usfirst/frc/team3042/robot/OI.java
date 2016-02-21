@@ -58,6 +58,7 @@ public class OI {
 		gunner_B.whenPressed(new ShooterArm_Pickup());
 		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new ShooterArm_Storage());
+		gunner_Y.whenPressed(new ShooterArm_Position(246));
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Raise());
