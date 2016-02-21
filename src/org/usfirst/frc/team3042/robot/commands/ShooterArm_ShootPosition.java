@@ -11,7 +11,6 @@ public class ShooterArm_ShootPosition extends Command {
 
     public ShooterArm_ShootPosition() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.shooterArm);
     }
 

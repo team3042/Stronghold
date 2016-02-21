@@ -25,6 +25,11 @@ public class DriveTrain extends Subsystem {
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
+	private int encCounts = (RobotMap.isSkoll) ? 300 : 360;
+	private boolean leftReverseEnc = (RobotMap.isSkoll) ? true : false;
+	private boolean rightReverseEnc = (RobotMap.isSkoll) ? false : true;
+	private int leftEncSign = (RobotMap.isSkoll) ? 1 : 1;
+	private int rightEncSign = (RobotMap.isSkoll) ? 1 : -1;
 	
 	//PIDF values
 	double kP = 2, kI = 0, kD = 0, kF = 0.9;
@@ -68,16 +73,11 @@ public class DriveTrain extends Subsystem {
 		leftEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		rightEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 
-		leftEncMotor.configEncoderCodesPerRev(300);
-		rightEncMotor.configEncoderCodesPerRev(300);
-		if(RobotMap.isSkoll) {
-			leftEncMotor.reverseSensor(true);
-			rightEncMotor.reverseSensor(false);
-		}
-		else {
-			leftEncMotor.reverseSensor(false);
-			rightEncMotor.reverseSensor(true);
-		}
+		leftEncMotor.configEncoderCodesPerRev(encCounts);
+		rightEncMotor.configEncoderCodesPerRev(encCounts);
+		
+		leftEncMotor.reverseSensor(leftReverseEnc);
+		rightEncMotor.reverseSensor(rightReverseEnc);
 		
 		resetEncoders();
 	}
@@ -127,22 +127,12 @@ public class DriveTrain extends Subsystem {
     }
     
     private double scaleLeft(double left) {
-    	if(RobotMap.isSkoll) {
-    		left = left;
-    	}
-    	else {
-    		left = left;
-    	}
+    	
     	return left;
     }
     
     private double scaleRight(double right) {
-    	if(RobotMap.isSkoll) {
-    		right = right;
-    	}
-    	else {
-    		right = right;
-    	}
+    	
     	return right;
     }
 
@@ -152,11 +142,11 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public int getLeftEncoder() {
-		return leftEncMotor.getEncPosition() - leftEncoderZero;
+		return leftEncSign * (leftEncMotor.getEncPosition() - leftEncoderZero);
 	}
 	
 	public int getRightEncoder() {
-		return -(rightEncMotor.getEncPosition() - rightEncoderZero);
+		return rightEncSign * (rightEncMotor.getEncPosition() - rightEncoderZero);
 	}
 
 	public double getLeftSpeed() {

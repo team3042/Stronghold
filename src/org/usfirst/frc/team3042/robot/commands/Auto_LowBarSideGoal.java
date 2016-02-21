@@ -18,7 +18,6 @@ public class Auto_LowBarSideGoal extends Command {
 
     public Auto_LowBarSideGoal() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.driveTrain);
     }
 
