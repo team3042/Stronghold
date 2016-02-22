@@ -9,6 +9,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.OverlayTextOptions;
 import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.Rect;
 
@@ -241,6 +242,38 @@ public class CameraAPI extends Subsystem {
 	{
 		//we want descending sort order
 		return particle1.percentAreaToImageArea > particle2.percentAreaToImageArea;
+	}
+	
+	//The overlay method meant for the targeting camera in stronghold
+	public void drawOverlay(Image image, NIVision.RGBValue color, String text, ParticleReport2 overlayReport, OverlayTextOptions textOptions, int centerOvalSize){
+		//Draw a box around the target
+		NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
+		
+		//Create a point that designates the center of the image
+		NIVision.Point center = new NIVision.Point(NIVision.imaqGetImageSize(image).width/2,NIVision.imaqGetImageSize(image).height/2);
+		
+		//Create a point for the text
+		NIVision.Point top = new NIVision.Point(center.x,NIVision.imaqGetImageSize(image).height-10);
+		
+		//Draw text at the top of the image
+		NIVision.imaqOverlayText(image, top, text, color, textOptions, null);
+		
+		//Draw an oval at the center point
+		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.PAINT_VALUE);
+    
+		setCameraServerImage(image);
+	}
+	
+	//By default the camera server should show the back camera for the stronghold competition
+	public void setCameraServerImage(Image image){
+		//Send the image to the camera server
+		CameraServer.getInstance().setImage(image);
+	}
+	
+	public void setCameraServerImageDefault(){
+		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		camera.getImage(image);
+		setCameraServerImage(image);
 	}
 
 	/**
