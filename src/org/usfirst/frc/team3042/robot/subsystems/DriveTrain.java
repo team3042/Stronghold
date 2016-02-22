@@ -32,7 +32,8 @@ public class DriveTrain extends Subsystem {
 	private int rightEncSign = (RobotMap.isSkoll) ? 1 : -1;
 	
 	//PIDF values
-	double kP = 2, kI = 0, kD = 0, kF = 0.9;
+	double kP = 2, kI = 0, kD = 0;
+	double kF = (RobotMap.isSkoll) ? 0.0 : 0.9;
 
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 

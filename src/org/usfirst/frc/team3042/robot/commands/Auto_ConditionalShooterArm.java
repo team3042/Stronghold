@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
-import org.usfirst.frc.team3042.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,53 +8,39 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_RotateAlt extends Command {
-	private Timer timer = new Timer();
- 
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? 0.0 : -16.5;
-	int cyclesTolerance = 4;
-	double encPerPixel = (RobotMap.isSkoll) ? 1 : 1;
-	double timeout = 4.0;
+public class Auto_ConditionalShooterArm extends Command {
 
-	double lastOffset;
-	int stillCycles;
-	boolean finished, firstPass;
+	double encTarget, potValue;
+	boolean finished;
+	Timer timer = new Timer();
+	double timeout = 3.0;
 	
-    public Auto_RotateAlt() {
+    public Auto_ConditionalShooterArm(double encTarget, double potValue) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.camera);
-        requires(Robot.driveTrain);
+        requires(Robot.shooterArm);
+        
+        this.encTarget = encTarget;
+        this.potValue = potValue;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	lastOffset = 0.0;
-    	stillCycles = 0;
+    	Robot.driveTrain.resetEncoders();
     	finished = false;
     	timer.reset();
     	timer.start();
-    	firstPass = true;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double offset = Robot.camera.getRotationOffset() - OFFSET_ZERO;
+    	int leftEnc = Robot.driveTrain.getLeftEncoder();
+    	int rightEnc = Robot.driveTrain.getRightEncoder();
     	
-    	if (offset == lastOffset) {
-    		stillCycles++;
-    		finished = (stillCycles > cyclesTolerance);
-    	} else {
-    		stillCycles = 0;
-    		
-    		Robot.driveTrain.resetEncoders();
-    		double leftTarget = -offset * encPerPixel;
-    		double rightTarget = offset * encPerPixel;
-    		
-    		if (firstPass) Robot.driveTrain.setPosition(leftTarget, rightTarget);
-    		firstPass = false;
+    	if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
+    		Robot.shooterArm.setPosition(potValue);
+    		finished = true;
     	}
-    	lastOffset = offset;
     }
 
     // Make this return true when this Command no longer needs to run execute()

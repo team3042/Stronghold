@@ -57,9 +57,8 @@ public class Auto_LowBarSideGoal extends Command {
     	status = Robot.driveTrain.getMotionProfileStatus();
     	
     	if(status[0].btmBufferCnt > 5) {
-    		//Robot.driveTrain.enableMotionProfile();
+    		Robot.driveTrain.enableMotionProfile();
     	}
-    	Robot.logger.log(status[0].btmBufferCnt + "", 3);
     	
     	if(status[0].hasUnderrun) {
     		Robot.logger.log("Left Underrun", 2);
