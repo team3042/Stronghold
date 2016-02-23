@@ -23,10 +23,10 @@ public class ShooterArm extends Subsystem {
 	private double shoot = 276;
 	
 	private double toleranceMin = 350, toleranceMax = (RobotMap.isSkoll)? 800: 500;
-	private int allowableError = (RobotMap.isSkoll)? 35: 20;
+	private int allowableError = (RobotMap.isSkoll)? 0: 0;
 	
-	private double rotateSpeed = .3;
-	private double p = 10, i = 0, d = 0;
+	private double rotateSpeed = .6;
+	private double p = 5, i = 0, d = 0;
 	
 	public ShooterArm() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
