@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
@@ -33,12 +34,13 @@ public class Robot extends IterativeRobot {
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
+	public static final DriversCamera driversCamera = new DriversCamera();
 	public static OI oi;
 
     Command autonomousCommand;
     SendableChooser chooser;
     public static Logger logger;
-    CameraServer server;
+    CameraServer usbCamera;
         
     private int LOGGER_LEVEL = 5;
     String CALIBRATION_FILE_NAME = "calibration";
@@ -51,14 +53,8 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		oi = new OI();
-
-		//USB Camera Server
-        server = CameraServer.getInstance();
-        server.setQuality(50);
-        server.startAutomaticCapture("cam1");
-		
-		chooser = new SendableChooser();
         logger = new Logger(true, true, LOGGER_LEVEL);
+		chooser = new SendableChooser();
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);

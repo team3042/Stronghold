@@ -22,9 +22,6 @@ public class ShooterArm extends Subsystem {
 	private double pickup = 10; 
 	private double shoot = 276;
 	
-	private double toleranceMin = 350, toleranceMax = (RobotMap.isSkoll)? 800: 500;
-	private int allowableError = (RobotMap.isSkoll)? 0: 0;
-	
 	private double rotateSpeed = .6;
 	private double p = 5, i = 0, d = 0;
 	
@@ -35,6 +32,7 @@ public class ShooterArm extends Subsystem {
 		talonRotate.setInverted(true);
 		
 		talonRotate.setPID(p, i ,d);
+		talonRotate.setAllowableClosedLoopErr(0);
 	}
 	
     public void initDefaultCommand() {
@@ -56,13 +54,6 @@ public class ShooterArm extends Subsystem {
     }
 
     public void setPosition(double position) {
-    	if(position > toleranceMin && position < toleranceMax) {
-    		talonRotate.setAllowableClosedLoopErr(allowableError);
-    	}
-    	else {
-    		talonRotate.setAllowableClosedLoopErr(0);
-    	}
-    	
     	position = POT_ZERO - safetyTest(position);
 
     	talonRotate.changeControlMode(TalonControlMode.Position);
