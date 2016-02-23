@@ -9,6 +9,7 @@ import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
 import org.usfirst.frc.team3042.robot.subsystems.TapeShooter;
 import org.usfirst.frc.team3042.robot.subsystems.Winch;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser chooser;
     public static Logger logger;
+    CameraServer server;
         
     private int LOGGER_LEVEL = 5;
     String CALIBRATION_FILE_NAME = "calibration";
@@ -49,7 +51,13 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		oi = new OI();
-        chooser = new SendableChooser();
+
+		//USB Camera Server
+        server = CameraServer.getInstance();
+        server.setQuality(50);
+        server.startAutomaticCapture("cam1");
+		
+		chooser = new SendableChooser();
         logger = new Logger(true, true, LOGGER_LEVEL);
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
