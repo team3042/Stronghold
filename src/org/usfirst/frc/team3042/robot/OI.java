@@ -75,7 +75,6 @@ public class OI {
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
 		left_5.toggleWhenPressed(new Overlay_Toggle());
-		left_6.whenPressed(new Overlay_CheckTarget());
 	}
 }
 
