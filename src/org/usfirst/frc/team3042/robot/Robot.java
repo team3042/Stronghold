@@ -137,6 +137,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Right Drive Position", driveTrain.getRightEncoder());
     	
     	SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
+    	
+    	SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
     }
     
     /**

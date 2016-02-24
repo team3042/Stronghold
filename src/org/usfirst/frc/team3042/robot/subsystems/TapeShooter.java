@@ -13,7 +13,7 @@ public class TapeShooter extends Subsystem {
     	
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
-	final double raiseSpeed = 0.5, lowerSpeed = 0.3;
+	final double raiseSpeed = .9, lowerSpeed = 0.6;
 	int encoderZero;
 	final double encLimit = 41000;
 	final double tolerance = 500;
