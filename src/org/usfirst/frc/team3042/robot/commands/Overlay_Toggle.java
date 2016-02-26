@@ -4,13 +4,10 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI.ParticleReport2;
 
 import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.RGBValue;
-import com.ni.vision.NIVision.Rect;
 import com.ni.vision.NIVision.TextAlignment;
 import com.ni.vision.NIVision.VerticalTextAlignment;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -41,19 +38,21 @@ public class Overlay_Toggle extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.camera);
+    	requires(Robot.driversCamera);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
+    	timer.reset();
+    	timeToDisplay = 0;
     }
 
     //The offset variables
     private double offsetMin = -2;
     private double offsetMax = 2;
     private double offsetZero = -16.5f;
-    
-    // Called repeatedly when this Command is scheduled to run
+
     protected void execute() {
     	//Set up a new particle report, passing a score minimum from 0 to 100
     	ParticleReport2 report = Robot.camera.createTargetReport(20);
@@ -71,10 +70,10 @@ public class Overlay_Toggle extends Command {
     			Robot.logger.log("Overlay target isnt in y range", 1);
     		}
     		
-    		drawFrontViewOverlay(defaultColor, defaultText, report);
+    		drawOverlayFrontView(defaultColor, defaultText, report);
     	}else{
     		//If our report is null we draw the regular front camera view
-    		drawFrontView();
+    		drawCleanFrontView();
     	}
     }
     
@@ -85,22 +84,19 @@ public class Overlay_Toggle extends Command {
     }
     
     //Draw the front camera view with targeting report information
-    private void drawFrontViewOverlay(NIVision.RGBValue color, String text, ParticleReport2 overlayReport){
+    private void drawOverlayFrontView(NIVision.RGBValue color, String text, ParticleReport2 overlayReport){
     	//See if we are supposed to be coloring the image based on our timedColor
 		if(timedColor!=null && timedText!= null && timer.get()<timeToDisplay){
 			color = timedColor;
 			text = timedText;
 		}
-
-		//Draw a box around the target
-		NIVision.imaqOverlayRect(overlayReport.unfilteredImage, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
 		
 		//Send the image to the camera server
-		Robot.camera.drawOverlay(overlayReport.unfilteredImage, color, text, overlayReport, textOptions, centerOvalSize);
+		Robot.driversCamera.setCameraServerImage(Robot.camera.getDrawnOverlay(overlayReport.unfilteredImage, color, text, overlayReport, textOptions, centerOvalSize));
     }
     
-    private void drawFrontView(){
-    	Robot.camera.setCameraServerImageDefault();
+    private void drawCleanFrontView(){
+    	Robot.driversCamera.setCameraServerImage(Robot.camera.getCleanImage());
     }
     
     // Make this return true when this Command no longer needs to run execute()
@@ -111,11 +107,15 @@ public class Overlay_Toggle extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	timer.reset();
+    	timeToDisplay = 0;
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.logger.log("Interrupted", 1);
+    	timer.reset();
+    	timeToDisplay = 0;
     }
 }

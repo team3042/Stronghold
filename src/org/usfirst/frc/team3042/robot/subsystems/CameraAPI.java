@@ -2,7 +2,6 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import java.util.Comparator;
 import java.util.Vector;
-import java.util.logging.Logger;
 
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
@@ -13,13 +12,10 @@ import com.ni.vision.NIVision.OverlayTextOptions;
 import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.Rect;
 
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
 import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
-import edu.wpi.first.wpilibj.vision.AxisCamera.Rotation;
 import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
 import java.io.File;
@@ -245,7 +241,7 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	//The overlay method meant for the targeting camera in stronghold
-	public void drawOverlay(Image image, NIVision.RGBValue color, String text, ParticleReport2 overlayReport, OverlayTextOptions textOptions, int centerOvalSize){
+	public Image getDrawnOverlay(Image image, NIVision.RGBValue color, String text, ParticleReport2 overlayReport, OverlayTextOptions textOptions, int centerOvalSize){
 		//Draw a box around the target
 		NIVision.imaqOverlayRect(image, overlayReport.boundingBox, color, NIVision.DrawMode.DRAW_VALUE, null);
 		
@@ -261,19 +257,13 @@ public class CameraAPI extends Subsystem {
 		//Draw an oval at the center point
 		NIVision.imaqOverlayOval(image, new Rect(center.y+(centerOvalSize/2),center.x-(centerOvalSize/2),centerOvalSize,centerOvalSize), color, NIVision.DrawMode.PAINT_VALUE);
     
-		setCameraServerImage(image);
+		return image;
 	}
 	
-	//By default the camera server should show the back camera for the stronghold competition
-	public void setCameraServerImage(Image image){
-		//Send the image to the camera server
-		CameraServer.getInstance().setImage(image);
-	}
-	
-	public void setCameraServerImageDefault(){
+	public Image getCleanImage(){
 		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		camera.getImage(image);
-		setCameraServerImage(image);
+		return image;
 	}
 
 	/**
