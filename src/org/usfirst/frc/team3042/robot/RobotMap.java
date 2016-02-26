@@ -7,7 +7,7 @@ package org.usfirst.frc.team3042.robot;
  */
 public class RobotMap {
 	//Chose which robot is being used
-	public static boolean isSkoll = false;
+	public static boolean isSkoll = true;
 	
 	//CAN Talons
 	public static final int DRIVETRAIN_TALON_LEFT_1 = (isSkoll)? 14 : 18;

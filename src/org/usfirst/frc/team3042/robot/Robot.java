@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team3042.robot;
 
+import org.usfirst.frc.team3042.robot.commands.Auto_LowBarSideGoal;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
@@ -55,8 +56,9 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
         logger = new Logger(true, true, LOGGER_LEVEL);
 		chooser = new SendableChooser();
-//        chooser.addObject("My Auto", new MyAutoCommand());
+        chooser.addObject("Low Bar Side Goal", new Auto_LowBarSideGoal());
         SmartDashboard.putData("Auto mode", chooser);
+        
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
         
         SmartDashboard.putString("Calibration File Name", CALIBRATION_FILE_NAME);
@@ -125,8 +127,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();  
-        SmartDashboard.putNumber("left enc", shooter.getEncoderRPMLeft());
-        SmartDashboard.putNumber("right enc", shooter.getEncoderRPMRight());
+        SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
+        SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
         SmartDashboard.putNumber("Potentiometer", Robot.shooterArm.getPotentiometerVal());
         
         SmartDashboard.putNumber("Left Drive Speed", driveTrain.getLeftSpeed());
@@ -135,6 +137,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Right Drive Position", driveTrain.getRightEncoder());
     	
     	SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
+    	
+    	SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
     }
     
     /**
