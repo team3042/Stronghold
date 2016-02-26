@@ -27,13 +27,13 @@ public class DriveTrain extends Subsystem {
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
 	private int encCounts = (RobotMap.isSkoll) ? 300 : 360;
 	private boolean leftReverseEnc = (RobotMap.isSkoll) ? true : false;
-	private boolean rightReverseEnc = (RobotMap.isSkoll) ? false : true;
+	private boolean rightReverseEnc = (RobotMap.isSkoll) ? true : true;
 	private int leftEncSign = (RobotMap.isSkoll) ? 1 : 1;
-	private int rightEncSign = (RobotMap.isSkoll) ? 1 : -1;
+	private int rightEncSign = (RobotMap.isSkoll) ? -1 : -1;
 	
 	//PIDF values
 	double kP = 2, kI = 0, kD = 0;
-	double kF = (RobotMap.isSkoll) ? 0.0 : 0.9;
+	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
 
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 

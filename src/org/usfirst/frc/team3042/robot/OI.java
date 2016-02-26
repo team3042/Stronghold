@@ -63,18 +63,19 @@ public class OI {
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Raise());
+		left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
 		gunner_Back.whenPressed(new TapeShooter_Retract());
 		
 		//Auto
-		left_3.whenPressed(new Auto_LowBar());
+		left_3.whenPressed(new Auto_LowBarSideGoal());
 		right_3.whenPressed(new Auto_Rotate());
 		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
-		left_5.toggleWhenPressed(new Overlay_Toggle());
+		//left_5.toggleWhenPressed(new Overlay_Toggle());
 	}
 }
 

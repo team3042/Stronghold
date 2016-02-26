@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
-	public static final DriversCamera driversCamera = new DriversCamera();
+	//public static final DriversCamera driversCamera = new DriversCamera();
 	public static OI oi;
 
     Command autonomousCommand;
