@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Shooter_Stop;
 
@@ -24,8 +25,8 @@ public class Shooter extends Subsystem {
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	public double leftF = (RobotMap.isSkoll)? 0.0283: 0.0272, 
-			rightF = (RobotMap.isSkoll)? 0.0283: 0.0272;
+	public double leftF = (RobotMap.isSkoll)? 0.0259: 0.0272, 
+			rightF = (RobotMap.isSkoll)? 0.0259: 0.0272;
 
 	public Shooter() {
 		//Setting Talon settings

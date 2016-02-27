@@ -18,7 +18,7 @@ public class Auto_Rotate extends Command {
 	//The degrees of error that the offset can follow
 	//The default is -16.5 for center
 	private NIVision.Range OFFSET_ERROR = new NIVision.Range(-1,1);
-	private double OFFSET_ZERO = -19.0;
+	private double OFFSET_ZERO = -49.0;
 	
     private double rotateSpeed = 0.12;
 	private double p = 0.1;
