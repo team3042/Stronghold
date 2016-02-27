@@ -14,25 +14,25 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
  */
 public class DriversCamera extends Subsystem {
 	//The camera on the back of the stronghold robot
-    private USBCamera driverCamera = new USBCamera(RobotMap.DRIVERS_CAMERA);
+    //private USBCamera driverCamera = new USBCamera(RobotMap.DRIVERS_CAMERA);
 	
-    CameraServer usbCamera;
+    CameraServer driversCameraServer;
     
     public DriversCamera () {
-        usbCamera = CameraServer.getInstance();
-        usbCamera.setQuality(50);
-        usbCamera.startAutomaticCapture(RobotMap.DRIVERS_CAMERA);
+        driversCameraServer = CameraServer.getInstance();
+        driversCameraServer.setQuality(50);
+        driversCameraServer.startAutomaticCapture(RobotMap.DRIVERS_CAMERA);
     }
     
     //Just a plain image from this camera
     public Image getCleanImage(){
 		Image image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		driverCamera.getImage(image);
+		//driverCamera.getImage(image);
 		return image;
 	}
     
     public void setCameraServerImage(Image image){
-    	usbCamera.setImage(image);
+    	driversCameraServer.setImage(image);
     }
 
     public void initDefaultCommand() {

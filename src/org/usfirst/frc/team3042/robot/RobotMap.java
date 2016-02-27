@@ -30,5 +30,5 @@ public class RobotMap {
 	
 	//Robot Camera IP
 	public static final String CAMERA_IP = "axis-camera";
-	public static final String DRIVERS_CAMERA = "cam1";
+	public static final String DRIVERS_CAMERA = "cam4";
 }

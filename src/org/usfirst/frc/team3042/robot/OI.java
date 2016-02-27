@@ -71,7 +71,7 @@ public class OI {
 		
 		//Auto
 		left_3.whenPressed(new Auto_DriveLowBarSideGoal());
-		right_3.whenPressed(new Auto_Rotate());
+		right_3.whenPressed(new Auto_RotateAlt());
 		right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());

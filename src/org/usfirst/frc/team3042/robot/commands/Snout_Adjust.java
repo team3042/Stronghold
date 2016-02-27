@@ -27,7 +27,7 @@ public class Snout_Adjust extends Command {
 
 	public Snout_Adjust() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
@@ -35,7 +35,7 @@ public class Snout_Adjust extends Command {
     	Robot.logger.log("Initialize", 1);
     	double distance = Robot.camera.getDistToTarget();
     	
-		potGoal = Robot.shooterArm.getPotentiometerVal();
+		potGoal = Robot.snout.getPotentiometerVal();
 
     	if ((distance < maxDist) && (distance > minDist)) {
         	int i = 1;
@@ -53,7 +53,7 @@ public class Snout_Adjust extends Command {
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
     	
-    	Robot.shooterArm.setPosition(potGoal);
+    	Robot.snout.setPosition(potGoal);
     }
 
     // Called repeatedly when this Command is scheduled to run

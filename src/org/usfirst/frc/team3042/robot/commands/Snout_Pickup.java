@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Snout_Pickup extends Command {
 	
     public Snout_Pickup() {
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.goToPickup();
+    	Robot.snout.goToPickup();
     }
 
     // Called repeatedly when this Command is scheduled to run

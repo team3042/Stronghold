@@ -11,14 +11,14 @@ public class Snout_ShootPosition extends Command {
 
     public Snout_ShootPosition() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.shooterArm.goToShoot();
+    	Robot.snout.goToShoot();
     }
 
     // Called repeatedly when this Command is scheduled to run

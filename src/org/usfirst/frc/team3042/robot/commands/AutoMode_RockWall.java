@@ -27,7 +27,7 @@ public class AutoMode_RockWall extends CommandGroup {
     	
     	//TODO Find values for snout positioning
     	addParallel(new Auto_ConditionalSnout(140, 6000, 640));
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -2));
     	
     }
 }

@@ -14,7 +14,7 @@ public class Auto_RotateAlt extends Command {
  
 	double OFFSET_ZERO = (RobotMap.isSkoll) ? 0.0 : -16.5;
 	int cyclesTolerance = 4;
-	double encPerPixel = (RobotMap.isSkoll) ? 1 : 1;
+	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
 	double timeout = 4.0;
 
 	double lastOffset;
@@ -41,6 +41,7 @@ public class Auto_RotateAlt extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double offset = Robot.camera.getRotationOffset() - OFFSET_ZERO;
+    	Robot.logger.log("Offset "+offset, 3);
     	
     	if (offset == lastOffset) {
     		stillCycles++;
@@ -49,8 +50,8 @@ public class Auto_RotateAlt extends Command {
     		stillCycles = 0;
     		
     		Robot.driveTrain.resetEncoders();
-    		double leftTarget = -offset * encPerPixel;
-    		double rightTarget = offset * encPerPixel;
+    		double leftTarget = -offset * rotationsPerPixel;
+    		double rightTarget = offset * rotationsPerPixel;
     		
     		if (firstPass) Robot.driveTrain.setPosition(leftTarget, rightTarget);
     		firstPass = false;

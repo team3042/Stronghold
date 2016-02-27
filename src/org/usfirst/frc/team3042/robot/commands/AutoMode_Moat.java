@@ -25,8 +25,11 @@ public class AutoMode_Moat extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new Auto_ConditionalSnout(140, 6000, 640));
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
+    	
+    	addParallel(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
+    	addSequential(new Auto_ConditionalSnout(100, 6000, 500));
+    	addSequential(new Auto_ConditionalSnout(500, 500, 150));
+    	addSequential(new Auto_ConditionalSnout(250, 500, 640));
     	
     }
 }

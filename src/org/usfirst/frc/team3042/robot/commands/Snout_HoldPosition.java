@@ -11,13 +11,13 @@ public class Snout_HoldPosition extends Command {
 
     public Snout_HoldPosition() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.holdPosition();
+    	Robot.snout.holdPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -16,13 +16,13 @@ public class Snout_StorageTimed extends Command {
     public Snout_StorageTimed() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.goToStorage();
+    	Robot.snout.goToStorage();
     	
     	timer.reset();
     	timer.start();

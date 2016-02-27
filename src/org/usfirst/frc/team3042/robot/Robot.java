@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 
 	public static final Shooter shooter = new Shooter();
 	public static final ShooterServo shooterServo = new ShooterServo();	
-	public static final Snout shooterArm = new Snout();
+	public static final Snout snout = new Snout();
 	public static final TapeShooter tapeShooter = new TapeShooter();
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
@@ -46,7 +46,6 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser chooser;
     public static Logger logger;
-    CameraServer usbCamera;
         
     private int LOGGER_LEVEL = 5;
     String CALIBRATION_FILE_NAME = "calibration";
@@ -139,12 +138,10 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();  
         SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
-        SmartDashboard.putNumber("Potentiometer", Robot.shooterArm.getPotentiometerVal());
+        SmartDashboard.putNumber("Potentiometer", Robot.snout.getPotentiometerVal());
         
-        SmartDashboard.putNumber("Left Drive Speed", driveTrain.getLeftSpeed());
-    	SmartDashboard.putNumber("Right Drive Speed", driveTrain.getRightSpeed());
-    	SmartDashboard.putNumber("Left Drive Position", driveTrain.getLeftEncoder());
-    	SmartDashboard.putNumber("Right Drive Position", driveTrain.getRightEncoder());
+        SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
+        SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
     	
     	SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
     	

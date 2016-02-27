@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Snout_Raise extends Command {
 
     public Snout_Raise() {
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +20,7 @@ public class Snout_Raise extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.shooterArm.raise();
+    	Robot.snout.raise();
     }
 
     // Make this return true when this Command no longer needs to run execute()

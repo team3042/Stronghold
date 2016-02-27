@@ -36,10 +36,16 @@ public class CameraAPI extends Subsystem {
 	//0-180
 	//
 	//
+	/*
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(69, 255);	//Range for green light
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
-	
+	*/
+	/*Daytime Commons 8*/
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(112, 154);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(153, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(96, 155);	//Range for green light
+
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
 	
@@ -152,37 +158,46 @@ public class CameraAPI extends Subsystem {
 				particles.add(par);
 			}
 			
+			boolean isTarget = false;
+			int currentTargetIndex = 0;
 			//"If the specified comparator is null then all elements in this list must implement the Comparable interface"
 			particles.sort(null);
-			//Get the largest particle, after the vector list has been sorted
-			ParticleReport2 report = particles.get(0);
 			
-			//I only set these values after we find the largest particle.
-			report.percentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-			report.convexHullArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-			report.boundingBox.top = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-			report.perimeter = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_PERIMETER);
-			report.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-			report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-			report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
-			report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
-			
-			boolean isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
-			this.aspectRatioScore(report)>=SCORE_MIN 
-			&& this.ConvexHullAreaScore(report)>= SCORE_MIN;
-			//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
-			//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
-			//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
-			
+			for(int i=0; i<particles.size(); i++){
+				//Get the largest particle, after the vector list has been sorted
+				ParticleReport2 report = particles.get(i);
+				
+				//I only set these values after we find the largest particle.
+				report.percentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				report.convexHullArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+				report.boundingBox.top = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				report.perimeter = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_PERIMETER);
+				report.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+				report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				
+				isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
+				this.ConvexHullAreaScore(report)>= SCORE_MIN &&
+				this.aspectRatioScore(report)>=SCORE_MIN;
+				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
+				//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
+				//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
+				if(isTarget){
+					currentTargetIndex = i;
+					break;
+				}
+			}
 			if(isTarget){
-				particles.get(0).image = binaryImage;
-				particles.get(0).unfilteredImage = unfilteredImage;
-				targetReport = particles.get(0);
+				particles.get(currentTargetIndex).image = binaryImage;
+				particles.get(currentTargetIndex).unfilteredImage = unfilteredImage;
+				targetReport = particles.get(currentTargetIndex);
 			}else{
 				Robot.logger.log("!!!------------------------------------", 5);
-				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
-				Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
-				Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
+				Robot.logger.log("Didn't find target.", 1);
+				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(targetReport), 5);
+				//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
+				//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
 				Robot.logger.log("-------------------------------------", 5);
 			}
 		}

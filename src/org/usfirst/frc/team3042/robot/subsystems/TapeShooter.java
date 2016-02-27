@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.TapeShooter_Stop;
 
@@ -13,13 +14,15 @@ public class TapeShooter extends Subsystem {
     	
 	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
 	
-	final double raiseSpeed = .9, lowerSpeed = 0.6;
+	final double raiseSpeed = .9, lowerSpeed = 0.5;
 	int encoderZero;
-	final double encLimit = 41000;
+	final double encLimit = 43000;
 	final double tolerance = 500;
+	
 	
 	public TapeShooter() {
 		shooterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+		resetEncoder();
 	}
 	
     public void initDefaultCommand() {
@@ -32,12 +35,11 @@ public class TapeShooter extends Subsystem {
     }
     
     public void raise() {
-    	resetEncoder();
     	setSpeed(raiseSpeed);
     }
     
     public void retract() {
-    	setSpeed(-lowerSpeed);
+    	setSpeed((shooterTalon.getEncPosition() > 0)? -lowerSpeed : 0);
     }
     
     private void setSpeed(double speed) {

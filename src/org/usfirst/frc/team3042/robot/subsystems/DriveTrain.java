@@ -25,10 +25,10 @@ public class DriveTrain extends Subsystem {
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
-	private int encCounts = (RobotMap.isSkoll) ? 300 : 360;
+	private int encCounts = (RobotMap.isSkoll) ? 360 : 360;
 	private boolean leftReverseEnc = (RobotMap.isSkoll) ? true : false;
 	private boolean rightReverseEnc = (RobotMap.isSkoll) ? true : true;
-	private int leftEncSign = (RobotMap.isSkoll) ? 1 : 1;
+	private int leftEncSign = (RobotMap.isSkoll) ? -1 : 1;
 	private int rightEncSign = (RobotMap.isSkoll) ? -1 : -1;
 	
 	//PIDF values
@@ -120,8 +120,8 @@ public class DriveTrain extends Subsystem {
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
     	
-    	left += leftEncoderZero;
-    	right += rightEncoderZero;
+    	//left += leftEncoderZero;
+    	//right += rightEncoderZero;
     	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);

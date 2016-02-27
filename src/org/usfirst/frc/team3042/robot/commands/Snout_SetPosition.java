@@ -15,7 +15,7 @@ public class Snout_SetPosition extends Command {
     public Snout_SetPosition(double position) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.shooterArm);
+    	requires(Robot.snout);
     	
     	this.position = position;
     }
@@ -24,7 +24,7 @@ public class Snout_SetPosition extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.shooterArm.setPosition(position);
+    	Robot.snout.setPosition(position);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,7 +33,7 @@ public class Snout_SetPosition extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.shooterArm.getPotentiometerVal() - position) 
+        return (Math.abs(Robot.snout.getPotentiometerVal() - position) 
         		< tolerance);
     }
 
