@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
  */
 public class DriversCamera extends Subsystem {
 	//The camera on the back of the stronghold robot
-    private USBCamera driverCamera = new USBCamera(RobotMap.DRIVERS_CAMERA_IP);
+    private USBCamera driverCamera = new USBCamera(RobotMap.DRIVERS_CAMERA);
 	
     CameraServer usbCamera;
     
     public DriversCamera () {
         usbCamera = CameraServer.getInstance();
         usbCamera.setQuality(50);
-        //usbCamera.startAutomaticCapture("cam1");
+        usbCamera.startAutomaticCapture(RobotMap.DRIVERS_CAMERA);
     }
     
     //Just a plain image from this camera
