@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.CANTalon;
 
-public class Auto_MotionProfile {
+public class AutoTrajectory_MotionProfile {
 	
 	//Current point
 	int currentPoint = 0;
@@ -40,7 +40,7 @@ public class Auto_MotionProfile {
 	//Array with all values of filterSum1
 	double[] filterSums1;
 	
-	public Auto_MotionProfile(int itp, double time1, double time2, 
+	public AutoTrajectory_MotionProfile(int itp, double time1, double time2, 
 			double maxVelocity, double distance) {
 		this.itp = itp;
 		this.time1 = time1;

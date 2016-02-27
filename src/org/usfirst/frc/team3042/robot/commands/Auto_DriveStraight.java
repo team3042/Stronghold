@@ -25,7 +25,7 @@ public class Auto_DriveStraight extends Command {
 	//Distance traveled in rotations
 	double distance = 10;
 	
-	Auto_MotionProfile motionProfile;
+	AutoTrajectory_MotionProfile motionProfile;
 	
     public Auto_DriveStraight() {
         // Use requires() here to declare subsystem dependencies
@@ -36,7 +36,7 @@ public class Auto_DriveStraight extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.initMotionProfile();
-    	motionProfile = new Auto_MotionProfile(itp, time1, time2, maxVelocity, distance);
+    	motionProfile = new AutoTrajectory_MotionProfile(itp, time1, time2, maxVelocity, distance);
     	CANTalon.TrajectoryPoint[] leftTrajectory = motionProfile.calculateProfile();
     	CANTalon.TrajectoryPoint[] rightTrajectory = motionProfile.calculateProfile();
     	

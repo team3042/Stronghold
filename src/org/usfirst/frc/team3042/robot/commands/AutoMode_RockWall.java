@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Auto_Moat extends CommandGroup {
+public class AutoMode_RockWall extends CommandGroup {
     
-    public  Auto_Moat() {
+    public  AutoMode_RockWall() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -25,7 +25,8 @@ public class Auto_Moat extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new Auto_ConditionalShooterArm(140, 6000, 640));
+    	//TODO Find values for snout positioning
+    	addParallel(new Auto_ConditionalSnout(140, 6000, 640));
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
     	
     }

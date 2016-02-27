@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Auto_AimShoot extends CommandGroup {
+public class AutoMode_LowBarSideGoal extends CommandGroup {
     
-    public  Auto_AimShoot() {
+    public  AutoMode_LowBarSideGoal() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -25,8 +25,10 @@ public class Auto_AimShoot extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addSequential(new Auto_RotateAlt());
-    	addSequential(new Snout_Adjust());
-    	addSequential(new Auto_Shoot());
+    	addParallel(new Snout_PickupTimed());
+    	addSequential(new Auto_DriveLowBarSideGoal());
+    	addParallel(new Snout_SetPosition(300));
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 0.5, 1, 0));
+    	addSequential(new Auto_AimShoot());
     }
 }

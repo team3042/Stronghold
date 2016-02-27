@@ -1,12 +1,17 @@
 
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.commands.Auto_LowBarSideGoal;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBar;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBarSideGoal;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_Ramparts;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_RockWall;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
-import org.usfirst.frc.team3042.robot.subsystems.ShooterArm;
+import org.usfirst.frc.team3042.robot.subsystems.Snout;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
 import org.usfirst.frc.team3042.robot.subsystems.TapeShooter;
 import org.usfirst.frc.team3042.robot.subsystems.Winch;
@@ -30,12 +35,12 @@ public class Robot extends IterativeRobot {
 
 	public static final Shooter shooter = new Shooter();
 	public static final ShooterServo shooterServo = new ShooterServo();	
-	public static final ShooterArm shooterArm = new ShooterArm();
+	public static final Snout shooterArm = new Snout();
 	public static final TapeShooter tapeShooter = new TapeShooter();
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
-	//public static final DriversCamera driversCamera = new DriversCamera();
+	public static final DriversCamera driversCamera = new DriversCamera();
 	public static OI oi;
 
     Command autonomousCommand;
@@ -56,7 +61,12 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
         logger = new Logger(true, true, LOGGER_LEVEL);
 		chooser = new SendableChooser();
-        chooser.addObject("Low Bar Side Goal", new Auto_LowBarSideGoal());
+        chooser.addObject("Low Bar", new AutoMode_LowBar());
+        //chooser.addObject("Low Bar Side Goal", new AutoMode_LowBarSideGoal());
+        chooser.addObject("Rough Terrain", new AutoMode_RoughTerrain());
+        //chooser.addObject("Moat", new AutoMode_Moat());
+        //chooser.addObject("Rock Wall", new AutoMode_RockWall());
+        //chooser.addObject("Ramparts", new AutoMode_Ramparts());
         SmartDashboard.putData("Auto mode", chooser);
         
         SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);

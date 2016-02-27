@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArm_Storage extends Command {
+public class Snout_Storage extends Command {
 
-    public ShooterArm_Storage() {
+    public Snout_Storage() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.shooterArm);

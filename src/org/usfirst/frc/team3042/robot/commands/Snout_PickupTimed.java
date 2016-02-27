@@ -8,21 +8,19 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArm_StorageTimed extends Command {
+public class Snout_PickupTimed extends Command {
 	
 	Timer timer = new Timer();
 	double timeout = 1.5;
-
-    public ShooterArm_StorageTimed() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+	
+    public Snout_PickupTimed() {
     	requires(Robot.shooterArm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.goToStorage();
+    	Robot.shooterArm.goToPickup();
     	
     	timer.reset();
     	timer.start();

@@ -9,14 +9,18 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_LowBarSideGoal extends Command {
+public class Auto_DriveLowBarSideGoal extends Command {
 	
-	double[][] leftPoints = AutoTrajectory_LowBarSideGoal.getLeftTrajectory();
-	double[][] rightPoints = AutoTrajectory_LowBarSideGoal.getRightTrajectory();
+	boolean isReversed = true;
+	
+	double[][] leftPoints = (isReversed)? 
+			AutoTrajectory_LowBarSideGoal.getRightTrajectory() : AutoTrajectory_LowBarSideGoal.getLeftTrajectory();
+	double[][] rightPoints = (isReversed)?
+			AutoTrajectory_LowBarSideGoal.getLeftTrajectory() : AutoTrajectory_LowBarSideGoal.getRightTrajectory();
 	
 	MotionProfileStatus[] status;
 
-    public Auto_LowBarSideGoal() {
+    public Auto_DriveLowBarSideGoal() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.driveTrain);
     }
@@ -30,11 +34,11 @@ public class Auto_LowBarSideGoal extends Command {
     		CANTalon.TrajectoryPoint currentLeftPoint = new CANTalon.TrajectoryPoint();
     		CANTalon.TrajectoryPoint currentRightPoint = new CANTalon.TrajectoryPoint();
     		
-    		currentLeftPoint.position = leftPoints[i][0];
-    		currentRightPoint.position = rightPoints[i][0];
+    		currentLeftPoint.position = ((isReversed)? -1 : 1) * leftPoints[i][0];
+    		currentRightPoint.position = ((isReversed)? -1 : 1) * rightPoints[i][0];
     		
-    		currentLeftPoint.velocity = leftPoints[i][1];
-    		currentRightPoint.velocity = rightPoints[i][1];
+    		currentLeftPoint.velocity = ((isReversed)? -1 : 1) * leftPoints[i][1];
+    		currentRightPoint.velocity = ((isReversed)? -1 : 1) * rightPoints[i][1];
     		
     		currentLeftPoint.timeDurMs = (int) leftPoints[i][2];
     		currentRightPoint.timeDurMs = (int) rightPoints[i][2];

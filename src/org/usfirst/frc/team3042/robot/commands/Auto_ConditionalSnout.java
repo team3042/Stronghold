@@ -8,19 +8,20 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_ConditionalShooterArm extends Command {
+public class Auto_ConditionalSnout extends Command {
 
 	int encTarget;
 	double potValue, startPot;
-	boolean finished;
+	boolean finished, targetReached;
 	Timer timer = new Timer();
 	double timeout = 5.0;
+	double tolerance = 10.0;
 	
-    public Auto_ConditionalShooterArm(double startPot, int encTarget, double potValue) {
+    public Auto_ConditionalSnout(double startPot, int encTarget, double potValue) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterArm);
-
-        this.startPot = startPot;	
+       
+        this.startPot = startPot;
         this.encTarget = Math.abs(encTarget);
         this.potValue = potValue;
     }
@@ -30,11 +31,10 @@ public class Auto_ConditionalShooterArm extends Command {
     	Robot.logger.log("Initialize", 1);
     	Robot.driveTrain.resetEncoders();
     	finished = false;
-
-    	Robot.shooterArm.setPosition(startPot);
-    	
+    	targetReached = false;
     	timer.reset();
     	timer.start();
+    	Robot.shooterArm.setPosition(startPot);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -42,9 +42,12 @@ public class Auto_ConditionalShooterArm extends Command {
     	int leftEnc = Math.abs(Robot.driveTrain.getLeftEncoder());
     	int rightEnc = Math.abs(Robot.driveTrain.getRightEncoder());
     	
-    	if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
+    	if (targetReached) {
+    		finished = Math.abs(Robot.shooterArm.getPotentiometerVal() - potValue) < tolerance;    		
+    	}
+    	else if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
     		Robot.shooterArm.setPosition(potValue);
-    		finished = true;
+    		targetReached = true;
     	}
     }
 

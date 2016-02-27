@@ -55,11 +55,11 @@ public class OI {
 		gunner_RT.whileActive(new Shooter_Shoot());
 		
 		//Control Snout Position
-		gunner_LeftJoyDown.whileActive(new ShooterArm_Raise());
-		gunner_LeftJoyUp.whileActive(new ShooterArm_Lower());
-		gunner_B.whenPressed(new ShooterArm_Pickup());
+		gunner_LeftJoyDown.whileActive(new Snout_Raise());
+		gunner_LeftJoyUp.whileActive(new Snout_Lower());
+		gunner_B.whenPressed(new Snout_Pickup());
 		gunner_A.whileHeld(new Shooter_Intake());
-		gunner_X.whenPressed(new ShooterArm_Storage());
+		gunner_X.whenPressed(new Snout_Storage());
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Tape_Raise());
@@ -70,12 +70,12 @@ public class OI {
 		gunner_Back.whileHeld(new TapeShooter_Retract());
 		
 		//Auto
-		left_3.whenPressed(new Auto_LowBarSideGoal());
+		left_3.whenPressed(new Auto_DriveLowBarSideGoal());
 		right_3.whenPressed(new Auto_Rotate());
-		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
+		right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
-		left_5.toggleWhenPressed(new Auto_Moat());
+		left_5.toggleWhenPressed(new AutoMode_Moat());
 	}
 }
 

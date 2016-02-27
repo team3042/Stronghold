@@ -2,30 +2,39 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class ShooterArm_Lower extends Command {
+public class Snout_StorageTimed extends Command {
+	
+	Timer timer = new Timer();
+	double timeout = 1.5;
 
-    public ShooterArm_Lower() {
+    public Snout_StorageTimed() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     	requires(Robot.shooterArm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
+    	Robot.shooterArm.goToStorage();
+    	
+    	timer.reset();
+    	timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.shooterArm.lower();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return timer.get() > timeout;
     }
 
     // Called once after isFinished returns true
