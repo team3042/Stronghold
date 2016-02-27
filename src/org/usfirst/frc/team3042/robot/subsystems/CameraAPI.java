@@ -7,9 +7,12 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
+import com.ni.vision.NIVision.ContourPoint;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.OverlayTextOptions;
 import com.ni.vision.NIVision.ParticleReport;
+import com.ni.vision.NIVision.Point;
+import com.ni.vision.NIVision.PointDouble;
 import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -38,6 +41,7 @@ public class CameraAPI extends Subsystem {
 	//
 	/*
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
+<<<<<<< HEAD
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(69, 255);	//Range for green light
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
@@ -193,6 +197,13 @@ public class CameraAPI extends Subsystem {
 				particles.get(currentTargetIndex).unfilteredImage = unfilteredImage;
 				targetReport = particles.get(currentTargetIndex);
 			}else{
+				//Testing for getting side views of a the target, creating a triangle
+				//particles.get(0).image = binaryImage;
+				//particles.get(0).unfilteredImage = unfilteredImage;
+				//ParticleReport2 triangleTest = particles.get(0);
+				
+				//isTriangle(triangleTest);
+				
 				Robot.logger.log("!!!------------------------------------", 5);
 				Robot.logger.log("Didn't find target.", 1);
 				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(targetReport), 5);
@@ -288,6 +299,71 @@ public class CameraAPI extends Subsystem {
 	double ratioToScore(double ratio)
 	{
 		return (Math.max(0, Math.min(100*(1-Math.abs(1-ratio)), 100)));
+	}
+	
+	public int isTriangle(ParticleReport2 report){
+		NIVision.ContourInfoReport creport = NIVision.imaqContourInfo(report.image);
+		NIVision.ContourFitPolynomialReport fpReport = NIVision.imaqContourFitPolynomial(report.image, 1);
+		System.out.println(creport.length);
+		
+		//Iterate through the countour points to get the highest points on the image
+		Vector<PointDouble> highestPoints = new Vector<PointDouble>();
+		double highestCurrentPoint = 0;
+		for(int i =0; i<creport.pointsPixel.length; i++){
+			if(isSideways){
+				if(creport.pointsPixel[i].x>highestCurrentPoint){
+					//If the new point is higher on the y axis than any others, clear the list and add it
+					highestPoints.clear();
+					highestPoints.add(creport.pointsPixel[i]);
+					highestCurrentPoint = creport.pointsPixel[i].x;
+				}if(creport.pointsPixel[i].x==highestCurrentPoint){
+					//If this point is one of the highest then we should add it to our list
+					highestPoints.add(creport.pointsPixel[i]);
+				}
+			}else{
+				if(creport.pointsPixel[i].y>highestCurrentPoint){
+					//If the new point is higher on the y axis than any others, clear the list and add it
+					highestPoints.clear();
+					highestPoints.add(creport.pointsPixel[i]);
+					highestCurrentPoint = creport.pointsPixel[i].y;
+				}if(creport.pointsPixel[i].y==highestCurrentPoint){
+					//If this point is one of the highest then we should add it to our list
+					highestPoints.add(creport.pointsPixel[i]);
+				}
+			}
+		}
+		
+		//Iterate through the highest points to get the left most point
+		PointDouble leftMostPoint = null;
+		for(int i=0; i<highestPoints.size(); i++){
+			if(isSideways){
+				if(leftMostPoint!=null){
+					if(highestPoints.get(i).y>leftMostPoint.y){
+						leftMostPoint = highestPoints.get(i);
+					}
+				}else{
+					leftMostPoint = highestPoints.get(i);
+				}
+			}else{
+				if(leftMostPoint!=null){
+					if(highestPoints.get(i).x<leftMostPoint.x){
+						leftMostPoint = highestPoints.get(i);
+					}
+				}else{
+					leftMostPoint = highestPoints.get(i);
+				}
+			}
+		}
+		
+		if(leftMostPoint!=null){
+			if(isSideways){
+				return (int) (report.boundingBox.top-leftMostPoint.y);
+			}else{
+				return (int) (report.boundingBox.left-leftMostPoint.x);
+			}
+		}
+
+		return 0;
 	}
 
 	/**
