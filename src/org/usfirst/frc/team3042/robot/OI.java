@@ -62,12 +62,12 @@ public class OI {
 		gunner_X.whenPressed(new ShooterArm_Storage());
 		
 		//Winch Controls
-		gunner_POVUp.whileActive(new Winch_Raise());
+		gunner_POVUp.whileActive(new Winch_Tape_Raise());
 		left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
-		gunner_Back.whenPressed(new TapeShooter_Retract());
+		gunner_Back.whileHeld(new TapeShooter_Retract());
 		
 		//Auto
 		left_3.whenPressed(new Auto_LowBarSideGoal());
@@ -75,7 +75,7 @@ public class OI {
 		right_4.whenPressed(new Interruptible(new ShooterArm_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());
-		//left_5.toggleWhenPressed(new Overlay_Toggle());
+		left_5.toggleWhenPressed(new Auto_Moat());
 	}
 }
 

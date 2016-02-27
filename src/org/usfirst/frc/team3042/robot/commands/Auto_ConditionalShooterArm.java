@@ -10,15 +10,16 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Auto_ConditionalShooterArm extends Command {
 
-	double encTarget, potValue;
+	double encTarget, potValue, startPot;
 	boolean finished;
 	Timer timer = new Timer();
 	double timeout = 3.0;
 	
-    public Auto_ConditionalShooterArm(double encTarget, double potValue) {
+    public Auto_ConditionalShooterArm(double startPot, double encTarget, double potValue) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterArm);
-        
+       
+        this.startPot = startPot;
         this.encTarget = encTarget;
         this.potValue = potValue;
     }
@@ -29,7 +30,7 @@ public class Auto_ConditionalShooterArm extends Command {
     	Robot.driveTrain.resetEncoders();
     	finished = false;
     	timer.reset();
-    	timer.start();
+    	Robot.shooterArm.setPosition(startPot);
     }
 
     // Called repeatedly when this Command is scheduled to run
