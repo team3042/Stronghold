@@ -2,28 +2,29 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class ShooterArm_PickupTimed extends Command {
+public class Snout_SetPosition extends Command {
 	
-	Timer timer = new Timer();
-	double timeout = 1.5;
-	
-    public ShooterArm_PickupTimed() {
+	double position;
+	double tolerance = 10;
+
+    public Snout_SetPosition(double position) {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     	requires(Robot.shooterArm);
+    	
+    	this.position = position;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooterArm.goToPickup();
     	
-    	timer.reset();
-    	timer.start();
+    	Robot.shooterArm.setPosition(position);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -32,7 +33,8 @@ public class ShooterArm_PickupTimed extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return timer.get() > timeout;
+        return (Math.abs(Robot.shooterArm.getPotentiometerVal() - position) 
+        		< tolerance);
     }
 
     // Called once after isFinished returns true

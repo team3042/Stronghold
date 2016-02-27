@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArm_Pickup extends Command {
+public class Snout_Pickup extends Command {
 	
-    public ShooterArm_Pickup() {
+    public Snout_Pickup() {
     	requires(Robot.shooterArm);
     }
 

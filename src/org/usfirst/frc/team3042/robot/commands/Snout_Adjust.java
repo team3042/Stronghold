@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class ShooterArm_Adjust extends Command {
+public class Snout_Adjust extends Command {
 	
 	double[][] lookUpTable = new double[][]{
 		//Currently in pot values, these are temporary fillers.
@@ -25,7 +25,7 @@ public class ShooterArm_Adjust extends Command {
 	static final double maxDist = 13, minDist = 7.9;
 	double potGoal;
 
-	public ShooterArm_Adjust() {
+	public Snout_Adjust() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.shooterArm);
     }

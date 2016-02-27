@@ -7,24 +7,16 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArm_SetPosition extends Command {
-	
-	double position;
-	double tolerance = 10;
+public class Snout_Stop extends Command {
 
-    public ShooterArm_SetPosition(double position) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public Snout_Stop() {
     	requires(Robot.shooterArm);
-    	
-    	this.position = position;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
-    	Robot.shooterArm.setPosition(position);
+    	Robot.shooterArm.stop();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,8 +25,7 @@ public class ShooterArm_SetPosition extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.shooterArm.getPotentiometerVal() - position) 
-        		< tolerance);
+        return false;
     }
 
     // Called once after isFinished returns true

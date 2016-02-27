@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterArm_ShootPosition extends Command {
+public class Snout_HoldPosition extends Command {
 
-    public ShooterArm_ShootPosition() {
+    public Snout_HoldPosition() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.shooterArm);
     }
@@ -17,12 +17,12 @@ public class ShooterArm_ShootPosition extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
-    	Robot.shooterArm.goToShoot();
+    	Robot.shooterArm.holdPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -38,6 +38,6 @@ public class ShooterArm_ShootPosition extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrrupt", 1);
+    	Robot.logger.log("Interrupt", 1);
     }
 }

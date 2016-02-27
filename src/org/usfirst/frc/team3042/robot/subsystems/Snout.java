@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.ShooterArm_HoldPosition;
+import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class ShooterArm extends Subsystem {
+public class Snout extends Subsystem {
 	
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
 	
@@ -25,7 +25,7 @@ public class ShooterArm extends Subsystem {
 	private double rotateSpeed = .6;
 	private double p = 5, i = 0, d = 0;
 	
-	public ShooterArm() {
+	public Snout() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		talonRotate.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
 		talonRotate.reverseOutput(true);
@@ -37,7 +37,7 @@ public class ShooterArm extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new ShooterArm_HoldPosition());
+        setDefaultCommand(new Snout_HoldPosition());
     }
 
     public void stop() {

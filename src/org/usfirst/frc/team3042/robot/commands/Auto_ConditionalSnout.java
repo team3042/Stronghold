@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_ConditionalShooterArm extends Command {
+public class Auto_ConditionalSnout extends Command {
 
 	double encTarget, potValue, startPot;
 	boolean finished;
 	Timer timer = new Timer();
-	double timeout = 3.0;
+	double timeout = 5.0;
 	
-    public Auto_ConditionalShooterArm(double startPot, double encTarget, double potValue) {
+    public Auto_ConditionalSnout(double startPot, double encTarget, double potValue) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterArm);
        

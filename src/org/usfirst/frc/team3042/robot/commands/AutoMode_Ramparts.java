@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Auto_RoughTerrain extends CommandGroup {
+public class AutoMode_Ramparts extends CommandGroup {
     
-    public  Auto_RoughTerrain() {
+    public  AutoMode_Ramparts() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -25,7 +25,8 @@ public class Auto_RoughTerrain extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new ShooterArm_StorageTimed());
+    	//TODO Find values for snout positioning
+    	addParallel(new Auto_ConditionalSnout(140, 6000, 640));
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
     	
     }

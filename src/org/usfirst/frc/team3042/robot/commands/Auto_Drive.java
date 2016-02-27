@@ -26,8 +26,8 @@ public class Auto_Drive extends Command {
 	
 	double wheelbaseWidth = 2.4;
 	
-	Auto_MotionProfile motionProfileLeft;
-	Auto_MotionProfile motionProfileRight;
+	AutoTrajectory_MotionProfile motionProfileLeft;
+	AutoTrajectory_MotionProfile motionProfileRight;
 	
 	MotionProfileStatus[] status;
 	
@@ -103,8 +103,8 @@ public class Auto_Drive extends Command {
     	
     	Robot.driveTrain.initMotionProfile();
     	
-    	motionProfileLeft = new Auto_MotionProfile(itp, time1, time2, leftMaxSpeed, leftDistance);
-    	motionProfileRight = new Auto_MotionProfile(itp, time1, time2, rightMaxSpeed, rightDistance);
+    	motionProfileLeft = new AutoTrajectory_MotionProfile(itp, time1, time2, leftMaxSpeed, leftDistance);
+    	motionProfileRight = new AutoTrajectory_MotionProfile(itp, time1, time2, rightMaxSpeed, rightDistance);
     	
     	CANTalon.TrajectoryPoint[] leftTrajectory = motionProfileLeft.calculateProfile();
     	CANTalon.TrajectoryPoint[] rightTrajectory = motionProfileRight.calculateProfile();
