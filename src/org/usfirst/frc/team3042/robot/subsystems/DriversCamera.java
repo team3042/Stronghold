@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /**
  *
