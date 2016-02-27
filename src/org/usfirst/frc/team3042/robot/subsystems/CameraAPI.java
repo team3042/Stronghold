@@ -183,11 +183,11 @@ public class CameraAPI extends Subsystem {
 				targetReport = particles.get(0);
 			}else{
 				//Testing for getting side views of a the target, creating a triangle
-				particles.get(0).image = binaryImage;
-				particles.get(0).unfilteredImage = unfilteredImage;
-				ParticleReport2 triangleTest = particles.get(0);
+				//particles.get(0).image = binaryImage;
+				//particles.get(0).unfilteredImage = unfilteredImage;
+				//ParticleReport2 triangleTest = particles.get(0);
 				
-				isTriangle(triangleTest);
+				//isTriangle(triangleTest);
 				
 				Robot.logger.log("!!!------------------------------------", 5);
 				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
