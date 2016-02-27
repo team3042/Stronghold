@@ -120,9 +120,9 @@ public class DriveTrain extends Subsystem {
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
     	
-    	//left += leftEncoderZero;
-    	//right += rightEncoderZero;
-    	
+    	leftMotorFront.setPosition(0.0);
+    	rightMotorFront.setPosition(0.0);
+    	    	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
     }

@@ -18,7 +18,6 @@ public class Auto_Rotate extends Command {
 	//The degrees of error that the offset can follow
 	//The default is -16.5 for center
 	private NIVision.Range OFFSET_ERROR = new NIVision.Range(-1,1);
-	private double OFFSET_ZERO = -49.0;
 	
     private double rotateSpeed = 0.12;
 	private double p = 0.1;
@@ -29,9 +28,9 @@ public class Auto_Rotate extends Command {
 	double lastOffset = 0.0;
 	int stillCycles = 0;
 	int cyclesTolerance = 4;
+    boolean finished;
 	
 	//Some variables to track motion if camera is not keeping up
-	double encStart, firstOffset, startOffset;
 	double cycleOffsetReduction = 0.5;
 	
     public Auto_Rotate() {
@@ -45,10 +44,6 @@ public class Auto_Rotate extends Command {
     	finished = false;
     	timer.reset();
     	timer.start();
-    	encStart = Robot.driveTrain.getLeftEncoder();
-    	firstOffset = Robot.camera.getRotationOffset();
-    	Robot.logger.log("First Offset: " + firstOffset, 3);
-    	startOffset = 0.0;
     	lastOffset = 0;
     	stillCycles = 0;
     }
@@ -61,9 +56,9 @@ public class Auto_Rotate extends Command {
 		double leftSpeed = 0, rightSpeed = 0;
 		
     	if(report != null){
-    		offset = Robot.camera.getRotationOffset(report) - OFFSET_ZERO;
+    		offset = Robot.camera.getRotationOffset(report);
     		
-    		if (offset == startOffset) {
+    		if (offset == lastOffset) {
     			stillCycles++;
     			if (stillCycles >= cyclesTolerance) {
     				finished = true;
@@ -71,13 +66,11 @@ public class Auto_Rotate extends Command {
     			//offset = lastOffset * cycleOffsetReduction;
     		}else{
     			stillCycles =0;
-    			startOffset = offset;
     		}
     		lastOffset = offset;
     		
    			//when the offset is negative it means that the target is to the right
     		//when the offset is positive it means that the target is to the left
-    		//this comes from (imagecenter - targetcenter) which is later converted into degrees for getRotationOffset
     		if(offset < OFFSET_ERROR.minValue){
    				//If the offset is negative, and less than the allowed negative error, then rotate to the right
    				leftSpeed = rotateSpeed;
@@ -98,20 +91,17 @@ public class Auto_Rotate extends Command {
     	leftSpeed *= Math.min(1, p * Math.abs(offset));
     	rightSpeed *= Math.min(1, p * Math.abs(offset));
     	
-    //	Robot.driveTrain.setMotors(leftSpeed, rightSpeed);
+    	Robot.driveTrain.setMotors(leftSpeed, rightSpeed);
     }
 
-    boolean finished = false;
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return timer.get() > timeout || finished;
+        return (timer.get() > timeout) || finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
-    	double pixelsPerEnc = firstOffset / (Robot.driveTrain.getLeftEncoder()-encStart);
-    	Robot.logger.log("Pixels Per Encoder Count = "+pixelsPerEnc, 3);
     }
 
     // Called when another command which requires one or more of the same

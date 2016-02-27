@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Auto_RotateAlt extends Command {
 	private Timer timer = new Timer();
  
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? 0.0 : -16.5;
 	int cyclesTolerance = 4;
 	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
 	double timeout = 4.0;
 
 	double lastOffset;
 	int stillCycles;
-	boolean finished, firstPass;
+	boolean finished;
 	
     public Auto_RotateAlt() {
         // Use requires() here to declare subsystem dependencies
@@ -35,33 +34,34 @@ public class Auto_RotateAlt extends Command {
     	finished = false;
     	timer.reset();
     	timer.start();
-    	firstPass = true;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double offset = Robot.camera.getRotationOffset() - OFFSET_ZERO;
+    	double offset = Robot.camera.getRotationOffset();
     	Robot.logger.log("Offset "+offset, 3);
     	
-    	if (offset == lastOffset) {
+    	if (offset == lastOffset && false) {
     		stillCycles++;
     		finished = (stillCycles > cyclesTolerance);
     	} else {
     		stillCycles = 0;
     		
-    		Robot.driveTrain.resetEncoders();
     		double leftTarget = -offset * rotationsPerPixel;
     		double rightTarget = offset * rotationsPerPixel;
     		
-    		if (firstPass) Robot.driveTrain.setPosition(leftTarget, rightTarget);
-    		firstPass = false;
+    		leftTarget = -1;
+    		rightTarget = 1;
+    		
+    		Robot.driveTrain.setPosition(leftTarget, rightTarget);
     	}
     	lastOffset = offset;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return finished || (timer.get() > timeout);
+    	return true;
+    	//return finished || (timer.get() > timeout);
     }
 
     // Called once after isFinished returns true

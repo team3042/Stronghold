@@ -61,11 +61,13 @@ public class CameraAPI extends Subsystem {
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 55;
 	
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -30 : -16.5;
+	
 	public CameraAPI(){
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k320x240);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(20);
+		camera.writeBrightness(10);
 		camera.writeExposureControl(ExposureControl.kHold);
 	}
 	
@@ -113,6 +115,7 @@ public class CameraAPI extends Subsystem {
 				int width = NIVision.imaqGetImageSize(report.image).width;
 				offset = ((report.boundingBox.left+report.boundingBox.width *0.5)-((double)width/2));
 			}
+			offset -= OFFSET_ZERO;
 		}
 		return offset;
 	}
