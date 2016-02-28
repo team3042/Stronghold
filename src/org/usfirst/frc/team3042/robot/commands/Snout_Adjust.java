@@ -2,6 +2,7 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -10,19 +11,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Snout_Adjust extends Command {
 	
+	Timer timer = new Timer();
+	double timeout = 2;
+	
 	double[][] lookUpTable = new double[][]{
 		//Currently in pot values, these are temporary fillers.
-			{7.9, 345},
-			{8.25, 330},
-			{8.5, 322},
-			{8.9, 307},
-			{9.5, 292},
-			{10.1, 280},
-			{11.3, 278},
-			{11.65, 276},
-			{13, 276}};
+			{5.2, 340},
+			{5.42, 301},
+			{5.7, 274},
+			{6.5, 248},
+			{7.4, 230},
+			{8.35, 218},
+			{9.45, 210}};
 			
-	static final double maxDist = 13, minDist = 7.9;
+	static final double maxDist = 9.45, minDist = 5.2;
+	static double potOffset = 20;
+	static double tolerance = 5;
 	double potGoal;
 
 	public Snout_Adjust() {
@@ -53,7 +57,9 @@ public class Snout_Adjust extends Command {
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
     	
-    	Robot.snout.setPosition(potGoal);
+    	Robot.snout.setPosition(potGoal + potOffset);
+    	timer.reset();
+    	timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -62,7 +68,8 @@ public class Snout_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Math.abs(Robot.snout.getPotentiometerVal() - potGoal) < tolerance || 
+        		timer.get() > timeout;
     }
 
     // Called once after isFinished returns true

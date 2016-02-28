@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 
@@ -7,6 +8,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -34,6 +36,9 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
+	
+	//PID values for rotate - lower speed
+	double posP = 0.01, posI = 0, posD = 0;
 
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
@@ -64,10 +69,13 @@ public class DriveTrain extends Subsystem {
     	notifier.startPeriodic(0.005);
     	
     	//Initializing PIDF
+    	leftMotorFront.setProfile(0);
+    	rightMotorFront.setProfile(0);
     	leftMotorFront.setPID(kP, kI, kD);
-    	rightMotorFront.setPID(kP,  kI,  kD);
+    	rightMotorFront.setPID(kP, kI, kD);
     	leftMotorFront.setF(kF);
     	rightMotorFront.setF(kF);
+    	
 	}
 	
 	void initEncoders() {
@@ -117,12 +125,10 @@ public class DriveTrain extends Subsystem {
     }
     
     public void setPosition(double left, double right) {
+    	
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
-    	
-    	leftMotorFront.setPosition(0.0);
-    	rightMotorFront.setPosition(0.0);
-    	    	
+    	  	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
     }
@@ -160,6 +166,7 @@ public class DriveTrain extends Subsystem {
 	
 	//Motion profile functions
     public void initMotionProfile() {
+    	
     	leftMotorFront.clearMotionProfileTrajectories();
     	rightMotorFront.clearMotionProfileTrajectories();
     	

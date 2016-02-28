@@ -14,7 +14,7 @@ public class Auto_RotateAlt extends Command {
  
 	int cyclesTolerance = 4;
 	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
-	double timeout = 4.0;
+	double timeout = 8.0;
 
 	double lastOffset;
 	int stillCycles;
@@ -34,6 +34,11 @@ public class Auto_RotateAlt extends Command {
     	finished = false;
     	timer.reset();
     	timer.start();
+    	
+    	double leftTarget = -1;
+		double rightTarget = 1;
+		
+		Robot.driveTrain.setPosition(leftTarget, rightTarget);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -50,17 +55,14 @@ public class Auto_RotateAlt extends Command {
     		double leftTarget = -offset * rotationsPerPixel;
     		double rightTarget = offset * rotationsPerPixel;
     		
-    		leftTarget = -1;
-    		rightTarget = 1;
     		
-    		Robot.driveTrain.setPosition(leftTarget, rightTarget);
     	}
     	lastOffset = offset;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return true;
+    	return (timer.get() > timeout);
     	//return finished || (timer.get() > timeout);
     }
 

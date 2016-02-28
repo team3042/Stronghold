@@ -60,6 +60,7 @@ public class OI {
 		gunner_B.whenPressed(new Snout_Pickup());
 		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new Snout_Storage());
+		gunner_Y.whenPressed(new Interruptible(new Auto_AimShoot()));
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Tape_Raise());
@@ -71,7 +72,7 @@ public class OI {
 		
 		//Auto
 		left_3.whenPressed(new Auto_DriveLowBarSideGoal());
-		right_3.whenPressed(new Auto_RotateAlt());
+		right_3.whenPressed(new Auto_Rotate());
 		right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());
 		left_4.whenPressed(new Auto_StopFollow());

@@ -19,7 +19,7 @@ public class Auto_Rotate extends Command {
 	//The default is -16.5 for center
 	private NIVision.Range OFFSET_ERROR = new NIVision.Range(-1,1);
 	
-    private double rotateSpeed = 0.12;
+    private double rotateSpeed = 0.15;
 	private double p = 0.1;
 	private Timer timer = new Timer();
 	double timeout = 4.0;
@@ -31,7 +31,7 @@ public class Auto_Rotate extends Command {
     boolean finished;
 	
 	//Some variables to track motion if camera is not keeping up
-	double cycleOffsetReduction = 0.5;
+	double cycleOffsetReduction = 0.1;
 	
     public Auto_Rotate() {
         requires(Robot.camera);
@@ -57,13 +57,14 @@ public class Auto_Rotate extends Command {
 		
     	if(report != null){
     		offset = Robot.camera.getRotationOffset(report);
+    		Robot.logger.log("Offset: " + offset, 5);
     		
     		if (offset == lastOffset) {
     			stillCycles++;
     			if (stillCycles >= cyclesTolerance) {
     				finished = true;
     			}
-    			//offset = lastOffset * cycleOffsetReduction;
+    			offset = lastOffset * cycleOffsetReduction;
     		}else{
     			stillCycles =0;
     		}
@@ -73,12 +74,12 @@ public class Auto_Rotate extends Command {
     		//when the offset is positive it means that the target is to the left
     		if(offset < OFFSET_ERROR.minValue){
    				//If the offset is negative, and less than the allowed negative error, then rotate to the right
-   				leftSpeed = rotateSpeed;
-   				rightSpeed = -rotateSpeed;
+   				leftSpeed = -rotateSpeed;
+   				rightSpeed = rotateSpeed;
     		}else if(offset > OFFSET_ERROR.maxValue){
     			//If the offset is positive, and greater than the allowed positive error, then rotate to the left
-    			leftSpeed = -rotateSpeed;
-   				rightSpeed = rotateSpeed;
+    			leftSpeed = rotateSpeed;
+   				rightSpeed = -rotateSpeed;
    			}else{
    				//The robot is within the error range, meaning that we are on target
     			finished = true;
@@ -102,11 +103,15 @@ public class Auto_Rotate extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	
+    	Robot.driveTrain.setMotors(0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
+    	
+    	Robot.driveTrain.setMotors(0, 0);
     }
 }

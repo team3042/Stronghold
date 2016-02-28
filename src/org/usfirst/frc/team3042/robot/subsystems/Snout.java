@@ -22,7 +22,7 @@ public class Snout extends Subsystem {
 	private double pickup = 10; 
 	private double shoot = 276;
 	
-	private double rotateSpeed = .6;
+	private double rotateSpeed = .3;
 	private double p = 5, i = 0, d = 0;
 	
 	public Snout() {

@@ -41,15 +41,20 @@ public class CameraAPI extends Subsystem {
 	//
 	/*
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);	//Range for green light
-<<<<<<< HEAD
+
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(69, 255);	//Range for green light
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(112, 154);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(153, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(96, 155);	//Range for green light
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(112, 154);	//Range for green light
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(153, 255);	//Range for green light
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(96, 155);	//Range for green light
 
+	//Lights Off - B123
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 210);
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(133, 255);
+	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
 	
@@ -61,13 +66,13 @@ public class CameraAPI extends Subsystem {
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 55;
 	
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -30 : -16.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -16.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
-		camera.writeResolution(Resolution.k320x240);
+		camera.writeResolution(Resolution.k480x360);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(10);
+		camera.writeBrightness(20);
 		camera.writeExposureControl(ExposureControl.kHold);
 	}
 	
@@ -185,8 +190,8 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				
 				isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
-				this.ConvexHullAreaScore(report)>= SCORE_MIN &&
-				this.aspectRatioScore(report)>=SCORE_MIN;
+				this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
+				//this.aspectRatioScore(report)>=SCORE_MIN;
 				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
 				//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
 				//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
@@ -201,17 +206,17 @@ public class CameraAPI extends Subsystem {
 				targetReport = particles.get(currentTargetIndex);
 			}else{
 				//Testing for getting side views of a the target, creating a triangle
-				//particles.get(0).image = binaryImage;
-				//particles.get(0).unfilteredImage = unfilteredImage;
+				particles.get(0).image = binaryImage;
+				particles.get(0).unfilteredImage = unfilteredImage;
 				//ParticleReport2 triangleTest = particles.get(0);
 				
 				//isTriangle(triangleTest);
 				
 				Robot.logger.log("!!!------------------------------------", 5);
 				Robot.logger.log("Didn't find target.", 1);
-				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(targetReport), 5);
-				//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);
-				//Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(report), 5);
+				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(particles.get(0)), 5);
+				Robot.logger.log("AspectRatio: "+this.aspectRatioScore(particles.get(0)), 5);
+				Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(particles.get(0)), 5);
 				Robot.logger.log("-------------------------------------", 5);
 			}
 		}

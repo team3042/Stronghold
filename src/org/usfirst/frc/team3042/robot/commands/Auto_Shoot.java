@@ -23,12 +23,13 @@ public class Auto_Shoot extends Command {
     	Robot.logger.log("Initialize", 1);
     	Robot.shooter.spinToShoot();
     	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
+    	timer.reset();
+		timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {  	
     	if (Robot.shooter.readyToShoot()) {
-    		timer.start();
     		Robot.shooterServo.setServoExtended();
     	}
     }
