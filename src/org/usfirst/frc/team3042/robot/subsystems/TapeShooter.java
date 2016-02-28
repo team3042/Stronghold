@@ -39,7 +39,7 @@ public class TapeShooter extends Subsystem {
     }
     
     public void retract() {
-    	setSpeed((shooterTalon.getEncPosition() > 0)? -lowerSpeed : 0);
+    	setSpeed(encoderZeroReached() ? 0 : -lowerSpeed);
     }
     
     private void setSpeed(double speed) {
