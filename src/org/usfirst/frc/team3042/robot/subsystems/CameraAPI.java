@@ -66,7 +66,9 @@ public class CameraAPI extends Subsystem {
 	public boolean isSideways = true;//The boolean describing whether or not the camera is on it's side
 	private double DEFAULT_SCORE_MIN = 55;
 	
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -16.5;
+	//Fenrir offset at 320x240 is -16.5. 
+	//Scaled up to 480x360 I expect it to be -25
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -25;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
