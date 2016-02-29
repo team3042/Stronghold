@@ -12,20 +12,20 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Auto_RotateProfile extends Command {
 
-	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
+	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625; //Possibly 0.00196875 with new resolution
 	
 	//Current point
 	int pointNumber = 0;
 
 	//Time between each point in ms
-	int itp = 30;
+	int itp = 20;
 			
 	//Time for each filter in ms
-	double time1 = 100, time2 = 50;
+	double time1 = 50, time2 = 25;
 		
 	double wheelbaseWidth = 2.4;
 	
-	double maxSpeed = 0.1;
+	double maxSpeed = 0.03; //Possibly 0.04 with new resolution
 		
 	AutoTrajectory_MotionProfile motionProfileLeft;
 	AutoTrajectory_MotionProfile motionProfileRight;
@@ -43,12 +43,12 @@ public class Auto_RotateProfile extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	double offset = Robot.camera.getRotationOffset();
+    	double offset = 100; //Robot.camera.getRotationOffset();
     	double leftTarget = -offset * rotationsPerPixel;
     	double rightTarget = offset * rotationsPerPixel;
     	
-    	double leftMaxSpeed = (leftTarget > 0)? maxSpeed : -maxSpeed;
-    	double rightMaxSpeed = (rightTarget > 0)? maxSpeed : -maxSpeed;
+    	double leftMaxSpeed = offset * ((leftTarget > 0)? maxSpeed : -maxSpeed);
+    	double rightMaxSpeed = offset * ((rightTarget > 0)? maxSpeed : -maxSpeed);
     	
     	motionProfileLeft = new AutoTrajectory_MotionProfile(itp, time1, time2, leftMaxSpeed, leftTarget);
     	motionProfileRight = new AutoTrajectory_MotionProfile(itp, time1, time2, rightMaxSpeed, rightTarget);
