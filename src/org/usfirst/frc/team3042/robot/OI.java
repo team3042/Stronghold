@@ -71,7 +71,8 @@ public class OI {
 		gunner_Back.whileHeld(new TapeShooter_Retract());
 		
 		//Auto
-		left_3.whenPressed(new Auto_DriveLowBarSideGoal());
+		left_3.whenPressed(new Auto_FollowTrajectory(AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
+    			AutoTrajectory_LowBarSideGoal.getRightTrajectory(), true));
 		right_3.whenPressed(new Auto_Rotate());
 		right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_3.whenPressed(new Auto_Follow());

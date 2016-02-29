@@ -64,7 +64,7 @@ public class Robot extends IterativeRobot {
         //chooser.addObject("Low Bar Side Goal", new AutoMode_LowBarSideGoal());
         chooser.addObject("Rough Terrain", new AutoMode_RoughTerrain());
         //chooser.addObject("Moat", new AutoMode_Moat());
-        //chooser.addObject("Rock Wall", new AutoMode_RockWall());
+        chooser.addObject("Rock Wall", new AutoMode_RockWall());
         //chooser.addObject("Ramparts", new AutoMode_Ramparts());
         SmartDashboard.putData("Auto mode", chooser);
         
