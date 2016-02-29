@@ -14,7 +14,7 @@ public class Auto_RotateAlt extends Command {
  
 	int cyclesTolerance = 4;
 	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
-	double timeout = 8.0;
+	double timeout = 2.0;
 
 	double lastOffset;
 	int stillCycles;
@@ -38,26 +38,35 @@ public class Auto_RotateAlt extends Command {
     	double leftTarget = -1;
 		double rightTarget = 1;
 		
+		logOutput();
+		
 		Robot.driveTrain.setPosition(leftTarget, rightTarget);
+    }
+    
+    void logOutput() {
+    	double setPoint = Robot.driveTrain.leftMotorFront.getSetpoint();
+    	double position = Robot.driveTrain.leftMotorFront.getPosition();
+    	Robot.logger.log("LeftL: setPoint = "+setPoint+" position = "+position, 5);    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double offset = Robot.camera.getRotationOffset();
-    	Robot.logger.log("Offset "+offset, 3);
+    	logOutput();
     	
-    	if (offset == lastOffset && false) {
-    		stillCycles++;
-    		finished = (stillCycles > cyclesTolerance);
-    	} else {
-    		stillCycles = 0;
-    		
-    		double leftTarget = -offset * rotationsPerPixel;
-    		double rightTarget = offset * rotationsPerPixel;
-    		
-    		
-    	}
-    	lastOffset = offset;
+    	//double offset = Robot.camera.getRotationOffset();
+    	//Robot.logger.log("Offset "+offset, 3);
+    	
+    	//if (offset == lastOffset && false) {
+    	//	stillCycles++;
+    	//	finished = (stillCycles > cyclesTolerance);
+    	//} else {
+    	//	stillCycles = 0;
+    	//	
+    	//	double leftTarget = -offset * rotationsPerPixel;
+    	//	double rightTarget = offset * rotationsPerPixel;
+		//	Robot.driveTrain.setPosition(leftTarget, rightTarget);
+    	//}
+    	//lastOffset = offset;
     }
 
     // Make this return true when this Command no longer needs to run execute()
