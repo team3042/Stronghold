@@ -33,7 +33,7 @@ public class Snout_SetPosition extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.snout.getPotentiometerVal() - position) 
+        return (Math.abs(Robot.snout.getPotValue() - position) 
         		< tolerance);
     }
 

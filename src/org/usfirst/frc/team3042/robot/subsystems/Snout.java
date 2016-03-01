@@ -27,8 +27,10 @@ public class Snout extends Subsystem {
 	private double slowRotateSpeed = 0.3;
 	private double p = 5, i = 0, d = 0;
 	
-	private double positionScalar = 1, positionAdditive = 0;
-	
+	//variables to correct for gravity
+	double potGoal, virtualGoal, lastPotValue;
+	double tolerance = 1;
+		
 	public Snout() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		talonRotate.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
@@ -53,16 +55,37 @@ public class Snout extends Subsystem {
     	talonRotate.set(speed);
     }
     
-    public double getPotentiometerVal() {
+    public double getPotValue() {
     	return POT_ZERO - talonRotate.getAnalogInRaw();
     }
 
+    public void holdPosition() {
+    	double potValue = getPotValue();
+    	//if the current value is the same as the previous value, 
+    	//the snout is not moving, so adjust the virtual goal 
+    	boolean stationary = (potValue == lastPotValue);
+    	//if the snout is moving away from the goal, 
+    	//then adjust the virtual goal
+    	boolean wrongWay = (Math.abs(potValue-potGoal) > Math.abs(lastPotValue-potGoal));
+    	if (stationary || wrongWay) {
+    		if (potValue < (potGoal-tolerance)) virtualGoal++;
+    		if (potValue > (potGoal+tolerance)) virtualGoal--;
+    	}
+    	setTalonPosition(virtualGoal);
+    	lastPotValue = potValue;
+    }
+    
     public void setPosition(double position) {
+    	potGoal = position;
+    	virtualGoal = position;
+    	lastPotValue = getPotValue();
+    	setTalonPosition(position);
+    }
+    
+    private void setTalonPosition(double position) {
     	position = POT_ZERO - safetyTest(position);
-    	position = scalePosition(position);
-    	
     	talonRotate.changeControlMode(TalonControlMode.Position);
-    	talonRotate.set(position);
+    	talonRotate.set(position);    	
     }
     
     private double safetyTest(double position) {
@@ -75,18 +98,12 @@ public class Snout extends Subsystem {
     	return position;
     }
     
-    private double scalePosition(double position) {
-    	position = position * positionScalar + positionAdditive;
-    	
-    	return position;
-    }
-    
     public boolean belowRaiseLimit() {
-    	return (getPotentiometerVal() < raiseLimit);
+    	return (getPotValue() < raiseLimit);
     }
     
     public boolean aboveLowerLimit(){
-    	return (getPotentiometerVal() > lowerLimit);
+    	return (getPotValue() > lowerLimit);
     }
     
     public void raise() {
@@ -141,8 +158,8 @@ public class Snout extends Subsystem {
     	setPosition(layup);
     }
     
-    public void holdPosition() {
-    	setPosition(getPotentiometerVal());
+    public void setToCurrentPosition() {
+    	setPosition(getPotValue());
     }    
 }
 

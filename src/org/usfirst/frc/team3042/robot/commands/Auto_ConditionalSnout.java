@@ -50,7 +50,7 @@ public class Auto_ConditionalSnout extends Command {
     		int rightEnc = Math.abs(Robot.driveTrain.getRightEncoder());
     	
     		if (targetReached) {
-    			finished = Math.abs(Robot.snout.getPotentiometerVal() - potValue) < tolerance;    		
+    			finished = Math.abs(Robot.snout.getPotValue() - potValue) < tolerance;    		
     		}
     		else if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
     			Robot.snout.setPosition(potValue);

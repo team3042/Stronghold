@@ -39,7 +39,7 @@ public class Snout_Adjust extends Command {
     	Robot.logger.log("Initialize", 1);
     	double distance = Robot.camera.getDistToTarget();
     	
-		potGoal = Robot.snout.getPotentiometerVal();
+		potGoal = Robot.snout.getPotValue();
 
     	if ((distance < maxDist) && (distance > minDist)) {
         	int i = 1;
@@ -69,7 +69,7 @@ public class Snout_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Robot.snout.getPotentiometerVal() - potGoal) < tolerance || 
+        return Math.abs(Robot.snout.getPotValue() - potGoal) < tolerance || 
         		timer.get() > timeout;
     }
 

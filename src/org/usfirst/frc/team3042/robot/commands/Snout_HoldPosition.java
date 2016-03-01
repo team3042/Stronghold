@@ -17,12 +17,12 @@ public class Snout_HoldPosition extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.snout.holdPosition();
+    	Robot.snout.setToCurrentPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	//Robot.snout.holdPosition();
     }
 
     // Make this return true when this Command no longer needs to run execute()
