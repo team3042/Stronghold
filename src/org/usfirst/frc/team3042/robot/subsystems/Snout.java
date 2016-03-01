@@ -21,8 +21,10 @@ public class Snout extends Subsystem {
 	private double storage = 640;
 	private double pickup = 10; 
 	private double shoot = 276;
+	private double layup = 340;
 	
 	private double rotateSpeed = .6;
+	private double slowRotateSpeed = 0.3;
 	private double p = 5, i = 0, d = 0;
 	
 	public Snout() {
@@ -31,7 +33,7 @@ public class Snout extends Subsystem {
 		talonRotate.reverseOutput(true);
 		talonRotate.setInverted(true);
 		
-		talonRotate.setPID(p, i ,d);
+		talonRotate.setPID(p, i, d);
 		talonRotate.setAllowableClosedLoopErr(0);
 	}
 	
@@ -55,7 +57,7 @@ public class Snout extends Subsystem {
 
     public void setPosition(double position) {
     	position = POT_ZERO - safetyTest(position);
-
+    	
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	talonRotate.set(position);
     }
@@ -87,9 +89,27 @@ public class Snout extends Subsystem {
     	}
     }
     
+    public void slowRaise() {
+    	if (belowRaiseLimit()) {
+    		setSpeed(-slowRotateSpeed);
+    	}
+    	else {
+    		setPosition(raiseLimit);
+    	}
+    }
+    
     public void lower() {
     	if (aboveLowerLimit()) {
     		setSpeed(rotateSpeed);
+    	}
+    	else {
+    		setPosition(lowerLimit);
+    	}
+    }
+    
+    public void slowLower() {
+    	if (aboveLowerLimit()) {
+    		setSpeed(slowRotateSpeed);
     	}
     	else {
     		setPosition(lowerLimit);
@@ -106,6 +126,10 @@ public class Snout extends Subsystem {
     
     public void goToShoot() {
     	setPosition(shoot);
+    }
+    
+    public void goToLayup() {
+    	setPosition(layup);
     }
     
     public void holdPosition() {

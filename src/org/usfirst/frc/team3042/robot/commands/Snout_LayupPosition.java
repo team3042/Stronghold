@@ -7,32 +7,28 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Snout_Raise extends Command {
-	
-	double speedChange = 0.75;
+public class Snout_LayupPosition extends Command {
 
-    public Snout_Raise() {
+    public Snout_LayupPosition() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     	requires(Robot.snout);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
+    	
+    	Robot.snout.goToLayup();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(Robot.oi.gamePadGunner.getRawAxis(1) > speedChange) {
-    		Robot.snout.raise();
-    	}
-    	else {
-    		Robot.snout.slowRaise();
-    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return false;
+        return false;
     }
 
     // Called once after isFinished returns true

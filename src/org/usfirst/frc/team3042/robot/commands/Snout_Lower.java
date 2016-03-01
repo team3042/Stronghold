@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class Snout_Lower extends Command {
+	
+	double speedChange = -0.75;
 
     public Snout_Lower() {
     	requires(Robot.snout);
@@ -20,7 +22,12 @@ public class Snout_Lower extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.snout.lower();
+    	if(Robot.oi.gamePadGunner.getRawAxis(1) < speedChange) {
+    		Robot.snout.lower();
+    	}
+    	else {
+    		Robot.snout.slowLower();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

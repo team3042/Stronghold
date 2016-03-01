@@ -56,6 +56,7 @@ public class Snout_Adjust extends Command {
     	}
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
+    	SmartDashboard.putNumber("Target Pot Value", potGoal);
     	
     	Robot.snout.setPosition(potGoal + potOffset);
     	timer.reset();
