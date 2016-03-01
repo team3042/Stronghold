@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Auto_RotateProfile extends Command {
 
-	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625; //Possibly 0.00196875 with new resolution
+	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.00196875 : 0.00196875; 
 	
 	//Current point
 	int pointNumber = 0;
@@ -25,7 +25,7 @@ public class Auto_RotateProfile extends Command {
 		
 	double wheelbaseWidth = 2.4;
 	
-	double maxSpeed = 0.03; //Possibly 0.04 with new resolution
+	double maxSpeed = 0.04;
 		
 	AutoTrajectory_MotionProfile motionProfileLeft;
 	AutoTrajectory_MotionProfile motionProfileRight;

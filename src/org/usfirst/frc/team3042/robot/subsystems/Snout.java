@@ -27,6 +27,8 @@ public class Snout extends Subsystem {
 	private double slowRotateSpeed = 0.3;
 	private double p = 5, i = 0, d = 0;
 	
+	private double positionScalar = 1, positionAdditive = 0;
+	
 	public Snout() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
 		talonRotate.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
@@ -57,6 +59,7 @@ public class Snout extends Subsystem {
 
     public void setPosition(double position) {
     	position = POT_ZERO - safetyTest(position);
+    	position = scalePosition(position);
     	
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	talonRotate.set(position);
@@ -69,6 +72,12 @@ public class Snout extends Subsystem {
     	else if (position < lowerLimit) {
     		position = lowerLimit;
     	}
+    	return position;
+    }
+    
+    private double scalePosition(double position) {
+    	position = position * positionScalar + positionAdditive;
+    	
     	return position;
     }
     

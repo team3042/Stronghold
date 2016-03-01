@@ -138,16 +138,16 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();  
-        SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
-        SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
-        SmartDashboard.putNumber("Potentiometer", Robot.snout.getPotentiometerVal());
+        //SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
+        //SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
+        //SmartDashboard.putNumber("Potentiometer", Robot.snout.getPotentiometerVal());
         
-        SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
-        SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
+        //SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
+        //SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
     	
-    	SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
+    	//SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
     	
-    	SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
+    	//SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
     }
     
     /**
