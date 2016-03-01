@@ -62,7 +62,6 @@ public class Auto_ConditionalSnout extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	Robot.logger.log("left "+Robot.driveTrain.getLeftEncoder()+" timer "+timer.get(), 3);
         return finished || (timer.get() > timeout);
     }
 

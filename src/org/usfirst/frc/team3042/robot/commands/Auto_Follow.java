@@ -44,7 +44,6 @@ public class Auto_Follow extends Command {
     		double distance = Robot.camera.getDistToTarget(report) - TARGET_DISTANCE;
     		double rotation = Robot.camera.getRotationOffset(report) - ROTATION_ZERO;
     		
-    		Robot.logger.log("Camera Rotation = "+rotation, 3);
     		if (rotation == rotationStart){
     			//double leftEnc = Robot.driveTrain.getLeftEncoder() - leftEncStart;
     			//double rightEnc = Robot.driveTrain.getRightEncoder() - rightEncStart;

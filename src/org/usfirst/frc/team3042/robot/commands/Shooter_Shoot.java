@@ -3,7 +3,6 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -19,10 +18,9 @@ public class Shooter_Shoot extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.shooter.spinToShoot();
-    	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 2);
-    	Robot.logger.log("Potentiometer Value= " + 
-    			Robot.snout.getPotValue(), 2);
-    	Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 2);
+    	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 4);
+    	Robot.logger.log("Potentiometer Value= " + Robot.snout.getPotValue(), 4);
+    	Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
     }
 
     // Called repeatedly when this Command is scheduled to run

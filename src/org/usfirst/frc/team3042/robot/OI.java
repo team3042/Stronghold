@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -67,18 +66,19 @@ public class OI {
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_Tape_Raise());
-		left_8.whileHeld(new Winch_Release());
+		//left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
 		gunner_Start.whenPressed(new TapeShooter_Raise());
 		gunner_Back.whileHeld(new TapeShooter_Retract());
 		
 		//Auto
-		/*left_3.whenPressed(new Auto_FollowTrajectory(AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
-    			AutoTrajectory_LowBarSideGoal.getRightTrajectory(), true)); */
-		right_3.whenPressed(new Auto_RotateAlt());
+		//left_3.whenPressed(new Auto_FollowTrajectory(
+		//		AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
+		//		AutoTrajectory_LowBarSideGoal.getRightTrajectory(), 
+		//		true));
+		//right_3.whenPressed(new Auto_RotateAlt());
 		//right_4.whenPressed(new Interruptible(new Snout_Adjust()));
-		//left_3.whenPressed(new Snout_SetPosition(SmartDashboard.getNumber("Shoot Test")));
 		//left_4.whenPressed(new Auto_StopFollow());
 		//left_5.toggleWhenPressed(new AutoMode_LowBar());
 	}

@@ -3,7 +3,6 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
@@ -78,7 +77,6 @@ public class Shooter extends Subsystem {
     }
     
     public void spinToShoot() {
-    	shootSpeed = SmartDashboard.getNumber("Shooter Speed");
     	setRPM(shootSpeed);
     }
     

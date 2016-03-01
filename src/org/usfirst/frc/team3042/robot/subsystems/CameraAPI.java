@@ -153,10 +153,10 @@ public class CameraAPI extends Subsystem {
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	this.outPutImagePNG(binaryImage, "HSVFiltered");
+    	//this.outPutImagePNG(binaryImage, "HSVFiltered");
     	filterOutSmallParticles(binaryImage, 0, 100);
     	fillParticles(binaryImage);
-    	this.outPutImagePNG(binaryImage, "FilteredParticle");
+    	//this.outPutImagePNG(binaryImage, "FilteredParticle");
     	
     	ParticleReport2 targetReport = null;
     	
@@ -219,12 +219,12 @@ public class CameraAPI extends Subsystem {
 				
 				//isTriangle(triangleTest);
 				
-				Robot.logger.log("!!!------------------------------------", 5);
-				Robot.logger.log("Didn't find target.", 1);
-				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(particles.get(0)), 5);
-				Robot.logger.log("AspectRatio: "+this.aspectRatioScore(particles.get(0)), 5);
-				Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(particles.get(0)), 5);
-				Robot.logger.log("-------------------------------------", 5);
+				Robot.logger.log("!!!------------------------------------", 3);
+				Robot.logger.log("Didn't find target.", 3);
+				Robot.logger.log("Trapezoid: "+this.TrapezoidScore(particles.get(0)), 3);
+				Robot.logger.log("AspectRatio: "+this.aspectRatioScore(particles.get(0)), 3);
+				Robot.logger.log("ConvexHull: "+this.ConvexHullAreaScore(particles.get(0)), 3);
+				Robot.logger.log("-------------------------------------", 3);
 			}
 		}
     	
@@ -237,7 +237,6 @@ public class CameraAPI extends Subsystem {
 			//Creates a png image on the roborio of Frame in location /tmp
 			NIVision.imaqWritePNGFile2(image, File.createTempFile(name, ".png").getAbsolutePath(), 100, NIVision.RGB_BLACK, 1);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

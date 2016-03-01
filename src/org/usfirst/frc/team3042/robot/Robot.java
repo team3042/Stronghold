@@ -7,6 +7,7 @@ import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Ramparts;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RockWall;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
+import org.usfirst.frc.team3042.robot.commands.Auto_DoNothing;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
@@ -45,12 +46,9 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
+    
     public static Logger logger;
-        
-    private int LOGGER_LEVEL = 5;
-    String CALIBRATION_FILE_NAME = "calibration";
-    double CALIBRATION_SPEED = 0;
-    double CALIBRATION_LENGTH = 0;
+    private int LOGGER_LEVEL = 3;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -60,6 +58,7 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
         logger = new Logger(true, true, LOGGER_LEVEL);
 		chooser = new SendableChooser();
+        chooser.addDefault("Default (Do Nothing)", new Auto_DoNothing());
         chooser.addObject("Low Bar", new AutoMode_LowBar());
         //chooser.addObject("Low Bar Side Goal", new AutoMode_LowBarSideGoal());
         chooser.addObject("Rough Terrain", new AutoMode_RoughTerrain());
@@ -67,14 +66,6 @@ public class Robot extends IterativeRobot {
         chooser.addObject("Rock Wall", new AutoMode_RockWall());
         //chooser.addObject("Ramparts", new AutoMode_Ramparts());
         SmartDashboard.putData("Auto mode", chooser);
-        
-        SmartDashboard.putNumber("Logger Level", LOGGER_LEVEL);
-        
-        SmartDashboard.putString("Calibration File Name", CALIBRATION_FILE_NAME);
-        SmartDashboard.putNumber("Calibration Motor Speed", CALIBRATION_SPEED);
-        SmartDashboard.putNumber("Calibration Length In Seconds", CALIBRATION_LENGTH);
-        SmartDashboard.putNumber("Shooter Speed", 5000);
-        SmartDashboard.putNumber("Shoot Test", 330);
     }
 	
 	/**
@@ -83,6 +74,7 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
      */
     public void disabledInit(){
+    	Robot.logger.log("Disabled Init", 1);
     }
 	
 	public void disabledPeriodic() {
@@ -99,18 +91,8 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
+    	Robot.logger.log("Autonomous Init", 1);
         autonomousCommand = (Command) chooser.getSelected();
-        
-		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-		switch(autoSelected) {
-		case "My Auto":
-			autonomousCommand = new MyAutoCommand();
-			break;
-		case "Default Auto":
-		default:
-			autonomousCommand = new ExampleCommand();
-			break;
-		} */
     	
     	// schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
@@ -124,6 +106,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
+    	Robot.logger.log("Teleop Init", 1);
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
@@ -140,13 +123,11 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();  
         //SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
         //SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
-        //SmartDashboard.putNumber("Potentiometer", Robot.snout.getPotentiometerVal());
+        SmartDashboard.putNumber("Potentiometer", snout.getPotValue());
         
         //SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
         //SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
-    	
-    	//SmartDashboard.putNumber("Left Shooter Encoder", shooter.getEncoderValLeft());
-    	
+    	    	
     	//SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
     }
     

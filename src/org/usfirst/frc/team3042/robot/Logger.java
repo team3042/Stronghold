@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Logger extends FileIO {
 	
 	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
@@ -34,9 +32,7 @@ public class Logger extends FileIO {
 	}
 	
 	public void log(String message, int level) {
-		
-		this.level = (int) SmartDashboard.getNumber("Logger Level");
-		
+				
 		if(level <= this.level) {
 			//Getting and adding class name to log
 			String cls = Thread.currentThread().getStackTrace()[2].getClassName();

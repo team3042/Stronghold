@@ -2,40 +2,30 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Auto_Shoot extends Command {
+public class Auto_DoNothing extends Command {
 
-	Timer timer = new Timer();
-	double timeToShoot = 2;
-	
-	public Auto_Shoot() {
-    	requires(Robot.shooter);
-    	requires(Robot.shooterServo);
+    public Auto_DoNothing() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.shooter.spinToShoot();
-    	timer.reset();
-		timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {  	
-    	if (Robot.shooter.readyToShoot()) {
-    		Robot.shooterServo.setServoExtended();
-    	}
+    protected void execute() {
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (timer.get() > timeToShoot);
+        return false;
     }
 
     // Called once after isFinished returns true
@@ -46,6 +36,6 @@ public class Auto_Shoot extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrupt", 1);
+    	Robot.logger.log("Interrupted", 1);
     }
 }
