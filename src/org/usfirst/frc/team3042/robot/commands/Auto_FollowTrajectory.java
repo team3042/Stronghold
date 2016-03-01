@@ -9,20 +9,22 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_DriveLowBarSideGoal extends Command {
+public class Auto_FollowTrajectory extends Command {
 	
-	boolean isReversed = true;
+	boolean isReversed;
 	
-	double[][] leftPoints = (isReversed)? 
-			AutoTrajectory_LowBarSideGoal.getRightTrajectory() : AutoTrajectory_LowBarSideGoal.getLeftTrajectory();
-	double[][] rightPoints = (isReversed)?
-			AutoTrajectory_LowBarSideGoal.getLeftTrajectory() : AutoTrajectory_LowBarSideGoal.getRightTrajectory();
+	double[][] leftPoints;
+	double[][] rightPoints;
 	
 	MotionProfileStatus[] status;
 
-    public Auto_DriveLowBarSideGoal() {
+    public Auto_FollowTrajectory(double[][] leftPoints, double[][] rightPoints, boolean isReversed) {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.driveTrain);
+    	
+    	this.leftPoints = (isReversed)? rightPoints : leftPoints;
+    	this.rightPoints = (isReversed)? leftPoints : rightPoints;
+    	this.isReversed = isReversed;
     }
 
     // Called just before this Command runs the first time

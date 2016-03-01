@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DriveTrain extends Subsystem {
     
-	CANTalon leftMotorFront = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_1);
+	public CANTalon leftMotorFront = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_1);
 	CANTalon leftMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_2);
 	CANTalon rightMotorFront = new CANTalon(RobotMap.DRIVETAIN_TALON_RIGHT_1);
 	CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
@@ -37,9 +37,6 @@ public class DriveTrain extends Subsystem {
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
 	
-	//PID values for rotate - lower speed
-	double posP = 0.01, posI = 0, posD = 0;
-
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
 			leftMotorFront.processMotionProfileBuffer();
@@ -61,6 +58,7 @@ public class DriveTrain extends Subsystem {
     	
     	rightMotorFront.setInverted(true);
     	rightMotorFront.reverseOutput(true);
+    	
     	initEncoders();
     	
     	//Starting talons processing motion profile
@@ -69,8 +67,6 @@ public class DriveTrain extends Subsystem {
     	notifier.startPeriodic(0.005);
     	
     	//Initializing PIDF
-    	leftMotorFront.setProfile(0);
-    	rightMotorFront.setProfile(0);
     	leftMotorFront.setPID(kP, kI, kD);
     	rightMotorFront.setPID(kP, kI, kD);
     	leftMotorFront.setF(kF);
@@ -125,21 +121,21 @@ public class DriveTrain extends Subsystem {
     }
     
     public void setPosition(double left, double right) {
-    	
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
+    	
+    	left = left + leftMotorFront.getPosition();
+    	right = right + rightMotorFront.getPosition();
     	  	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
     }
     
     private double scaleLeft(double left) {
-    	
     	return left;
     }
     
     private double scaleRight(double right) {
-    	
     	return right;
     }
 
