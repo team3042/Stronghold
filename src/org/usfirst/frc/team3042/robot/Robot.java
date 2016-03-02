@@ -49,6 +49,7 @@ public class Robot extends IterativeRobot {
     
     public static Logger logger;
     private int LOGGER_LEVEL = 3;
+    boolean useConsole = true, useFile = true;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -56,7 +57,7 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		oi = new OI();
-        logger = new Logger(true, true, LOGGER_LEVEL);
+        logger = new Logger(useConsole, useFile, LOGGER_LEVEL);
 		chooser = new SendableChooser();
         chooser.addDefault("Default (Do Nothing)", new Auto_DoNothing());
         chooser.addObject("Low Bar", new AutoMode_LowBar());
