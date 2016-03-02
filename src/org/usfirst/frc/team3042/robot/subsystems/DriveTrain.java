@@ -5,6 +5,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
@@ -75,6 +76,9 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	void initEncoders() {
+		leftEncMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		rightEncMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		
 		leftEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		rightEncMotor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 
@@ -121,12 +125,14 @@ public class DriveTrain extends Subsystem {
     }
     
     public void setPosition(double left, double right) {
+    	left += leftMotorFront.getPosition();
+    	right += rightMotorFront.getPosition();
+    	  	
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
     	
-    	left = left + leftMotorFront.getPosition();
-    	right = right + rightMotorFront.getPosition();
-    	  	
+    	Robot.logger.log("Actual Left Goal = "+left, 5);
+    	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
     }

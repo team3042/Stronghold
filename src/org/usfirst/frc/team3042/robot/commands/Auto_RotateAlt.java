@@ -44,9 +44,12 @@ public class Auto_RotateAlt extends Command {
     }
     
     void logOutput() {
-    	double setPoint = Robot.driveTrain.leftMotorFront.getSetpoint();
-    	double position = Robot.driveTrain.leftMotorFront.getPosition();
-    	Robot.logger.log("LeftL: setPoint = "+setPoint+" position = "+position, 5);    	
+    	Robot.logger.log("Left:" + 
+    			" mode = " + Robot.driveTrain.leftMotorFront.getControlMode() +
+    			" setPoint = " + Robot.driveTrain.leftMotorFront.getSetpoint() +
+    			" position = " + Robot.driveTrain.leftMotorFront.getPosition() + 
+    			" enc = " + Robot.driveTrain.leftMotorFront.getEncPosition() +
+    			" error = " + Robot.driveTrain.leftMotorFront.getClosedLoopError(), 5);
     }
 
     // Called repeatedly when this Command is scheduled to run
