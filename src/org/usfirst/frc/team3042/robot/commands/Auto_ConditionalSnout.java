@@ -47,6 +47,9 @@ public class Auto_ConditionalSnout extends Command {
     	if (waitCycles == 0) delayedInitialize();
     	if (waitCyclesLeft <= 0) {
     		int leftEnc = Math.abs(Robot.driveTrain.getLeftEncoder());
+    		Robot.logger.log("Left:" +
+    				" getLeftEncoder = " + leftEnc + 
+    				" getPosition = " + Robot.driveTrain.leftMotorFront.getPosition(), 5);
     		int rightEnc = Math.abs(Robot.driveTrain.getRightEncoder());
     	
     		if (targetReached) {
