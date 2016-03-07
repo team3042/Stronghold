@@ -36,4 +36,7 @@ public class FileIO {
 		writer.flush();
 	}
 	
+	public void closeFile() {
+		writer.close();
+	}
 }
