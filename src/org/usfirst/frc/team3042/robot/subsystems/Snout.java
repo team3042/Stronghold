@@ -6,6 +6,7 @@ import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -20,12 +21,13 @@ public class Snout extends Subsystem {
 	private double raiseLimit = 690;
 	private double storage = 640;
 	private double pickup = 10; 
-	private double shoot = 276;
-	private double layup = 340;
+	private double shoot = 240;
+	private double layup = 350;
 	
-	private double rotateSpeed = .6;
+	private double rotateSpeed = 0.6;
 	private double slowRotateSpeed = 0.3;
-	private double p = 5, i = 0, d = 0;
+	private double p = 5, i = 0.009, d = 0;
+	private int iZone = 25;
 	
 	//variables to correct for gravity
 	double potGoal, virtualGoal, lastPotValue;
@@ -38,6 +40,7 @@ public class Snout extends Subsystem {
 		talonRotate.setInverted(true);
 		
 		talonRotate.setPID(p, i, d);
+		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
 	}
 	
@@ -79,6 +82,7 @@ public class Snout extends Subsystem {
     	potGoal = position;
     	virtualGoal = position;
     	lastPotValue = getPotValue();
+    	SmartDashboard.putNumber("Snout Setpoint", position);
     	setTalonPosition(position);
     }
     

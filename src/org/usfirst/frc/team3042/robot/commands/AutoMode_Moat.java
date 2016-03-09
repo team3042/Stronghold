@@ -26,7 +26,7 @@ public class AutoMode_Moat extends CommandGroup {
         // arm.
     	
     	
-    	addParallel(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
+    	addParallel(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -2));
     	addSequential(new Auto_ConditionalSnout(100, 6000, 500));
     	addSequential(new Auto_ConditionalSnout(500, 500, 150));
     	addSequential(new Auto_ConditionalSnout(250, 500, 640));

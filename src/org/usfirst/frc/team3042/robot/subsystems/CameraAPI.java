@@ -1,6 +1,8 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import java.util.Comparator;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import org.usfirst.frc.team3042.robot.Robot;
@@ -23,12 +25,15 @@ import edu.wpi.first.wpilibj.vision.AxisCamera.WhiteBalance;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 //Compiled from two of the frc examples
 public class CameraAPI extends Subsystem {
 	
 	//Create the camera from an IP set in the robotMap
 	private AxisCamera camera = new AxisCamera(RobotMap.CAMERA_IP);
+	
+	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
 	
 	//Our ranges for HSV image acquisition 
 	/* From the 2015 example
@@ -56,9 +61,24 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(133, 255);
 	
 	//Commons Evening
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(180, 255);
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(108, 255);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(180, 255);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(108, 255);
+	
+	//Duluth Red Alliance
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 231);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(149, 242);
+	
+	//Duluth Blue Alliance(NOT CALIBRATED!!!!!!!!!!!!!!!)
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(48, 150);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 222);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(163, 255);
+	
+	//Duluth Pits
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(93, 154);
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(44, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(83, 255);
 	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
@@ -73,7 +93,7 @@ public class CameraAPI extends Subsystem {
 	
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -25;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -63.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
@@ -146,6 +166,19 @@ public class CameraAPI extends Subsystem {
 			distance =  scaleFactor / report.perimeter;
 		}
 		return distance;
+	}
+	
+	public void outputCleanImage() {
+		String dir = "/home/lvuser/images/";
+		
+		Date now = new Date();
+		SimpleDateFormat fileTimeStamp = new SimpleDateFormat(FILE_DATE_FORMAT);
+		fileTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+		String name = fileTimeStamp.format(now);
+		
+		Robot.fileIO.openFile(dir, name);
+		
+		NIVision.imaqWritePNGFile2(getCleanImage(), dir + name, 100, NIVision.RGB_BLACK, 1);
 	}
 	
 	//Run all the filters for a stronghold target

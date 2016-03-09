@@ -26,7 +26,7 @@ public class AutoMode_RoughTerrain extends CommandGroup {
         // arm.
     	
     	addParallel(new Snout_StorageTimed());
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -13, -2));
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -2));
     	
     }
 }
