@@ -3,10 +3,12 @@ package org.usfirst.frc.team3042.robot;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class FileIO {
 	
 	PrintStream writer;
+	Scanner scanner;
 	
 	boolean fileExists;
 
@@ -26,6 +28,9 @@ public class FileIO {
 			}
 			
 			writer = new PrintStream(file);
+			
+			scanner = new Scanner(file);
+			scanner.useDelimiter(",|\\n");
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -34,6 +39,10 @@ public class FileIO {
 	public void writeToFile(String content) {
 		writer.println(content);
 		writer.flush();
+	}
+	
+	public double readNextDouble() {
+		return scanner.nextDouble();
 	}
 	
 	public void closeFile() {

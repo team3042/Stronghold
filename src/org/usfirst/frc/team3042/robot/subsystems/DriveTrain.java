@@ -37,6 +37,7 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
+	double pPos = 1, fPos = 0;
 	
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
@@ -68,6 +69,15 @@ public class DriveTrain extends Subsystem {
     	notifier.startPeriodic(0.005);
     	
     	//Initializing PIDF
+    	leftMotorFront.setProfile(1);
+    	rightMotorFront.setProfile(1);
+    	leftMotorFront.setPID(pPos, kI, kD);
+    	rightMotorFront.setPID(pPos, kI, kD);
+    	leftMotorFront.setF(fPos);
+    	rightMotorFront.setF(fPos);
+    	
+    	leftMotorFront.setProfile(0);
+    	rightMotorFront.setProfile(0);
     	leftMotorFront.setPID(kP, kI, kD);
     	rightMotorFront.setPID(kP, kI, kD);
     	leftMotorFront.setF(kF);
@@ -127,6 +137,9 @@ public class DriveTrain extends Subsystem {
     public void setPosition(double left, double right) {
     	left += leftMotorFront.getPosition();
     	right += rightMotorFront.getPosition();
+    	
+    	leftMotorFront.setProfile(1);
+    	rightMotorFront.setProfile(1);
     	  	
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
@@ -171,6 +184,9 @@ public class DriveTrain extends Subsystem {
     	
     	leftMotorFront.clearMotionProfileTrajectories();
     	rightMotorFront.clearMotionProfileTrajectories();
+    	
+    	leftMotorFront.setProfile(0);
+    	rightMotorFront.setProfile(0);
     	
     	leftMotorFront.changeControlMode(TalonControlMode.MotionProfile);
     	rightMotorFront.changeControlMode(TalonControlMode.MotionProfile);
