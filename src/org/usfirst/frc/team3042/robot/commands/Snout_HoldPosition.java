@@ -2,12 +2,21 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class Snout_HoldPosition extends Command {
+	
+	double currentPos;
+	double scale = 10;
+	
+	Joystick gamepad = Robot.oi.gamePadGunner;
+	int axis = 1;
+	double deadzone = 0.05;
 
     public Snout_HoldPosition() {
         // Use requires() here to declare subsystem dependencies
@@ -18,11 +27,23 @@ public class Snout_HoldPosition extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.snout.setToCurrentPosition();
+    	
+    	currentPos = Robot.snout.getPotValue();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.snout.holdPosition();
+    	double currentY = gamepad.getRawAxis(axis);
+    	if(Math.abs(currentY) > deadzone) {
+    		
+    		currentPos = Robot.snout.safetyTest(currentY * scale + currentPos);
+    		Robot.snout.setPosition(currentPos);
+    	}
+    	else {
+    		Robot.snout.holdPosition();
+    	}
+    	
+    	SmartDashboard.putNumber("Setpoint", currentPos);
     }
 
     // Make this return true when this Command no longer needs to run execute()

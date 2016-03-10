@@ -6,6 +6,7 @@ import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -20,12 +21,11 @@ public class Snout extends Subsystem {
 	private double raiseLimit = 690;
 	private double storage = 640;
 	private double pickup = 10; 
-	private double shoot = 276;
-	private double layup = 340;
+	private double shoot = 240;
+	private double layup = 350;
 	
-	private double rotateSpeed = .6;
-	private double slowRotateSpeed = 0.3;
-	private double p = 5, i = 0, d = 0;
+	private double p = 5, i = 0.00, d = 0; //i = 0.009
+	private int iZone = 25;
 	
 	//variables to correct for gravity
 	double potGoal, virtualGoal, lastPotValue;
@@ -38,7 +38,9 @@ public class Snout extends Subsystem {
 		talonRotate.setInverted(true);
 		
 		talonRotate.setPID(p, i, d);
+		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
+		talonRotate.changeControlMode(TalonControlMode.Position);
 	}
 	
     public void initDefaultCommand() {
@@ -58,16 +60,25 @@ public class Snout extends Subsystem {
     public double getPotValue() {
     	return POT_ZERO - talonRotate.getAnalogInRaw();
     }
-
+    
+    public void setPosition(double position) {
+    	talonRotate.changeControlMode(TalonControlMode.Position);
+    	potGoal = position;
+    	virtualGoal = position;
+    	lastPotValue = getPotValue();
+    	setTalonPosition(position);
+    }
+    
     public void holdPosition() {
     	double potValue = getPotValue();
-    	//if the current value is the same as the previous value, 
+		//if the current value is the same as the previous value, 
     	//the snout is not moving, so adjust the virtual goal 
     	boolean stationary = (potValue == lastPotValue);
     	//if the snout is moving away from the goal, 
     	//then adjust the virtual goal
     	boolean wrongWay = (Math.abs(potValue-potGoal) > Math.abs(lastPotValue-potGoal));
-    	if (stationary || wrongWay) {
+    	
+		if (stationary || wrongWay) {
     		if (potValue < (potGoal-tolerance)) virtualGoal++;
     		if (potValue > (potGoal+tolerance)) virtualGoal--;
     	}
@@ -75,20 +86,12 @@ public class Snout extends Subsystem {
     	lastPotValue = potValue;
     }
     
-    public void setPosition(double position) {
-    	potGoal = position;
-    	virtualGoal = position;
-    	lastPotValue = getPotValue();
-    	setTalonPosition(position);
-    }
-    
     private void setTalonPosition(double position) {
     	position = POT_ZERO - safetyTest(position);
-    	talonRotate.changeControlMode(TalonControlMode.Position);
     	talonRotate.set(position);    	
     }
     
-    private double safetyTest(double position) {
+    public double safetyTest(double position) {
     	if (position > raiseLimit) {
     		position = raiseLimit;
     	}
@@ -104,42 +107,6 @@ public class Snout extends Subsystem {
     
     public boolean aboveLowerLimit(){
     	return (getPotValue() > lowerLimit);
-    }
-    
-    public void raise() {
-    	if (belowRaiseLimit()) {
-    		setSpeed(-rotateSpeed);
-    	}
-    	else {
-    		setPosition(raiseLimit);
-    	}
-    }
-    
-    public void slowRaise() {
-    	if (belowRaiseLimit()) {
-    		setSpeed(-slowRotateSpeed);
-    	}
-    	else {
-    		setPosition(raiseLimit);
-    	}
-    }
-    
-    public void lower() {
-    	if (aboveLowerLimit()) {
-    		setSpeed(rotateSpeed);
-    	}
-    	else {
-    		setPosition(lowerLimit);
-    	}
-    }
-    
-    public void slowLower() {
-    	if (aboveLowerLimit()) {
-    		setSpeed(slowRotateSpeed);
-    	}
-    	else {
-    		setPosition(lowerLimit);
-    	}
     }
     
     public void goToPickup() {
@@ -160,6 +127,10 @@ public class Snout extends Subsystem {
     
     public void setToCurrentPosition() {
     	setPosition(getPotValue());
-    }    
+    }  
+    
+    public boolean nearSetpoint() {
+    	return (Math.abs(getPotValue() - potGoal) < tolerance);
+    }
 }
 

@@ -48,7 +48,8 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     
     public static Logger logger;
-    private int LOGGER_LEVEL = 3;
+    public static FileIO fileIO = new FileIO();
+    private int LOGGER_LEVEL = 5;
     boolean useConsole = true, useFile = true;
 
     /**

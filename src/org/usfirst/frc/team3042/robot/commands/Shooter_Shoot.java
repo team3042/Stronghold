@@ -20,7 +20,8 @@ public class Shooter_Shoot extends Command {
     	Robot.shooter.spinToShoot();
     	Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 4);
     	Robot.logger.log("Potentiometer Value= " + Robot.snout.getPotValue(), 4);
-    	Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
+    	//Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
+    	Robot.camera.outputCleanImage();
     }
 
     // Called repeatedly when this Command is scheduled to run

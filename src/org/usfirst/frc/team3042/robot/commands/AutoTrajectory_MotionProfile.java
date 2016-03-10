@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3042.robot.commands;
 
+import org.usfirst.frc.team3042.robot.Robot;
+
 import edu.wpi.first.wpilibj.CANTalon;
 
 public class AutoTrajectory_MotionProfile {
@@ -114,6 +116,8 @@ public class AutoTrajectory_MotionProfile {
 					
 			currentPoint++;
 		}
+		
+		Robot.logger.log("Points in Trajectory: " + totalPoints, 5);
 				
 		return trajectory;
 	}

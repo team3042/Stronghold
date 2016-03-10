@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Auto_RotateProfile extends Command {
 
-	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.00196875 : 0.00196875; 
+	//double rotationsPerPixel = 0.00196875; 
+	double rotationsPerPixel = 0.004; 
 	
 	//Current point
 	int pointNumber = 0;
@@ -25,7 +26,7 @@ public class Auto_RotateProfile extends Command {
 		
 	double wheelbaseWidth = 2.4;
 	
-	double maxSpeed = 0.04;
+	double maxSpeed = 0.004;
 		
 	AutoTrajectory_MotionProfile motionProfileLeft;
 	AutoTrajectory_MotionProfile motionProfileRight;
@@ -43,12 +44,19 @@ public class Auto_RotateProfile extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	double offset = 100; //Robot.camera.getRotationOffset();
-    	double leftTarget = -offset * rotationsPerPixel;
-    	double rightTarget = offset * rotationsPerPixel;
+    	double offset = -128; // Robot.camera.getRotationOffset();
+    	
+    	Robot.logger.log("Offset: " + offset, 5);
+    	
+    	double leftTarget = offset * rotationsPerPixel;
+    	double rightTarget = -offset * rotationsPerPixel;
+    	
+    	Robot.logger.log("Left Target: " + leftTarget, 5);
     	
     	double leftMaxSpeed = offset * ((leftTarget > 0)? maxSpeed : -maxSpeed);
     	double rightMaxSpeed = offset * ((rightTarget > 0)? maxSpeed : -maxSpeed);
+    	
+    	Robot.driveTrain.initMotionProfile();
     	
     	motionProfileLeft = new AutoTrajectory_MotionProfile(itp, time1, time2, leftMaxSpeed, leftTarget);
     	motionProfileRight = new AutoTrajectory_MotionProfile(itp, time1, time2, rightMaxSpeed, rightTarget);
@@ -76,7 +84,11 @@ public class Auto_RotateProfile extends Command {
     protected void execute() {
     	status = Robot.driveTrain.getMotionProfileStatus();
     	
-    	if(status[0].btmBufferCnt > 5) {
+    	Robot.logger.log("Motion Profile Points" + status[0].topBufferCnt, 5);
+    	
+    	//logOutput();
+    	
+    	if(status[0].btmBufferCnt > 2) {
     		Robot.driveTrain.enableMotionProfile();
     	}
     	
@@ -106,5 +118,14 @@ public class Auto_RotateProfile extends Command {
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
     	Robot.driveTrain.disableMotionProfile();
+    }
+    
+    void logOutput() {
+    	Robot.logger.log("Left:" + 
+    			" mode = " + Robot.driveTrain.leftMotorFront.getControlMode() +
+    			" setPoint = " + Robot.driveTrain.leftMotorFront.getSetpoint() +
+    			" position = " + Robot.driveTrain.leftMotorFront.getPosition() + 
+    			" enc = " + Robot.driveTrain.leftMotorFront.getEncPosition() +
+    			" error = " + Robot.driveTrain.leftMotorFront.getClosedLoopError(), 5);
     }
 }

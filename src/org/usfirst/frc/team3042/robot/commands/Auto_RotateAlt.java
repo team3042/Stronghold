@@ -14,7 +14,7 @@ public class Auto_RotateAlt extends Command {
  
 	int cyclesTolerance = 4;
 	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
-	double timeout = 2.0;
+	double timeout = 5.0;
 
 	double lastOffset;
 	int stillCycles;
