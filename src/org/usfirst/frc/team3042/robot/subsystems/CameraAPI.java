@@ -181,6 +181,18 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqWritePNGFile2(getCleanImage(), dir + name, 100, NIVision.RGB_BLACK, 1);
 	}
 	
+	public void logData() {
+		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
+		
+		int perimeter = (int) report.perimeter;
+		int width = report.boundingBox.width;
+		int height = report.boundingBox.height;
+		int centerY = (int) (report.boundingBox.top - (height / 2.0));
+		
+		Robot.logger.log("Width = " + width + ", Height = " + height +
+				", Perimeter = " + perimeter + ", Center Y = " + centerY, 4);
+	}
+	
 	//Run all the filters for a stronghold target
 	public ParticleReport2 createTargetReport(double SCORE_MIN){
 		//Filtered HSV
