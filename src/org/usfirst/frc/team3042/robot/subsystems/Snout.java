@@ -34,6 +34,12 @@ public class Snout extends Subsystem {
 	double potGoal, virtualGoal, lastPotValue;
 	double tolerance = 1;
 	
+	//Dynamic f-gain to counter gravity
+	double horizontalPotValue = 0;// = measured
+	double verticalPotValue = 0;// = measured
+	double motorScalar = 1;// = measured
+	double radiansPerPotValue = 0.5 * Math.PI / (verticalPotValue - horizontalPotValue);
+	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
@@ -82,6 +88,8 @@ public class Snout extends Subsystem {
     	potGoal = position;
     	virtualGoal = position;
     	lastPotValue = getPotValue();
+    	
+    	//setFGain(position);
     	setTalonPosition(position);
     }
     
@@ -100,6 +108,12 @@ public class Snout extends Subsystem {
     	}
     	setTalonPosition(virtualGoal);
     	lastPotValue = potValue;
+    }
+    
+    public void setFGain (double targetPotValue) {
+    	double theta = (targetPotValue - horizontalPotValue) * radiansPerPotValue;
+    	double kF = motorScalar * Math.cos(theta) / targetPotValue;
+    	talonRotate.setF(kF);
     }
     
     private void setTalonPosition(double position) {
