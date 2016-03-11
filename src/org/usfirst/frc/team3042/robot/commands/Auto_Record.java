@@ -43,6 +43,7 @@ public class Auto_Record extends Command {
     	
     	Robot.driveTrain.resetEncoders();
     	
+    	//Finding intitial encoder values for calculating velocity
     	oldLeftDrive = Robot.driveTrain.getLeftEncoder();
     	oldRightDrive = Robot.driveTrain.getRightEncoder();
     	oldSnout = Robot.snout.getPotValue();
@@ -52,22 +53,24 @@ public class Auto_Record extends Command {
     protected void execute() {
     	dT = oldTime - timer.get();
     	oldTime += dT;
-    	currentState = dT + ", "; 
+    	currentState = dT * 1000 + ", "; 
     	
+    	//Recording drivetrain position and velocity
     	currentLeftDrive = Robot.driveTrain.getLeftEncoder();
     	currentState += currentLeftDrive + ", ";
     	currentState += (currentLeftDrive - oldLeftDrive) / dT + ", ";
     	oldLeftDrive = currentLeftDrive;
-    	
-    	currentRightDrive = Robot.driveTrain.getRightEncoder();
+   		currentRightDrive = Robot.driveTrain.getRightEncoder();
     	currentState += currentRightDrive + ", ";
     	currentState += (currentRightDrive - oldRightDrive) / dT + ", ";
     	oldRightDrive = currentRightDrive;
     	
+    	//Recording snout position and velocity
     	currentSnout = Robot.snout.getPotValue();
     	currentState += currentSnout + ", ";
     	currentState += (currentSnout - oldSnout) / dT + "";
     	oldSnout = currentSnout;
+    	
     	
     	fileIO.writeToFile(currentState);
     }

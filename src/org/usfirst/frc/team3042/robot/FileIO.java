@@ -45,6 +45,10 @@ public class FileIO {
 		return scanner.nextDouble();
 	}
 	
+	public boolean hasNextDouble() {
+		return scanner.hasNextDouble();
+	}
+	
 	public void closeFile() {
 		writer.close();
 	}

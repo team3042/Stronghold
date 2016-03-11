@@ -39,6 +39,7 @@ public class DriveTrain extends Subsystem {
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
 	double pPos = 1, fPos = 0;
 	
+	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
 			leftMotorFront.processMotionProfileBuffer();

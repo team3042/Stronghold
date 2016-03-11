@@ -2,8 +2,11 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
+import org.usfirst.frc.team3042.robot.subsystems.DriveTrain.PeriodicRunnable;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +33,15 @@ public class Snout extends Subsystem {
 	//variables to correct for gravity
 	double potGoal, virtualGoal, lastPotValue;
 	double tolerance = 1;
+	
+	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
+	class PeriodicRunnable implements java.lang.Runnable {
+		public void run() { 
+			talonRotate.processMotionProfileBuffer();
+		}
+	}
+	
+	Notifier notifier = new Notifier (new PeriodicRunnable());
 		
 	public Snout() {
 		talonRotate.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogPot);
@@ -41,6 +53,10 @@ public class Snout extends Subsystem {
 		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
 		talonRotate.changeControlMode(TalonControlMode.Position);
+		
+		//Beginning motion profile
+		talonRotate.changeMotionControlFramePeriod(5);
+    	notifier.startPeriodic(0.005);
 	}
 	
     public void initDefaultCommand() {
@@ -132,5 +148,40 @@ public class Snout extends Subsystem {
     public boolean nearSetpoint() {
     	return (Math.abs(getPotValue() - potGoal) < tolerance);
     }
+    
+    public void initMotionProfile() {
+    	talonRotate.clearMotionProfileTrajectories();
+    	talonRotate.changeControlMode(CANTalon.TalonControlMode.MotionProfile);
+    	talonRotate.set(CANTalon.SetValueMotionProfile.Disable.value);
+    	talonRotate.clearMotionProfileHasUnderrun();
+    }
+    
+    public void pushPoint(CANTalon.TrajectoryPoint point) {
+    	talonRotate.pushMotionProfileTrajectory(point);
+    }
+    
+    public MotionProfileStatus getMotionProfileStatus() {
+    	MotionProfileStatus motionProfileStatus = new MotionProfileStatus();
+    	talonRotate.getMotionProfileStatus(motionProfileStatus);
+    	
+    	return motionProfileStatus;
+    }
+    
+    public void removeUnderrun() {
+    	talonRotate.clearMotionProfileHasUnderrun();
+    }
+    
+    public void enableMotionProfile() {
+    	talonRotate.set(CANTalon.SetValueMotionProfile.Enable.value);
+    }
+    
+    public void holdMotionProfile() {
+    	talonRotate.set(CANTalon.SetValueMotionProfile.Hold.value);
+    }
+    
+    public void disableMotionProfile() {
+    	talonRotate.set(CANTalon.SetValueMotionProfile.Disable.value);
+    }
+    
 }
 
