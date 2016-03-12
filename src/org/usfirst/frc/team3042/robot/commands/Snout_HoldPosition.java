@@ -34,15 +34,12 @@ public class Snout_HoldPosition extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double currentY = gamepad.getRawAxis(axis);
-    	if(Math.abs(currentY) > deadzone) {
-    		
+    	if (Math.abs(currentY) > deadzone) {
     		currentPos = Robot.snout.safetyTest(currentY * scale + currentPos);
     		Robot.snout.setPosition(currentPos);
     	}
-    	else {
-    		Robot.snout.holdPosition();
-    	}
     	
+    	Robot.logger.log("Snout PID value = " + Robot.snout.talonRotate.pidGet(), 5);
     	SmartDashboard.putNumber("Setpoint", currentPos);
     }
 

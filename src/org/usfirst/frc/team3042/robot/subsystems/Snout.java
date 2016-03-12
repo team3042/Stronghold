@@ -2,14 +2,12 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
-import org.usfirst.frc.team3042.robot.subsystems.DriveTrain.PeriodicRunnable;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -30,13 +28,11 @@ public class Snout extends Subsystem {
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
 	private int iZone = 25;
 	
-	//variables to correct for gravity
-	double potGoal, virtualGoal, lastPotValue;
-	double tolerance = 1;
+	double potGoal, tolerance = 1;
 	
 	//Dynamic f-gain to counter gravity
-	double horizontalPotValue = 0;// = measured
-	double verticalPotValue = 0;// = measured
+	double horizontalPotValue = 100;// = measured
+	double verticalPotValue = 500;// = measured
 	double motorScalar = 1;// = measured
 	double radiansPerPotValue = 0.5 * Math.PI / (verticalPotValue - horizontalPotValue);
 	
@@ -58,7 +54,6 @@ public class Snout extends Subsystem {
 		talonRotate.setPID(p, i, d);
 		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
-		talonRotate.changeControlMode(TalonControlMode.Position);
 		
 		//Beginning motion profile
 		talonRotate.changeMotionControlFramePeriod(5);
@@ -86,28 +81,9 @@ public class Snout extends Subsystem {
     public void setPosition(double position) {
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	potGoal = position;
-    	virtualGoal = position;
-    	lastPotValue = getPotValue();
     	
     	//setFGain(position);
     	setTalonPosition(position);
-    }
-    
-    public void holdPosition() {
-    	double potValue = getPotValue();
-		//if the current value is the same as the previous value, 
-    	//the snout is not moving, so adjust the virtual goal 
-    	boolean stationary = (potValue == lastPotValue);
-    	//if the snout is moving away from the goal, 
-    	//then adjust the virtual goal
-    	boolean wrongWay = (Math.abs(potValue-potGoal) > Math.abs(lastPotValue-potGoal));
-    	
-		if (stationary || wrongWay) {
-    		if (potValue < (potGoal-tolerance)) virtualGoal++;
-    		if (potValue > (potGoal+tolerance)) virtualGoal--;
-    	}
-    	setTalonPosition(virtualGoal);
-    	lastPotValue = potValue;
     }
     
     public void setFGain (double targetPotValue) {

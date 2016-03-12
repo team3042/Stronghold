@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -144,9 +143,7 @@ public class DriveTrain extends Subsystem {
     	  	
     	leftMotorFront.changeControlMode(TalonControlMode.Position);
     	rightMotorFront.changeControlMode(TalonControlMode.Position);
-    	
-    	Robot.logger.log("Actual Left Goal = "+left, 5);
-    	
+    	    	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
     }
