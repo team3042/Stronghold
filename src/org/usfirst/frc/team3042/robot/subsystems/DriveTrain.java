@@ -36,7 +36,8 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
-	double pPos = 1, fPos = 0;
+	double pPos = 0.4, iPos = 0.001, fPos = 0;
+	int iZone = 150;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -71,8 +72,10 @@ public class DriveTrain extends Subsystem {
     	//Initializing PIDF
     	leftMotorFront.setProfile(1);
     	rightMotorFront.setProfile(1);
-    	leftMotorFront.setPID(pPos, kI, kD);
-    	rightMotorFront.setPID(pPos, kI, kD);
+    	leftMotorFront.setPID(pPos, iPos, kD);
+    	rightMotorFront.setPID(pPos, iPos, kD);
+    	leftMotorFront.setIZone(iZone);
+    	rightMotorFront.setIZone(iZone);
     	leftMotorFront.setF(fPos);
     	rightMotorFront.setF(fPos);
     	

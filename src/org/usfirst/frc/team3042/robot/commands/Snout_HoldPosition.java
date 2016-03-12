@@ -39,7 +39,7 @@ public class Snout_HoldPosition extends Command {
     		Robot.snout.setPosition(currentPos);
     	}
     	
-    	Robot.logger.log("Snout PID value = " + Robot.snout.talonRotate.pidGet(), 5);
+    	//Robot.logger.log("Snout PID value = " + Robot.snout.talonRotate.pidGet(), 5);
     	SmartDashboard.putNumber("Setpoint", currentPos);
     }
 
