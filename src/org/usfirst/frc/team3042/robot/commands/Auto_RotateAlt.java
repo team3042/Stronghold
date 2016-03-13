@@ -5,6 +5,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -13,12 +14,13 @@ public class Auto_RotateAlt extends Command {
 	private Timer timer = new Timer();
  
 	int cyclesTolerance = 4;
-	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002625 : 0.002625;
+	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002070 : 0.002625;
 	double timeout = 5.0;
 
 	double lastOffset;
 	int stillCycles;
 	boolean finished;
+	double offset;
 	
     public Auto_RotateAlt() {
         // Use requires() here to declare subsystem dependencies
@@ -34,50 +36,24 @@ public class Auto_RotateAlt extends Command {
     	finished = false;
     	timer.reset();
     	timer.start();
+    	offset = Robot.camera.getRotationOffset();
+    	Robot.logger.log("Offset " + offset, 3);
     	
-    	double leftTarget = -1;
-		double rightTarget = 1;
-		
-		logOutput();
-		
-		Robot.driveTrain.setPosition(leftTarget, rightTarget);
-    }
-    
-    void logOutput() {
-    	Robot.logger.log("Left:" + 
-    			" mode = " + Robot.driveTrain.leftMotorFront.getControlMode() +
-    			" setPoint = " + Robot.driveTrain.leftMotorFront.getSetpoint() +
-    			" position = " + Robot.driveTrain.leftMotorFront.getPosition() + 
-    			" enc = " + Robot.driveTrain.leftMotorFront.getEncPosition() +
-    			" error = " + Robot.driveTrain.leftMotorFront.getClosedLoopError() +
-    			" kP = " + Robot.driveTrain.leftMotorFront.getP() +
-    			" kF = " + Robot.driveTrain.leftMotorFront.getF(), 5);
+    	double leftTarget = offset * rotationsPerPixel;
+		double rightTarget = -offset * rotationsPerPixel;
+		Robot.driveTrain.offsetPosition(leftTarget, rightTarget);
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	logOutput();
-    	
-    	//double offset = Robot.camera.getRotationOffset();
-    	//Robot.logger.log("Offset "+offset, 3);
-    	
-    	//if (offset == lastOffset && false) {
-    	//	stillCycles++;
-    	//	finished = (stillCycles > cyclesTolerance);
-    	//} else {
-    	//	stillCycles = 0;
-    	//	
-    	//	double leftTarget = -offset * rotationsPerPixel;
-    	//	double rightTarget = offset * rotationsPerPixel;
-		//	Robot.driveTrain.setPosition(leftTarget, rightTarget);
-    	//}
-    	//lastOffset = offset;
+    protected void execute() {	
+    	SmartDashboard.putNumber("Error", Robot.driveTrain.leftMotorFront.getError());
+    	//TODO Add finish condition
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return (timer.get() > timeout);
-    	//return finished || (timer.get() > timeout);
+    	return finished || (timer.get() > timeout);
     }
 
     // Called once after isFinished returns true

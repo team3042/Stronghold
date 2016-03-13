@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
 
@@ -26,14 +27,15 @@ public class Snout extends Subsystem {
 	private double layup = 350;
 	
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
-	private int iZone = 25;
+	private int iZone = 15;
+	private double pZone = 25, highP = 12;
 	
 	double potGoal, tolerance = 5;
 	
 	//Dynamic f-gain to counter gravity
-	double horizontalPotValue = 100;// = measured
-	double verticalPotValue = 500;// = measured
-	double motorScalar = 1;// = measured
+	double horizontalPotValue = 25;// = measured
+	double verticalPotValue = 427;// = measured
+	double motorScalar = -120;// = measured
 	double radiansPerPotValue = 0.5 * Math.PI / (verticalPotValue - horizontalPotValue);
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
@@ -52,6 +54,7 @@ public class Snout extends Subsystem {
 		talonRotate.setInverted(true);
 		
 		talonRotate.setPID(p, i, d);
+		talonRotate.setF(0);
 		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
 		
@@ -82,14 +85,29 @@ public class Snout extends Subsystem {
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	potGoal = position;
     	
-    	//setFGain(position);
+    	talonRotate.setP(p);
+    	setFGain(position);
     	setTalonPosition(position);
+    }
+    
+    public double getAngle() {
+    	return (getPotValue() - horizontalPotValue) * radiansPerPotValue;
     }
     
     public void setFGain (double targetPotValue) {
     	double theta = (targetPotValue - horizontalPotValue) * radiansPerPotValue;
-    	double kF = motorScalar * Math.cos(theta) / targetPotValue;
+    	double kF = motorScalar * Math.cos(theta) / (POT_ZERO - targetPotValue);
+    	Robot.logger.log("F Gain: " + kF * (POT_ZERO - targetPotValue), 5);
     	talonRotate.setF(kF);
+    }
+    
+    public void setPGain() {
+    	if(Math.abs(talonRotate.getError()) < pZone) {
+    		talonRotate.setP(highP);
+    	}
+    	else {
+    		talonRotate.setP(p);
+    	}
     }
     
     private void setTalonPosition(double position) {

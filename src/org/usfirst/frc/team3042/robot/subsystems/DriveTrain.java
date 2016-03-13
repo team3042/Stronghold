@@ -36,7 +36,7 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
-	double pPos = 0.4, iPos = 0.001, fPos = 0;
+	double pPos = 1.2, iPos = 0.005, fPos = 0;
 	int iZone = 150;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
@@ -137,7 +137,7 @@ public class DriveTrain extends Subsystem {
         return motorValue;
     }
     
-    public void setPosition(double left, double right) {
+    public void offsetPosition(double left, double right) {
     	left += leftMotorFront.getPosition();
     	right += rightMotorFront.getPosition();
     	

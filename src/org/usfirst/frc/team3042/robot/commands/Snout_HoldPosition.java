@@ -38,8 +38,10 @@ public class Snout_HoldPosition extends Command {
     		currentPos = Robot.snout.safetyTest(currentY * scale + currentPos);
     		Robot.snout.setPosition(currentPos);
     	}
+    	Robot.snout.setPGain();
     	
-    	//Robot.logger.log("Snout PID value = " + Robot.snout.talonRotate.pidGet(), 5);
+    	//SmartDashboard.putNumber("Error", Robot.snout.talonRotate.getError());
+    	//Robot.logger.log("Current Angle = " + Robot.snout.getAngle(), 5);
     	SmartDashboard.putNumber("Setpoint", currentPos);
     }
 
