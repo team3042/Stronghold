@@ -25,8 +25,9 @@ public class Auto_AimShoot extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addSequential(new Auto_Rotate());
+    	addSequential(new Auto_RotateAlt());
     	addSequential(new Snout_Adjust());
+    	addSequential(new Auto_RotateAlt());
     	addSequential(new Auto_Shoot());
     }
 }

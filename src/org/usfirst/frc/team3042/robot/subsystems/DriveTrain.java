@@ -39,6 +39,10 @@ public class DriveTrain extends Subsystem {
 	double pPos = 1.2, iPos = 0.005, fPos = 0;
 	int iZone = 150;
 	
+	//Values for checking if near setpoint
+	double leftSetpoint, rightSetpoint;
+	double tolerance = 5;
+	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() { 
@@ -141,6 +145,9 @@ public class DriveTrain extends Subsystem {
     	left += leftMotorFront.getPosition();
     	right += rightMotorFront.getPosition();
     	
+    	leftSetpoint = left;
+    	rightSetpoint = right;
+    	
     	leftMotorFront.setProfile(1);
     	rightMotorFront.setProfile(1);
     	  	
@@ -149,6 +156,16 @@ public class DriveTrain extends Subsystem {
     	    	
     	leftMotorFront.set(left);
     	rightMotorFront.set(right);
+    }
+    
+    public boolean nearSetpoint() {
+    	double currentLeftPosition = leftMotorFront.getPosition();
+    	boolean nearLeft = Math.abs(leftSetpoint - currentLeftPosition) < tolerance;
+    	
+    	double currentRightPosition = rightMotorFront.getPosition();
+    	boolean nearRight = Math.abs(rightSetpoint - currentRightPosition) < tolerance;
+    	
+    	return nearLeft && nearRight;
     }
     
     private double scaleLeft(double left) {

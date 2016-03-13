@@ -14,18 +14,24 @@ public class Snout_Adjust extends Command {
 	Timer timer = new Timer();
 	double timeout = 2;
 	
-	double[][] lookUpTable = new double[][]{
-		//Currently in pot values, these are temporary fillers.
-			{5.2, 340},
-			{5.42, 301},
-			{5.7, 274},
-			{6.5, 248},
-			{7.4, 230},
-			{8.35, 218},
-			{9.45, 210}};
+	//Calibrated lookup tables for shooting over the front and back of the robot
+	//Camera Distance, Pot Value
+	double[][] forwardLookUpTable = new double[][]{
+		{5.2, 340},
+		{5.42, 301},
+		{5.7, 274},
+		{6.5, 248},
+		{7.4, 230},
+		{8.35, 218},
+		{9.45, 210}};
+			
+	double[][] backwardLookUpTable = new double[][]{
+		{0, 0},
+		{0, 0},
+		{0, 0}};
+	
 			
 	static final double maxDist = 9.45, minDist = 5.2;
-	static double potOffset = 20;
 	static double tolerance = 5;
 	double potGoal;
 
@@ -40,6 +46,8 @@ public class Snout_Adjust extends Command {
     	double distance = Robot.camera.getDistToTarget() * 2.0/3.0;
     	
 		potGoal = Robot.snout.getPotValue();
+		
+		double[][] lookUpTable = (Robot.snout.isBackwards())? backwardLookUpTable : forwardLookUpTable;
 
     	if ((distance < maxDist) && (distance > minDist)) {
         	int i = 1;
@@ -58,7 +66,7 @@ public class Snout_Adjust extends Command {
     	Robot.logger.log("potGoal = " + potGoal, 3);
     	SmartDashboard.putNumber("Target Pot Value", potGoal);
     	
-    	Robot.snout.setPosition(potGoal + potOffset);
+    	Robot.snout.setPosition(potGoal);
     	timer.reset();
     	timer.start();
     }

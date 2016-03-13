@@ -157,6 +157,10 @@ public class Snout extends Subsystem {
     	return (Math.abs(getPotValue() - potGoal) < tolerance);
     }
     
+    public boolean isBackwards() {
+    	return (getPotValue() > verticalPotValue);
+    }
+    
     public void initMotionProfile() {
     	talonRotate.clearMotionProfileTrajectories();
     	talonRotate.changeControlMode(CANTalon.TalonControlMode.MotionProfile);
