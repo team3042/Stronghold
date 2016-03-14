@@ -25,7 +25,7 @@ public class AutoMode_LowBarSideGoal extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new Snout_PickupTimed());
+    	addParallel(new Snout_Pickup());
     	addSequential(new Auto_FollowTrajectory(AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
     			AutoTrajectory_LowBarSideGoal.getRightTrajectory(), true));
     	addParallel(new Snout_SetPosition(200));

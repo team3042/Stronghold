@@ -44,20 +44,14 @@ public class Auto_ConditionalSnout extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (waitCycles == 0) delayedInitialize();
+    	if (waitCyclesLeft == 0) delayedInitialize();
     	if (waitCyclesLeft <= 0) {
     		int leftEnc = Math.abs(Robot.driveTrain.getLeftEncoder());
-    		Robot.logger.log("Left:" +
-    				" getLeftEncoder = " + leftEnc + 
-    				" getPosition = " + Robot.driveTrain.leftMotorFront.getPosition(), 5);
     		int rightEnc = Math.abs(Robot.driveTrain.getRightEncoder());
     	
-    		if (targetReached) {
-    			finished = Math.abs(Robot.snout.getPotValue() - potValue) < tolerance;    		
-    		}
-    		else if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
+    		if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
     			Robot.snout.setPosition(potValue);
-    			targetReached = true;
+    			finished = true;
     		}
     	}
     	waitCyclesLeft --;

@@ -25,7 +25,7 @@ public class AutoMode_LowBar extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new Snout_PickupTimed());
+    	addParallel(new Snout_Pickup());
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -2));
     	
     }

@@ -2,18 +2,13 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class Snout_Adjust extends Command {
-	
-	Timer timer = new Timer();
-	double timeout = 2;
-	
+		
 	//Calibrated lookup tables for shooting over the front and back of the robot
 	//Camera Distance, Pot Value
 	double[][] forwardLookUpTable = new double[][]{
@@ -32,7 +27,6 @@ public class Snout_Adjust extends Command {
 	
 			
 	static final double maxDist = 9.45, minDist = 5.2;
-	static double tolerance = 5;
 	double potGoal;
 
 	public Snout_Adjust() {
@@ -64,11 +58,8 @@ public class Snout_Adjust extends Command {
     	}
     	Robot.logger.log("distance = " + distance, 3);
     	Robot.logger.log("potGoal = " + potGoal, 3);
-    	SmartDashboard.putNumber("Target Pot Value", potGoal);
     	
     	Robot.snout.setPosition(potGoal);
-    	timer.reset();
-    	timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -77,8 +68,7 @@ public class Snout_Adjust extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Robot.snout.getPotValue() - potGoal) < tolerance || 
-        		timer.get() > timeout;
+        return true;
     }
 
     // Called once after isFinished returns true

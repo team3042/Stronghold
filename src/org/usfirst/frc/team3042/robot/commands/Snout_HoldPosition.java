@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Snout_HoldPosition extends Command {
 	
-	double currentPos;
+	double currentSetPoint;
 	double scale = 10;
 	
 	Joystick gamepad = Robot.oi.gamePadGunner;
@@ -26,23 +26,21 @@ public class Snout_HoldPosition extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.snout.setToCurrentPosition();
     	
-    	currentPos = Robot.snout.getPotValue();
+    	currentSetPoint = Robot.snout.getSetPoint();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double currentY = gamepad.getRawAxis(axis);
     	if (Math.abs(currentY) > deadzone) {
-    		currentPos = Robot.snout.safetyTest(currentY * scale + currentPos);
-    		Robot.snout.setPosition(currentPos);
+    		currentSetPoint = Robot.snout.safetyTest(currentY * scale + currentSetPoint);
+    		Robot.snout.setPosition(currentSetPoint);
     	}
     	Robot.snout.setPGain();
     	
     	//SmartDashboard.putNumber("Error", Robot.snout.talonRotate.getError());
-    	//Robot.logger.log("Current Angle = " + Robot.snout.getAngle(), 5);
-    	SmartDashboard.putNumber("Setpoint", currentPos);
+    	SmartDashboard.putNumber("Setpoint", currentSetPoint);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -14,7 +14,6 @@ public class Snout_SetPosition extends Command {
 
     public Snout_SetPosition(double position) {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.snout);
     	
     	this.position = position;
@@ -33,8 +32,7 @@ public class Snout_SetPosition extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.snout.getPotValue() - position) 
-        		< tolerance);
+        return true;
     }
 
     // Called once after isFinished returns true

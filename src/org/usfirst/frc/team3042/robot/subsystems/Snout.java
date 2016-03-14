@@ -58,6 +58,8 @@ public class Snout extends Subsystem {
 		talonRotate.setIZone(iZone);
 		talonRotate.setAllowableClosedLoopErr(0);
 		
+		setToCurrentPosition();
+		
 		//Beginning motion profile
 		talonRotate.changeMotionControlFramePeriod(5);
     	notifier.startPeriodic(0.005);
@@ -91,13 +93,20 @@ public class Snout extends Subsystem {
     }
     
     public double getAngle() {
-    	return (getPotValue() - horizontalPotValue) * radiansPerPotValue;
+    	return getAngle(getPotValue());
+    }
+    
+    public double getSetPoint() {
+    	return talonRotate.getSetpoint();
+    }
+    
+    private double getAngle(double potValue) {
+    	return (potValue - horizontalPotValue) * radiansPerPotValue;
     }
     
     public void setFGain (double targetPotValue) {
-    	double theta = (targetPotValue - horizontalPotValue) * radiansPerPotValue;
+    	double theta = getAngle(targetPotValue);
     	double kF = motorScalar * Math.cos(theta) / (POT_ZERO - targetPotValue);
-    	Robot.logger.log("F Gain: " + kF * (POT_ZERO - targetPotValue), 5);
     	talonRotate.setF(kF);
     }
     
