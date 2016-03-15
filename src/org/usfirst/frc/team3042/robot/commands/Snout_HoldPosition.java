@@ -37,9 +37,9 @@ public class Snout_HoldPosition extends Command {
     		currentSetPoint = Robot.snout.safetyTest(currentY * scale + currentSetPoint);
     		Robot.snout.setPosition(currentSetPoint);
     	}
-    	Robot.snout.setPGain();
+    	//Robot.snout.adjustPGain();
+    	Robot.snout.adjustFGain();
     	
-    	//SmartDashboard.putNumber("Error", Robot.snout.talonRotate.getError());
     	SmartDashboard.putNumber("Setpoint", currentSetPoint);
     }
 

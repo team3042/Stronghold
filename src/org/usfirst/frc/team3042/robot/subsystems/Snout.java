@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Snout_HoldPosition;
 
@@ -29,6 +30,7 @@ public class Snout extends Subsystem {
 	private int iZone = 15;
 	private double p1Zone = 25, p1 = 12;
 	private double p2Zone = 5, p2 = 25;
+	private double fZone = 25, dF = 1;
 	
 	double potGoal, tolerance = 5;
 	
@@ -110,16 +112,27 @@ public class Snout extends Subsystem {
     	talonRotate.setF(kF);
     }
     
-    public void setPGain() {
+    public void adjustPGain() {
     	double potError = Math.abs(talonRotate.getError());
-    	double dynamicP = p;
+    	double newP = p;
     	if (potError < p2Zone) {
-    		dynamicP = p2;
+    		newP = p2;
     	}
     	else if(potError < p1Zone) {
-    		dynamicP = p1;
+    		newP = p1;
     	}
-    	talonRotate.setP(dynamicP);
+    	talonRotate.setP(newP);
+    }
+    
+    public void adjustFGain() {
+    	double potError = talonRotate.getError();
+    	double newF = talonRotate.getF();
+    	Robot.logger.log("current F = " + newF, 5);
+    	if (Math.abs(potError) < fZone) {
+    		newF += dF * potError;
+    	}
+    	Robot.logger.log("adjusted F = " + newF, 5);
+    	//talonRotate.setF(newF);
     }
     
     private void setTalonPosition(double position) {
