@@ -40,6 +40,7 @@ public class Snout_HoldPosition extends Command {
     	//Robot.snout.adjustPGain();
     	Robot.snout.adjustFGain();
     	
+    	SmartDashboard.putNumber("Error", Robot.snout.talonRotate.getError());
     	SmartDashboard.putNumber("Setpoint", currentSetPoint);
     }
 
