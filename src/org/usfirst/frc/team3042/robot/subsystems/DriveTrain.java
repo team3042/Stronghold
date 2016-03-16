@@ -161,7 +161,6 @@ public class DriveTrain extends Subsystem {
     public boolean nearSetpoint() {
     	double currentLeftPosition = leftMotorFront.getPosition();
     	boolean nearLeft = Math.abs(leftSetpoint - currentLeftPosition) < tolerance;
-    	Robot.logger.log("Current Left: " + currentLeftPosition + " Left Setpoint: " + leftSetpoint, 3);
     	
     	double currentRightPosition = rightMotorFront.getPosition();
     	boolean nearRight = Math.abs(rightSetpoint - currentRightPosition) < tolerance;

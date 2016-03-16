@@ -132,11 +132,9 @@ public class Snout extends Subsystem {
     public void adjustFGain() {
     	double potError = talonRotate.getError();
     	double newF = talonRotate.getF();
-    	Robot.logger.log("current F = " + newF, 5);
     	if (Math.abs(potError) < fZone) {
     		newF += dF * potError;
     	}
-    	Robot.logger.log("adjusted F = " + newF, 5);
     	talonRotate.setF(newF);
     }
     
