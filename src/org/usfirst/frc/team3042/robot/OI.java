@@ -61,7 +61,7 @@ public class OI {
 		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new Snout_Storage());
 		gunner_LT.whenActive(new Interruptible(new Snout_Adjust()));
-		gunner_Y.whenPressed(new Snout_ShootPosition());
+		gunner_Y.whenPressed(new Snout_Adjust());
 		gunner_LB.whenActive(new Snout_LayupPosition());
 		
 		//Winch Controls

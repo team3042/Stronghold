@@ -28,16 +28,16 @@ public class Snout extends Subsystem {
 	
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
 	private int iZone = 15;
-	private double p1Zone = 25, p1 = 12;
-	private double p2Zone = 5, p2 = 25;
-	private double fZone = 25, dF = 1;
+	private double p1Zone = 25, d1Zone = 10, p1 = 12;
+	private double p2Zone = 5, d2Zone = 2, p2 = 35;
+	private double fZone = 3, dF = 0.0004;
 	
 	double potGoal, tolerance = 5;
 	
 	//Dynamic f-gain to counter gravity
 	double horizontalPotValue = 25;// = measured
 	double verticalPotValue = 427;// = measured
-	double motorScalar = -120;// = measured
+	double motorScalar = -100;// = measured
 	double radiansPerPotValue = 0.5 * Math.PI / (verticalPotValue - horizontalPotValue);
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
@@ -99,7 +99,7 @@ public class Snout extends Subsystem {
     }
     
     public double getSetPoint() {
-    	return talonRotate.getSetpoint();
+    	return nativeToUsed(talonRotate.getSetpoint());
     }
     
     private double getAngle(double potValue) {
@@ -112,16 +112,21 @@ public class Snout extends Subsystem {
     	talonRotate.setF(kF);
     }
     
+    double oldError = 0;
+    
     public void adjustPGain() {
     	double potError = Math.abs(talonRotate.getError());
+    	double dError = Math.abs(potError - oldError);
     	double newP = p;
-    	if (potError < p2Zone) {
+    	if (dError < d2Zone && potError < p2Zone) {
     		newP = p2;
     	}
-    	else if(potError < p1Zone) {
+    	else if(dError < d1Zone && potError < p1Zone) {
     		newP = p1;
     	}
     	talonRotate.setP(newP);
+    	
+    	oldError = potError;
     }
     
     public void adjustFGain() {
@@ -132,7 +137,11 @@ public class Snout extends Subsystem {
     		newF += dF * potError;
     	}
     	Robot.logger.log("adjusted F = " + newF, 5);
-    	//talonRotate.setF(newF);
+    	talonRotate.setF(newF);
+    }
+    
+    private double nativeToUsed (double input) {
+    	return POT_ZERO - input;
     }
     
     private void setTalonPosition(double position) {

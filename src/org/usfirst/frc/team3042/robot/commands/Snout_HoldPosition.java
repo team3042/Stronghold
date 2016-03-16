@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Snout_HoldPosition extends Command {
 	
 	double currentSetPoint;
-	double scale = 10;
+	double scale = 20;
 	
 	Joystick gamepad = Robot.oi.gamePadGunner;
 	int axis = 1;
@@ -37,8 +37,10 @@ public class Snout_HoldPosition extends Command {
     		currentSetPoint = Robot.snout.safetyTest(currentY * scale + currentSetPoint);
     		Robot.snout.setPosition(currentSetPoint);
     	}
-    	//Robot.snout.adjustPGain();
-    	Robot.snout.adjustFGain();
+    	else {
+    		Robot.snout.adjustPGain();
+    		//Robot.snout.adjustFGain();
+    	}
     	
     	SmartDashboard.putNumber("Error", Robot.snout.talonRotate.getError());
     	SmartDashboard.putNumber("Setpoint", currentSetPoint);

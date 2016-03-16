@@ -41,7 +41,7 @@ public class DriveTrain extends Subsystem {
 	
 	//Values for checking if near setpoint
 	double leftSetpoint, rightSetpoint;
-	double tolerance = 5;
+	double tolerance = 2.0 / encCounts;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -161,6 +161,7 @@ public class DriveTrain extends Subsystem {
     public boolean nearSetpoint() {
     	double currentLeftPosition = leftMotorFront.getPosition();
     	boolean nearLeft = Math.abs(leftSetpoint - currentLeftPosition) < tolerance;
+    	Robot.logger.log("Current Left: " + currentLeftPosition + " Left Setpoint: " + leftSetpoint, 3);
     	
     	double currentRightPosition = rightMotorFront.getPosition();
     	boolean nearRight = Math.abs(rightSetpoint - currentRightPosition) < tolerance;

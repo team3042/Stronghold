@@ -44,6 +44,7 @@ public class Auto_RotateAlt extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {	
     	SmartDashboard.putNumber("Error", Robot.driveTrain.leftMotorFront.getError());
+    	Robot.logger.log("Near Setpoint: " + Robot.driveTrain.nearSetpoint(), 3);
     }
 
     // Make this return true when this Command no longer needs to run execute()
