@@ -19,7 +19,7 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	double shootSpeed = 5000, intakeSpeed = 2000;
+	double shootSpeed = 5000, batterShootSpeed = 4000, intakeSpeed = 2000;
 	double toleranceRPM = 100;
 	
 	//Closed-Loop PIDF values
@@ -80,12 +80,20 @@ public class Shooter extends Subsystem {
     	setRPM(shootSpeed);
     }
     
+    public void spinToBatterShoot() {
+    	setRPM(batterShootSpeed);
+    }
+    
     public void spinToIntake() {
     	setRPM(-intakeSpeed);
     }
     
     public boolean readyToShoot() {
     	return getEncoderRPMRight() > (shootSpeed - toleranceRPM);
+    }
+    
+    public boolean readyToBatterShoot() {
+    	return getEncoderRPMRight() > (batterShootSpeed - toleranceRPM);
     }
     
     //Setting each flywheel to a target speed using PIDF through Talons
