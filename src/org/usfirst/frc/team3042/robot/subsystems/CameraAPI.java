@@ -51,14 +51,14 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(112, 154);	//Range for green light
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(153, 255);	//Range for green light
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(96, 155);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 170);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(172, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(142, 248);	//Range for green light
 
 	//Lights Off - B123
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(128, 255);
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
+//	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(128, 255);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);
@@ -93,7 +93,7 @@ public class CameraAPI extends Subsystem {
 	
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -44 : -63.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -32 : -63.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);

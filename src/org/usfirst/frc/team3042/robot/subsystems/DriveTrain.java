@@ -41,7 +41,7 @@ public class DriveTrain extends Subsystem {
 	
 	//Values for checking if near setpoint
 	double leftSetpoint, rightSetpoint;
-	double tolerance = 2.0 / encCounts;
+	double tolerance = 5.0 / encCounts;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {

@@ -25,7 +25,7 @@ public class Snout extends Subsystem {
 	private double pickup = 10; 
 	private double shoot = 240;
 	private double layup = 350;
-	private double batter = 550;
+	private double batter = 560;
 	
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
 	private int iZone = 15;
