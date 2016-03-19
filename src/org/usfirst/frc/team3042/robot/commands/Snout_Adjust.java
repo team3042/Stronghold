@@ -12,13 +12,19 @@ public class Snout_Adjust extends Command {
 	//Calibrated lookup tables for shooting over the front and back of the robot
 	//Camera Distance, Pot Value
 	double[][] forwardLookUpTable = new double[][]{
-		{5.2, 340},
-		{5.42, 301},
-		{5.7, 274},
-		{6.5, 248},
-		{7.4, 230},
-		{8.35, 218},
-		{9.45, 210}};
+		{52, 335},
+		{58, 318},
+		{68, 290},
+		{79,269},
+		{96, 252},
+		{108, 249},
+		{121, 241},
+		{135, 232},
+		{145, 225},
+		{158, 217},
+		{172, 215},
+		{179, 215},
+		{183, 205}};
 			
 	double[][] backwardLookUpTable = new double[][]{
 		{0, 0},
@@ -26,7 +32,7 @@ public class Snout_Adjust extends Command {
 		{0, 0}};
 	
 			
-	static final double maxDist = 9.45, minDist = 5.2;
+	static final double maxDist = 183, minDist = 52;
 	double potGoal;
 
 	public Snout_Adjust() {
@@ -37,7 +43,7 @@ public class Snout_Adjust extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	double distance = Robot.camera.getDistToTarget() * 2.0/3.0;
+    	double distance = Robot.camera.getDistToTarget();
     	
 		potGoal = Robot.snout.getPotValue();
 		

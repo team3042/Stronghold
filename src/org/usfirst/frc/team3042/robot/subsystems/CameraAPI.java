@@ -53,7 +53,7 @@ public class CameraAPI extends Subsystem {
 	/*Daytime Commons 8*/
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 170);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(172, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(142, 248);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(124, 248);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
@@ -93,7 +93,7 @@ public class CameraAPI extends Subsystem {
 	
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -32 : -63.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -50 : -63.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
@@ -159,11 +159,12 @@ public class CameraAPI extends Subsystem {
 		return getDistToTarget(report);
 	}
 	
-	double scaleFactor = 1400;
 	public double getDistToTarget(ParticleReport2 report){
 		double distance = 0.0;
 		if (report != null){
-			distance =  scaleFactor / report.perimeter;
+			double width = report.boundingBox.height;
+			Robot.logger.log("Width = "+width, 5);
+			distance =  0.026*width*width - 6.0 * width + 393;
 		}
 		return distance;
 	}
@@ -183,14 +184,15 @@ public class CameraAPI extends Subsystem {
 	
 	public void logData() {
 		ParticleReport2 report = createTargetReport(DEFAULT_SCORE_MIN);
+		int imageWidth = NIVision.imaqGetImageSize(report.image).width;
 		
 		int perimeter = (int) report.perimeter;
 		int width = report.boundingBox.width;
 		int height = report.boundingBox.height;
-		int centerY = (int) (report.boundingBox.top - (height / 2.0));
-		
-		Robot.logger.log("Width = " + width + ", Height = " + height +
-				", Perimeter = " + perimeter + ", Center Y = " + centerY, 4);
+		int centerY = (int)((report.boundingBox.left+report.boundingBox.width *0.5) - 0.5*imageWidth);
+		//Width is height because the camera is on its side
+		Robot.logger.log("Height = " + width + ", Width = " + height +
+				", Perimeter = " + perimeter + ", Center Y = " + centerY + ", Pot = " + Robot.snout.getPotValue(), 4);
 	}
 	
 	//Run all the filters for a stronghold target
@@ -240,9 +242,8 @@ public class CameraAPI extends Subsystem {
 				report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 				report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
-				
-				isTarget = this.TrapezoidScore(report) >= SCORE_MIN && 
-				this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
+				isTarget = true; //= this.TrapezoidScore(report) >= SCORE_MIN && 
+				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
 				//Robot.logger.log("Trapezoid: "+this.TrapezoidScore(report), 5);
 				//Robot.logger.log("AspectRatio: "+this.aspectRatioScore(report), 5);

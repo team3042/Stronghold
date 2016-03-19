@@ -19,13 +19,14 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	double shootSpeed = 5000, batterShootSpeed = 2500, intakeSpeed = 2000;
-	double toleranceRPM = 100;
+	double leftShootSpeed = 4500, rightShootSpeed = 5000;
+	double batterShootSpeed = 2500, intakeSpeed = 2000;
+	double toleranceRPM = 200;
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	public double leftF = (RobotMap.isSkoll)? 0.0265: 0.0272, 
-			rightF = (RobotMap.isSkoll)? 0.0265: 0.0272;
+	public double leftF = (RobotMap.isSkoll)? 0.024: 0.0272, 
+			rightF = (RobotMap.isSkoll)? 0.025: 0.0272;
 
 	public Shooter() {
 		//Setting Talon settings
@@ -77,19 +78,20 @@ public class Shooter extends Subsystem {
     }
     
     public void spinToShoot() {
-    	setRPM(shootSpeed);
+    	setRPM(leftShootSpeed, rightShootSpeed);
     }
     
     public void spinToBatterShoot() {
-    	setRPM(batterShootSpeed);
+    	setRPM(batterShootSpeed, batterShootSpeed);
     }
     
     public void spinToIntake() {
-    	setRPM(-intakeSpeed);
+    	setRPM(-intakeSpeed, -intakeSpeed);
     }
     
     public boolean readyToShoot() {
-    	return getEncoderRPMRight() > (shootSpeed - toleranceRPM);
+    	return getEncoderRPMRight() > (rightShootSpeed - toleranceRPM) && 
+    			getEncoderRPMLeft() > (leftShootSpeed - toleranceRPM);
     }
     
     public boolean readyToBatterShoot() {
@@ -97,12 +99,12 @@ public class Shooter extends Subsystem {
     }
     
     //Setting each flywheel to a target speed using PIDF through Talons
-    public void setRPM(double speed) {
+    public void setRPM(double leftSpeed, double rightSpeed) {
     	talonLeft.changeControlMode(TalonControlMode.Speed);
     	talonRight.changeControlMode(TalonControlMode.Speed);
 
-    	talonLeft.set(speed);
-    	talonRight.set(speed);
+    	talonLeft.set(leftSpeed);
+    	talonRight.set(rightSpeed);
     }
     
     //Getting speed in RPM
