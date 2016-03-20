@@ -10,6 +10,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.ContourPoint;
+import com.ni.vision.NIVision.GetPointsOnContourResult;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.OverlayTextOptions;
 import com.ni.vision.NIVision.ParticleReport;
@@ -113,6 +114,8 @@ public class CameraAPI extends Subsystem {
 		double convexHullArea;
 		public int particleIndex;
 		public int boundingBoxRight;
+		public double averageVertLength;
+		public double averageHorizLength;
 		public double perimeter;
 		public Image unfilteredImage;
 		public Image image;
@@ -164,8 +167,28 @@ public class CameraAPI extends Subsystem {
 		if (report != null){
 			double width = report.boundingBox.height;
 			Robot.logger.log("Width = "+width, 5);
-			distance =  0.026*width*width - 6.0 * width + 393;
+			//distance =  0.026*width*width - 6.0 * width + 393;
+			distance = (10014 / width) - 44.108;
+
+			//Correct for angle distortion
+			distance = correctForAngle(distance, report);
 		}
+		return distance;
+	}
+	
+	private double correctForAngle(double distance, ParticleReport2 report) {
+		double scale = 1;
+
+		double avgHoriz = report.averageHorizLength;
+		double avgVert = report.averageVertLength;
+		
+		double ratio = avgHoriz / avgVert;
+		
+		Robot.logger.log("Avg Horiz = " + avgHoriz + "Avg Vert = " + avgVert + 
+				"Ratio(H/V) = " + ratio, 5);
+		
+		//distance *= ratio * scale;
+		
 		return distance;
 	}
 	
@@ -242,6 +265,9 @@ public class CameraAPI extends Subsystem {
 				report.boundingBoxRight = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 				report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				report.averageHorizLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_HORIZ_SEGMENT_LENGTH);
+				report.averageVertLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_VERT_SEGMENT_LENGTH);
+
 				isTarget = true; //= this.TrapezoidScore(report) >= SCORE_MIN && 
 				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
@@ -365,6 +391,7 @@ public class CameraAPI extends Subsystem {
 		NIVision.ContourInfoReport creport = NIVision.imaqContourInfo(report.image);
 		NIVision.ContourFitPolynomialReport fpReport = NIVision.imaqContourFitPolynomial(report.image, 1);
 		System.out.println(creport.length);
+		
 		
 		//Iterate through the countour points to get the highest points on the image
 		Vector<PointDouble> highestPoints = new Vector<PointDouble>();
