@@ -12,6 +12,7 @@ import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.ContourPoint;
 import com.ni.vision.NIVision.GetPointsOnContourResult;
 import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.ImageType;
 import com.ni.vision.NIVision.OverlayTextOptions;
 import com.ni.vision.NIVision.ParticleReport;
 import com.ni.vision.NIVision.Point;
@@ -19,6 +20,7 @@ import com.ni.vision.NIVision.PointDouble;
 import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
 import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
@@ -166,7 +168,6 @@ public class CameraAPI extends Subsystem {
 		double distance = 0.0;
 		if (report != null){
 			double width = report.boundingBox.height;
-			Robot.logger.log("Width = "+width, 5);
 			//distance =  0.026*width*width - 6.0 * width + 393;
 			distance = (10014 / width) - 44.108;
 
@@ -177,32 +178,47 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	private double correctForAngle(double distance, ParticleReport2 report) {
-		double scale = 1;
+		//Test getting a sub image
+		Image subImage = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
+		NIVision.imaqSetImageSize(subImage, report.boundingBox.width, report.boundingBox.height);
+		NIVision.imaqCopyRect(subImage, report.image, report.boundingBox, new Point(0,0));
+		outPutImagePNG(subImage, "Test_SubImage");
 
-		double avgHoriz = report.averageHorizLength;
-		double avgVert = report.averageVertLength;
+		double avgVert = report.averageHorizLength;
+		double avgHoriz = report.averageVertLength;
+		double convexArea = report.convexHullArea;
+		double boundWidth = report.boundingBox.height;
+		double boundHeight = report.boundingBox.width;
+		double boundArea = boundWidth * boundHeight;
 		
-		double ratio = avgHoriz / avgVert;
-		
-		Robot.logger.log("Avg Horiz = " + avgHoriz + "Avg Vert = " + avgVert + 
-				"Ratio(H/V) = " + ratio, 5);
-		
-		//distance *= ratio * scale;
+		Robot.logger.log(
+				"Avg Horiz = " + avgHoriz + 
+				"Avg Vert = " + avgVert + 
+				"Bound Horiz = " + boundWidth +
+				"Bound Vert = " + boundHeight + 
+				"Convex Area = " + convexArea +
+				"Bound Area = " + boundArea , 5);
+				
+		//distance *= ???;
 		
 		return distance;
 	}
 	
 	public void outputCleanImage() {
-		String dir = "/home/lvuser/images/";
-		
+		outputImage(getCleanImage(), generateFileName());
+	}
+	
+	public String generateFileName() {
 		Date now = new Date();
 		SimpleDateFormat fileTimeStamp = new SimpleDateFormat(FILE_DATE_FORMAT);
 		fileTimeStamp.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-		String name = fileTimeStamp.format(now);
-		
+		return fileTimeStamp.format(now);		
+	}
+	
+	public void outputImage(Image image, String name) {
+		String dir = "/home/lvuser/images/";
 		Robot.fileIO.openFile(dir, name);
-		
-		NIVision.imaqWritePNGFile2(getCleanImage(), dir + name, 100, NIVision.RGB_BLACK, 1);
+		NIVision.imaqWritePNGFile2(image, dir + name, 100, NIVision.RGB_BLACK, 1);
 	}
 	
 	public void logData() {
