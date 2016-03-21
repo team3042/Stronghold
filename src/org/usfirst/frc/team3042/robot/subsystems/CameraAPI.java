@@ -118,6 +118,7 @@ public class CameraAPI extends Subsystem {
 		public int boundingBoxRight;
 		public double averageVertLength;
 		public double averageHorizLength;
+		public double filledArea;
 		public double perimeter;
 		public Image unfilteredImage;
 		public Image image;
@@ -239,10 +240,12 @@ public class CameraAPI extends Subsystem {
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	//this.outPutImagePNG(binaryImage, "HSVFiltered");
     	filterOutSmallParticles(binaryImage, 0, 100);
-    	fillParticles(binaryImage);
-    	//this.outPutImagePNG(binaryImage, "FilteredParticle");
+    	Image filledImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		NIVision.imaqFillHoles(filledImage, binaryImage, 1);
+		NIVision.imaqConvexHull(binaryImage, filledImage, 1);
+    	this.outPutImagePNG(filledImage, "Filled");
+    	this.outPutImagePNG(binaryImage, "ConvexHull");
     	
     	ParticleReport2 targetReport = null;
     	
@@ -283,6 +286,7 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				report.averageHorizLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_HORIZ_SEGMENT_LENGTH);
 				report.averageVertLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_VERT_SEGMENT_LENGTH);
+				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
 
 				isTarget = true; //= this.TrapezoidScore(report) >= SCORE_MIN && 
 				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
@@ -299,6 +303,8 @@ public class CameraAPI extends Subsystem {
 				particles.get(currentTargetIndex).image = binaryImage;
 				particles.get(currentTargetIndex).unfilteredImage = unfilteredImage;
 				targetReport = particles.get(currentTargetIndex);
+				Robot.logger.log("filledArea/convexArea = " + 
+						targetReport.filledArea/targetReport.convexHullArea, 5);
 			}else{
 				//Testing for getting side views of a the target, creating a triangle
 				particles.get(0).image = binaryImage;
@@ -354,13 +360,7 @@ public class CameraAPI extends Subsystem {
 		
 		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
 	}
-	
-	//Fill out gaps in particles, including the U-shaped stronghold high-goal target
-	public void fillParticles(Image image){
-		NIVision.imaqFillHoles(image, image, 1);
-		NIVision.imaqConvexHull(image, image, 1);
-	}
-	
+		
 	//Comparator function for sorting particles. Returns true if particle 1 is larger
 	static boolean CompareParticleSizes(ParticleReport2 particle1, ParticleReport2 particle2)
 	{
