@@ -54,9 +54,9 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 170);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(172, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(124, 248);	//Range for green light
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 170);	//Range for green light
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(172, 255);	//Range for green light
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(124, 248);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
@@ -64,9 +64,9 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(90, 140);
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(180, 255);
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(108, 255);
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(100, 160);
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(115, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(64, 255);
 	
 	//Duluth Red Alliance
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
@@ -191,14 +191,17 @@ public class CameraAPI extends Subsystem {
 		double boundWidth = report.boundingBox.height;
 		double boundHeight = report.boundingBox.width;
 		double boundArea = boundWidth * boundHeight;
+		double filledArea = report.filledArea;
 		
 		Robot.logger.log(
-				"Avg Horiz = " + avgHoriz + 
-				"Avg Vert = " + avgVert + 
-				"Bound Horiz = " + boundWidth +
-				"Bound Vert = " + boundHeight + 
-				"Convex Area = " + convexArea +
-				"Bound Area = " + boundArea , 5);
+				"\n\nAvg Horiz = " + avgHoriz + 
+				" Avg Vert = " + avgVert + 
+				" Bound Horiz = " + boundWidth +
+				" Bound Vert = " + boundHeight + 
+				" \nConvex Area = " + convexArea +
+				" Bound Area = " + boundArea +
+				" Filled Area = " + filledArea +
+				"\n", 5);
 				
 		//distance *= ???;
 		
@@ -219,6 +222,7 @@ public class CameraAPI extends Subsystem {
 	public void outputImage(Image image, String name) {
 		String dir = "/home/lvuser/images/";
 		Robot.fileIO.openFile(dir, name);
+		Robot.logger.log("Here I Am", 5);
 		NIVision.imaqWritePNGFile2(image, dir + name, 100, NIVision.RGB_BLACK, 1);
 	}
 	
@@ -286,7 +290,7 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				report.averageHorizLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_HORIZ_SEGMENT_LENGTH);
 				report.averageVertLength = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AVERAGE_VERT_SEGMENT_LENGTH);
-				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 
 				isTarget = true; //= this.TrapezoidScore(report) >= SCORE_MIN && 
 				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
