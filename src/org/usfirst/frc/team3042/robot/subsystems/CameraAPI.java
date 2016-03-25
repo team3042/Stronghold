@@ -166,10 +166,22 @@ public class CameraAPI extends Subsystem {
 		double distance = 0.0;
 		if (report != null){
 			double width = report.boundingBox.height;
+			double height = report.boundingBox.width;
 			//Correct for angle distortion
-			width = correctForAngle(width, report);
+			double geoWidth = correctForAngle(width, report);
+			double altWidth = correctForAngleAlt(width, height);
+			Robot.logger.log(
+					" Width = " + width +
+					" Geo Width" + geoWidth +
+					" Alt Width" + altWidth, 5);
 			
 			distance = (10014 / width) - 44.108;
+			double geoDist = (10014 / geoWidth) - 44.108;
+			double altDist = (10014 / altWidth) - 44.108;
+			Robot.logger.log(
+					" Dist = " + distance +
+					" Geo Dist = " + geoDist +
+					" Alt Dist = " + altDist, 5);
 		}
 		return distance;
 	}
@@ -185,6 +197,17 @@ public class CameraAPI extends Subsystem {
 				" angle = " + angle, 5);
 		
 		return width/cosAng;
+	}
+	
+	private double correctForAngleAlt(double width, double height) {
+		double m = -1.1891;
+		double a = -0.0098;
+		double b = 1.6112 - m;
+		double c = -29.261 - height + m*width;
+		
+		width = (-b + Math.sqrt(b*b - 4*a*c)) / (2*a);
+		
+		return width;
 	}
 	
 	public void outputCleanImage() {
