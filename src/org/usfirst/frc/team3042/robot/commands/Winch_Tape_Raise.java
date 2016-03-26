@@ -25,7 +25,7 @@ public class Winch_Tape_Raise extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new TapeShooter_Retract());
+    	addParallel(new HookLift_Retract());
     	addSequential(new Winch_Raise());
     }
 }

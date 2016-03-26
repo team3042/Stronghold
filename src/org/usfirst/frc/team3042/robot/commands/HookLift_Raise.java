@@ -7,20 +7,23 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Winch_Raise extends Command {
+public class HookLift_Raise extends Command {
 
-    public Winch_Raise() {
+	boolean finished = false;
+	
+    public HookLift_Raise() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.winch);
+    	requires(Robot.hookLift);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    
-    	if (Robot.hookLift.isDeployed()) {
-    		Robot.winch.raise();
+    	
+    	if (Robot.hookLiftServo.isDeployed()) {
+    		Robot.hookLift.raise();
     	}
+    	else finished = true;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,17 +32,23 @@ public class Winch_Raise extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+    	if (Robot.hookLift.encoderLimitReached()) {
+    		finished = true;
+    		Robot.hookLift.setDeployedTrue();
+    	}
+        return finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	Robot.hookLift.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrupt", 1);
+    	Robot.logger.log("Interrrupt", 1);
+    	Robot.hookLift.stop();
     }
 }
