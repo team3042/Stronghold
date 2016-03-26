@@ -27,9 +27,17 @@ public class Snout_Adjust extends Command {
 		{189, 205}};
 			
 	double[][] backwardLookUpTable = new double[][]{
-		{0, 0},
-		{0, 0},
-		{0, 0}};
+		{62, 585},
+		{72, 594},
+		{81, 600},
+		{95, 610},
+		{103, 620},
+		{117, 630},
+		{132, 532},
+		{145, 634},
+		{156, 641},
+		{169, 640},
+		{178, 640}};
 	
 			
 	static final double maxDist = 189, minDist = 54;
