@@ -36,7 +36,7 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	double kP = 1, kI = 0, kD = 0;
 	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
-	double pPos = 1.2, iPos = 0.005, fPos = 0;
+	double pPos = 1.3, iPos = 0.008, fPos = 0;
 	int iZone = 150;
 	
 	//Values for checking if near setpoint

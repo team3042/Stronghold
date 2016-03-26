@@ -32,9 +32,7 @@ public class Auto_RotateAlt extends Command {
     	double offset = Robot.camera.getRotationOffset();
     	if(Robot.snout.isBackwards()) {
 			offset *= -1;
-		}
-    	Robot.logger.log("Offset " + offset, 3);
-    	
+		}    	
     	double leftTarget = offset * rotationsPerPixel;
 		double rightTarget = -offset * rotationsPerPixel;
 		

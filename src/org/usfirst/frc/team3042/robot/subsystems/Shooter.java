@@ -20,7 +20,7 @@ public class Shooter extends Subsystem {
 	int talonLeftZero = 0, talonRightZero = 0;
 	
 	double leftShootSpeed = 4500, rightShootSpeed = 5000;
-	double batterShootSpeed = 2500, intakeSpeed = 2000;
+	double batterShootSpeed = 2750, intakeSpeed = 2000;
 	double toleranceRPM = 200;
 	
 	//Closed-Loop PIDF values

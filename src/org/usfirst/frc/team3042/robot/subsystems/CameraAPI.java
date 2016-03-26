@@ -54,9 +54,9 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(110, 170);	//Range for green light
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(172, 255);	//Range for green light
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(124, 248);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 153);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(138, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(55, 248);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
@@ -64,9 +64,9 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(100, 160);
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(115, 255);
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(64, 255);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(100, 160);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(115, 255);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(64, 255);
 	
 	//Duluth Red Alliance
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
@@ -96,7 +96,8 @@ public class CameraAPI extends Subsystem {
 	
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -50 : -63.5;
+	//If hitting right make less negative, to the left change to more negative.
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -37 : -63.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
@@ -167,21 +168,7 @@ public class CameraAPI extends Subsystem {
 		if (report != null){
 			double width = report.boundingBox.height;
 			double height = report.boundingBox.width;
-			//Correct for angle distortion
-			double geoWidth = correctForAngle(width, report);
-			double altWidth = correctForAngleAlt(width, height);
-			Robot.logger.log(
-					" Width = " + width +
-					" Geo Width" + geoWidth +
-					" Alt Width" + altWidth, 5);
-			
 			distance = (10014 / width) - 44.108;
-			double geoDist = (10014 / geoWidth) - 44.108;
-			double altDist = (10014 / altWidth) - 44.108;
-			Robot.logger.log(
-					" Dist = " + distance +
-					" Geo Dist = " + geoDist +
-					" Alt Dist = " + altDist, 5);
 		}
 		return distance;
 	}
@@ -236,6 +223,7 @@ public class CameraAPI extends Subsystem {
     	Image filledImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		NIVision.imaqFillHoles(filledImage, binaryImage, 1);
 		NIVision.imaqConvexHull(binaryImage, filledImage, 1);
+		outPutImagePNG(binaryImage, "convex");
     	
     	ParticleReport2 targetReport = null;
     	
@@ -274,7 +262,8 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 
-				isTarget = true; //= this.TrapezoidScore(report) >= SCORE_MIN && 
+				isTarget = ConvexHullAreaScore(report) >= SCORE_MIN;
+				//this.TrapezoidScore(report) >= SCORE_MIN && 
 				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
 				Robot.logger.log("ConvexHull Score: "+ConvexHullAreaScore(report), 5);
@@ -288,7 +277,7 @@ public class CameraAPI extends Subsystem {
 				particles.get(currentTargetIndex).unfilteredImage = unfilteredImage;
 				targetReport = particles.get(currentTargetIndex);
 				
-				//get the left and right height of the goal
+				/*get the left and right height of the goal
 				NIVision.Rect copyRect = new NIVision.Rect(
 						targetReport.boundingBox.top, 
 						targetReport.boundingBox.left, 
@@ -297,6 +286,7 @@ public class CameraAPI extends Subsystem {
 				targetReport.leftHeight = targetSideHeight(filledImage, copyRect, "left");
 				copyRect.top += copyRect.height;
 				targetReport.rightHeight = targetSideHeight(filledImage, copyRect, "right");
+				*/
 			}else{
 				//Testing for getting side views of a the target, creating a triangle
 				particles.get(0).image = binaryImage;
@@ -322,14 +312,29 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqSetImageSize(subImage, copyRect.width, copyRect.height);
 		NIVision.imaqCopyRect(subImage, image, copyRect, new Point(0,0));
 		outPutImagePNG(subImage, side);
-
-		double leftX = NIVision.imaqMeasureParticle(subImage, 0, 0, 
-				NIVision.MeasurementType.MT_MAX_HORIZ_SEGMENT_LENGTH_LEFT);
-		double rightX = NIVision.imaqMeasureParticle(subImage, 0, 0, 
-				NIVision.MeasurementType.MT_MAX_HORIZ_SEGMENT_LENGTH_RIGHT);
 		
-		return rightX - leftX;
-	}
+    	int numParticles = NIVision.imaqCountParticles(subImage, 1);
+
+    	double length = 1;
+    	if (numParticles > 0) {
+			Vector<ParticleReport2> particles = new Vector<ParticleReport2>();
+			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
+			{
+				ParticleReport2 par = new ParticleReport2();
+				par.particleIndex = particleIndex;
+				par.area = (int)NIVision.imaqMeasureParticle(subImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+				particles.add(par);
+			}			
+			particles.sort(null);
+    		double leftX = NIVision.imaqMeasureParticle(subImage, particles.get(0).particleIndex, 0, 
+    				NIVision.MeasurementType.MT_MAX_HORIZ_SEGMENT_LENGTH_LEFT);
+    		double rightX = NIVision.imaqMeasureParticle(subImage, particles.get(0).particleIndex, 0, 
+    				NIVision.MeasurementType.MT_MAX_HORIZ_SEGMENT_LENGTH_RIGHT);
+		
+    		length =  rightX - leftX;
+    	}
+    	return length;
+    }
 	
 	//Creates an image in the roborios tmp folder
 	public void outPutImagePNG(Image image, String name){
