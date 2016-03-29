@@ -31,7 +31,7 @@ public class DriveTrain extends Subsystem {
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
-	private int encCounts = (RobotMap.isSkoll) ? 360 : 360;
+	public int encCounts = (RobotMap.isSkoll) ? 360 : 360;
 	private boolean leftReverseEnc = (RobotMap.isSkoll) ? true : false;
 	private boolean rightReverseEnc = (RobotMap.isSkoll) ? true : true;
 	private int leftEncSign = (RobotMap.isSkoll) ? -1 : 1;
