@@ -4,12 +4,14 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  *
@@ -25,6 +27,8 @@ public class DriveTrain extends Subsystem {
 	CANTalon leftEncMotor = leftMotorFront;
 	CANTalon rightEncMotor = rightMotorFront;
 	
+	Gyro gyro = new AnalogGyro(RobotMap.DRIVETRAIN_GYRO);
+	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
 	private int encCounts = (RobotMap.isSkoll) ? 360 : 360;
@@ -34,8 +38,8 @@ public class DriveTrain extends Subsystem {
 	private int rightEncSign = (RobotMap.isSkoll) ? -1 : -1;
 	
 	//PIDF values
-	double kP = 1, kI = 0, kD = 0;
-	double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
+	public double kP = 1, kI = 0, kD = 0;
+	public double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
 	double pPos = 1.3, iPos = 0.008, fPos = 0;
 	int iZone = 150;
 	
@@ -67,6 +71,8 @@ public class DriveTrain extends Subsystem {
     	rightMotorFront.reverseOutput(true);
     	
     	initEncoders();
+    	
+    	gyro.reset();
     	
     	//Starting talons processing motion profile
     	leftMotorFront.changeMotionControlFramePeriod(5);
@@ -195,6 +201,14 @@ public class DriveTrain extends Subsystem {
 	
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
+	}
+	
+	public void resetGyro() {
+		gyro.reset();
+	}
+	
+	public double getGyro() {
+		return gyro.getAngle();
 	}
 	
 	//Motion profile functions
