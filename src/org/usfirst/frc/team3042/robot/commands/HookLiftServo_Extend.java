@@ -7,20 +7,16 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Winch_Raise extends Command {
+public class HookLiftServo_Extend extends Command {
 
-    public Winch_Raise() {
-        // Use requires() here to declare subsystem dependencies
-    	requires(Robot.winch);
+    public HookLiftServo_Extend() {
+    	requires(Robot.hookLiftServo);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    
-    	if (Robot.hookLift.isDeployed()) {
-    		Robot.winch.raise();
-    	}
+    	Robot.hookLiftServo.setServoExtended();
     }
 
     // Called repeatedly when this Command is scheduled to run

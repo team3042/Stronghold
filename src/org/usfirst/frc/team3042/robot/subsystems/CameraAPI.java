@@ -167,7 +167,6 @@ public class CameraAPI extends Subsystem {
 		double distance = 0.0;
 		if (report != null){
 			double width = report.boundingBox.height;
-			double height = report.boundingBox.width;
 			distance = (10014 / width) - 44.108;
 		}
 		return distance;
@@ -266,7 +265,7 @@ public class CameraAPI extends Subsystem {
 				//this.TrapezoidScore(report) >= SCORE_MIN && 
 				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
-				Robot.logger.log("ConvexHull Score: "+ConvexHullAreaScore(report), 5);
+				//Robot.logger.log("ConvexHull Score: "+ConvexHullAreaScore(report), 5);
 				if(isTarget){
 					currentTargetIndex = i;
 					break;

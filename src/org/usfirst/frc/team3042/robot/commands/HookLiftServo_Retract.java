@@ -7,20 +7,16 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TapeShooter_Raise extends Command {
+public class HookLiftServo_Retract extends Command {
 
-	//TODO: add a timeout for the command
-	
-    public TapeShooter_Raise() {
-        // Use requires() here to declare subsystem dependencies
-    	requires(Robot.tapeShooter);
+    public HookLiftServo_Retract() {
+    	requires(Robot.hookLiftServo);	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
-    	Robot.tapeShooter.raise();
+    	Robot.hookLiftServo.setServoRetracted();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,18 +25,17 @@ public class TapeShooter_Raise extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.tapeShooter.encoderLimitReached();
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
-    	Robot.tapeShooter.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.logger.log("Interrrupt", 1);
+    	Robot.logger.log("Interrupt", 1);
     }
 }

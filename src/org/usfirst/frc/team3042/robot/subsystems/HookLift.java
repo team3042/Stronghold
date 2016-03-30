@@ -2,32 +2,34 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.TapeShooter_Stop;
+import org.usfirst.frc.team3042.robot.commands.HookLift_Stop;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *
  */
-public class TapeShooter extends Subsystem {
+public class HookLift extends Subsystem {
     	
-	CANTalon shooterTalon = new CANTalon(RobotMap.TAPE_SHOOTER_TALON);
+	CANTalon liftTalon = new CANTalon(RobotMap.HOOK_LIFT_TALON);
 	
-	final double raiseSpeed = .9, lowerSpeed = 0.5;
+	final double raiseSpeed = 0.5, lowerSpeed = 0.3;
 	int encoderZero;
 	final double encLimit = 41000;
 	final double tolerance = 500;
 	
+	boolean deployed = false;
 	
-	public TapeShooter() {
-		shooterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
+	public HookLift() {
+		liftTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, 10);
 		resetEncoder();
 	}
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-    	setDefaultCommand(new TapeShooter_Stop());
+    	setDefaultCommand(new HookLift_Stop());
     }
     
     public void stop() {
@@ -43,12 +45,12 @@ public class TapeShooter extends Subsystem {
     }
     
     private void setSpeed(double speed) {
-    	shooterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    	shooterTalon.set(-speed);
+    	liftTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+    	liftTalon.set(-speed);
     }
 
 	public void resetEncoder() {
-		encoderZero = shooterTalon.getEncPosition();
+		encoderZero = liftTalon.getEncPosition();
 	}
 	
 	public boolean encoderLimitReached() {
@@ -60,8 +62,16 @@ public class TapeShooter extends Subsystem {
 	}
 
 	public int getEncDistance(){
-		return -(shooterTalon.getEncPosition() - encoderZero);
+		return -(liftTalon.getEncPosition() - encoderZero);
 		
+	}
+	
+	public boolean isDeployed() {
+		return deployed;
+	}
+	
+	public void setDeployedTrue() {
+		deployed = true;
 	}
 }
 

@@ -14,7 +14,8 @@ import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
 import org.usfirst.frc.team3042.robot.subsystems.Snout;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
-import org.usfirst.frc.team3042.robot.subsystems.TapeShooter;
+import org.usfirst.frc.team3042.robot.subsystems.HookLift;
+import org.usfirst.frc.team3042.robot.subsystems.HookLiftServo;
 import org.usfirst.frc.team3042.robot.subsystems.Winch;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -37,7 +38,8 @@ public class Robot extends IterativeRobot {
 	public static final Shooter shooter = new Shooter();
 	public static final ShooterServo shooterServo = new ShooterServo();	
 	public static final Snout snout = new Snout();
-	public static final TapeShooter tapeShooter = new TapeShooter();
+	public static final HookLift hookLift = new HookLift();
+	public static final HookLiftServo hookLiftServo = new HookLiftServo();
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
@@ -115,7 +117,7 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
         
-        tapeShooter.resetEncoder();
+        hookLift.resetEncoder();
         snout.setToCurrentPosition();
     }
 
@@ -127,6 +129,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
         SmartDashboard.putNumber("Potentiometer", snout.getPotValue());
+        SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
         
         //SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
         //SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());

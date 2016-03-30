@@ -70,8 +70,8 @@ public class OI {
 		//left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
-		gunner_Start.whenPressed(new TapeShooter_Raise());
-		gunner_Back.whileHeld(new TapeShooter_Retract());
+		gunner_Start.whenPressed(new HookLift_Raise());
+		gunner_Back.whileHeld(new HookLift_Retract());
 		
 		//Auto
 		/*

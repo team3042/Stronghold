@@ -50,7 +50,7 @@ public class AutoTrajectory_MotionProfile {
 		this.maxVelocity = maxVelocity;
 		this.distance = distance;
 		
-		//Calculating values from these values
+		//Calculating lengths of two stage filter and number of points
 		filterLength1 = Math.ceil(time1 / itp);
 		filterLength2 = Math.ceil(time2 / itp);
 		timeToDeccel = distance / maxVelocity * 1000;
@@ -76,7 +76,7 @@ public class AutoTrajectory_MotionProfile {
     		filterSum1 = 1;
     	}
     	
-    	//Creating filterSum2 from the sum of the last filterLength2 values of filterSum1
+    	//Creating filterSum2 from the sum of the last filterLength2 values of filterSum1(Boxcar filter)
     	filterSums1[currentPoint] = filterSum1;
     	int filter2Start = (int) ((currentPoint > filterLength2) ? currentPoint - filterLength2 + 1 : 0);
     	filterSum2 = 0;
@@ -119,6 +119,27 @@ public class AutoTrajectory_MotionProfile {
 		
 		Robot.logger.log("Points in Trajectory: " + totalPoints, 5);
 				
+		return trajectory;
+	}
+	
+	public double[][] calculateProfileRaw() {
+		double[][] trajectory = new double[totalPoints + 1][3];
+		
+		double currentTime = 0;
+		
+		for(int i = 0; i <= totalPoints; i++) {
+			runFilters();
+			calculateVelocity();
+			calculatePosition();
+			
+			trajectory[i][0] = currentTime;
+			trajectory[i][1] = currentPosition;
+			trajectory[i][2] = currentVelocity * 60;
+			
+			currentTime += itp;
+			currentPoint++;
+		}
+			
 		return trajectory;
 	}
 
