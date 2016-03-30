@@ -44,7 +44,7 @@ public class Auto_GyroDriveStraight extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.driveTrain.resetGyro();
+    	//Robot.driveTrain.resetGyro();
     	Robot.driveTrain.resetEncoders();
     	
     	motionProfile = new AutoTrajectory_MotionProfile(itp, time1, time2, maxSpeed, distance);
@@ -60,13 +60,13 @@ public class Auto_GyroDriveStraight extends Command {
     	double currentLeftError = goalPosition - Robot.driveTrain.getLeftEncoder();
     	double currentRightError = goalPosition - Robot.driveTrain.getRightEncoder();
     	
-    	double currentHeading = Robot.driveTrain.getGyro();
+    	//double currentHeading = Robot.driveTrain.getGyro();
     	
     	double leftSpeed = goalSpeed + pPos * currentLeftError; // - pTurn * currentHeading;
     	double rightSpeed = goalSpeed + pPos * currentRightError; // + pTurn * currentHeading;
     	
-    	Robot.logger.log("Turn Corrected Left = " + (leftSpeed - pTurn * currentHeading) +
-    			"Turn Corrected Right = " + (rightSpeed + pTurn * currentHeading), 4);
+    	//Robot.logger.log("Turn Corrected Left = " + (leftSpeed - pTurn * currentHeading) +
+    		//	"Turn Corrected Right = " + (rightSpeed + pTurn * currentHeading), 4);
     	
     	Robot.driveTrain.setMotorsRaw(leftSpeed, rightSpeed);
     	

@@ -27,7 +27,8 @@ public class DriveTrain extends Subsystem {
 	CANTalon leftEncMotor = leftMotorFront;
 	CANTalon rightEncMotor = rightMotorFront;
 	
-	Gyro gyro = new AnalogGyro(RobotMap.DRIVETRAIN_GYRO);
+	//Should be ADXRS450_Gyro
+	//Gyro gyro = new AnalogGyro(RobotMap.DRIVETRAIN_GYRO);
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
@@ -72,7 +73,7 @@ public class DriveTrain extends Subsystem {
     	
     	initEncoders();
     	
-    	gyro.reset();
+    	//gyro.reset();
     	
     	//Starting talons processing motion profile
     	leftMotorFront.changeMotionControlFramePeriod(5);
@@ -202,7 +203,7 @@ public class DriveTrain extends Subsystem {
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
 	}
-	
+	/*
 	public void resetGyro() {
 		gyro.reset();
 	}
@@ -210,7 +211,7 @@ public class DriveTrain extends Subsystem {
 	public double getGyro() {
 		return gyro.getAngle();
 	}
-	
+	*/
 	//Motion profile functions
     public void initMotionProfile() {
     	

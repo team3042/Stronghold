@@ -54,9 +54,9 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 153);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(138, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(110, 248);	//Range for green light
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 153);	//Range for green light
+//	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(138, 255);	//Range for green light
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(110, 248);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
@@ -64,9 +64,9 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(100, 160);
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(115, 255);
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(64, 255);
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 255);
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(160, 255);
 	
 	//Duluth Red Alliance
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);

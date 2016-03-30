@@ -24,6 +24,7 @@ public class HookLift_Raise extends Command {
     		Robot.hookLift.raise();
     	}
     	else finished = true;
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run

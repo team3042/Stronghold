@@ -25,7 +25,7 @@ public class RobotMap {
 	public static final int HOOK_LIFT_SERVO = 3;
 	
 	//Analog ports
-	public static final int DRIVETRAIN_GYRO = 0;
+	public static final int DRIVETRAIN_GYRO = 2;
 	
 	//USB Ports
 	public static final int LEFT_JOYSTICK_USB_PORT_0 = 0;

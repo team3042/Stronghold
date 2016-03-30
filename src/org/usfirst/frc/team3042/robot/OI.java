@@ -83,7 +83,7 @@ public class OI {
 		right_3.whenPressed(new Auto_Aim());
 		//right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_4.whenPressed(new Auto_StopFollow());
-		//left_5.toggleWhenPressed(new AutoMode_LowBar());
+		left_5.whenPressed(new AutoMode_RoughTerrain());
 	}
 }
 

@@ -28,8 +28,8 @@ public class AutoMode_LowBarSideGoal extends CommandGroup {
     	addParallel(new Snout_Pickup());
     	addSequential(new Auto_FollowTrajectory(AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
     			AutoTrajectory_LowBarSideGoal.getRightTrajectory(), true));
-    	addParallel(new Snout_SetPosition(200));
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 0.5, 1, 0));
+    	addParallel(new Snout_SetPosition(240)); 
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.62, 2, 0));
     	addSequential(new Auto_AimShoot());
     }
 }

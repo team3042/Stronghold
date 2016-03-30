@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Auto_Shoot extends Command {
 
 	Timer timer = new Timer();
-	double timeToShoot = 2;
+	double timeToShoot = 5;
 	
 	public Auto_Shoot() {
     	requires(Robot.shooter);
