@@ -56,7 +56,7 @@ public class CameraAPI extends Subsystem {
 	/*Daytime Commons 8*/
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 153);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(138, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(55, 248);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(110, 248);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
