@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Auto_DoNothing extends Command {
+public class AutoMode_DoNothing extends Command {
 
-    public Auto_DoNothing() {
+    public AutoMode_DoNothing() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }

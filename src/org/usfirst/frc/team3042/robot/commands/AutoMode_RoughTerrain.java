@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMode_RoughTerrain extends CommandGroup {
     
-    public  AutoMode_RoughTerrain() {
+    public  AutoMode_RoughTerrain(int defensePosition) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -30,8 +30,7 @@ public class AutoMode_RoughTerrain extends CommandGroup {
     	/*
     	addParallel(new Snout_SetPosition(240)); 
     	
-    	int defensePos = 3;
-    	switch(defensePos) {
+    	switch(defensePosition) {
     		case 0:
     			break;
     		case 1:

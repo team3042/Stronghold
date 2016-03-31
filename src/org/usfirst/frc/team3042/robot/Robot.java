@@ -7,7 +7,7 @@ import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Ramparts;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RockWall;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
-import org.usfirst.frc.team3042.robot.commands.Auto_DoNothing;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_DoNothing;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
@@ -47,7 +47,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
     Command autonomousCommand;
-    SendableChooser chooser;
+    SendableChooser defenseChooser;
+    public static SendableChooser positionChooser;
     
     public static Logger logger;
     public static FileIO fileIO = new FileIO();
@@ -61,15 +62,22 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         logger = new Logger(useConsole, useFile, LOGGER_LEVEL);
-		chooser = new SendableChooser();
-        chooser.addDefault("Default (Do Nothing)", new Auto_DoNothing());
-        chooser.addObject("Low Bar", new AutoMode_LowBar());
-        //chooser.addObject("Low Bar Side Goal", new AutoMode_LowBarSideGoal());
-        chooser.addObject("Rough Terrain", new AutoMode_RoughTerrain());
+		defenseChooser = new SendableChooser();
+        defenseChooser.addDefault("Default (Do Nothing)", DefenseType.NOTHING);
+        defenseChooser.addObject("Low Bar", DefenseType.LOW_BAR);
+        defenseChooser.addObject("Rough Terrain", DefenseType.ROUGH_TERRAIN);
         //chooser.addObject("Moat", new AutoMode_Moat());
-        chooser.addObject("Rock Wall", new AutoMode_RockWall());
+        defenseChooser.addObject("Rock Wall", DefenseType.ROCK_WALL);
         //chooser.addObject("Ramparts", new AutoMode_Ramparts());
-        SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putData("Auto mode", defenseChooser);
+        
+        positionChooser = new SendableChooser();
+        positionChooser.addDefault("Default (No Shot)", 0);
+        positionChooser.addObject("Position 1", 1);
+        positionChooser.addObject("Position 2", 2);
+        positionChooser.addObject("Position 3", 3);
+        positionChooser.addObject("Position 4", 4);
+        positionChooser.addObject("Position 5", 5);
     }
 	
 	/**
@@ -96,7 +104,29 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	Robot.logger.log("Autonomous Init", 1);
-        autonomousCommand = (Command) chooser.getSelected();
+    	
+    	int defensePosition = (int) positionChooser.getSelected();
+    	switch((DefenseType) defenseChooser.getSelected()) {
+    		case NOTHING:
+    			autonomousCommand = new AutoMode_DoNothing();
+    		case LOW_BAR:
+    			autonomousCommand = new AutoMode_LowBarSideGoal();
+    			break;
+    		case ROUGH_TERRAIN:
+    			autonomousCommand = new AutoMode_RoughTerrain(defensePosition);
+    			break;
+    		case ROCK_WALL:
+    			autonomousCommand = new AutoMode_RockWall(defensePosition);
+    			break;
+    		case MOAT:
+    			autonomousCommand = new AutoMode_Moat();
+    			break;
+    		case RAMPARTS:
+    			autonomousCommand = new AutoMode_Ramparts();
+    			break;
+    		default:
+    			autonomousCommand = new AutoMode_DoNothing();
+    	}
     	
     	// schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
@@ -142,6 +172,10 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
         LiveWindow.run();
+    }
+    
+    public enum DefenseType {
+    	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, NOTHING;
     }
     
 }

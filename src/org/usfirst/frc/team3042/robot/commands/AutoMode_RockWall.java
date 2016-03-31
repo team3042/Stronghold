@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3042.robot.commands;
 
+import org.usfirst.frc.team3042.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -7,7 +9,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMode_RockWall extends CommandGroup {
     
-    public  AutoMode_RockWall() {
+    public  AutoMode_RockWall(int defensePosition) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -28,10 +30,9 @@ public class AutoMode_RockWall extends CommandGroup {
     	//TODO Find values for snout positioning
     	addParallel(new Auto_ConditionalSnout(140, 5000, 640));
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -3));
-    	addParallel(new Snout_SetPosition(240)); 
+    	addParallel(new Snout_SetPosition(240));
     	
-    	int defensePos = 4;
-    	switch(defensePos) {
+    	switch(defensePosition) {
     		case 0:
     			break;
     		case 1:
