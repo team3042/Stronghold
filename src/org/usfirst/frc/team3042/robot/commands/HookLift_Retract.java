@@ -26,7 +26,7 @@ public class HookLift_Retract extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.hookLift.encoderZeroReached();
+        return false; //Robot.hookLift.encoderZeroReached();
     }
 
     // Called once after isFinished returns true

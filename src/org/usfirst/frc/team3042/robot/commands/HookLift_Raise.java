@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot.commands;
 import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -20,23 +21,26 @@ public class HookLift_Raise extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	if (Robot.hookLiftServo.isDeployed()) {
+    	//if (Robot.hookLiftServo.isDeployed()) {
     		Robot.hookLift.raise();
-    	}
-    	else finished = true;
+    	//}
+    	//else finished = true;
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	SmartDashboard.putNumber("Hook Lift Encoder", Robot.hookLift.getEncDistance());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	/*
     	if (Robot.hookLift.encoderLimitReached()) {
     		finished = true;
     		Robot.hookLift.setDeployedTrue();
     	}
+    	*/
         return finished;
     }
 

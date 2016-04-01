@@ -1,15 +1,13 @@
 package org.usfirst.frc.team3042.robot.commands;
 
-import org.usfirst.frc.team3042.robot.Robot;
-
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class AutoMode_RockWall extends CommandGroup {
+public class AutoMode_SpyBot extends CommandGroup {
     
-    public  AutoMode_RockWall(int defensePosition) {
+    public  AutoMode_SpyBot() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -27,29 +25,10 @@ public class AutoMode_RockWall extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	//TODO Find values for snout positioning
-    	addParallel(new Auto_ConditionalSnout(140, 5000, 640));
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -3));
     	addParallel(new Snout_SetPosition(240));
+    	addSequential(new Auto_FollowTrajectory(AutoTrajectory_SpyBot.getLeftTrajectory(), 
+    			AutoTrajectory_SpyBot.getRightTrajectory(), false));
+    	addSequential(new Auto_AimShoot());
     	
-    	switch(defensePosition) {
-    		case 0:
-    			break;
-    		case 1:
-    			break;
-    		case 2:
-    			break;
-    		case 3:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.3, 2, 0));
-    			break;
-    		case 4:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
-    			break;
-    		case 5:
-    			break;
-    	}
-    	if(defensePosition != 0) {
-    		addSequential(new Auto_AimShoot());
-    	}
     }
 }

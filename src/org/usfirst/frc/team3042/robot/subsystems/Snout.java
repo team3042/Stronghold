@@ -86,6 +86,11 @@ public class Snout extends Subsystem {
     	return POT_ZERO - talonRotate.getAnalogInRaw();
     }
     
+    //Checking if the snout is facing toward the front of the robot
+    public boolean isFacingForward() {
+    	return getPotValue() < verticalPotValue;
+    }
+    
     public void setPosition(double position) {
     	talonRotate.changeControlMode(TalonControlMode.Position);
     	potGoal = position;

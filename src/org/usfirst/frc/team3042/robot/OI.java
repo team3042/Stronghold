@@ -70,7 +70,7 @@ public class OI {
 		//left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
-		gunner_Start.whenPressed(new HookLift_Raise());
+		gunner_Start.whileHeld(new HookLift_Raise());
 		gunner_Back.whileHeld(new HookLift_Retract());
 		
 		//Auto
@@ -83,7 +83,7 @@ public class OI {
 		right_3.whenPressed(new Auto_Aim());
 		//right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_4.whenPressed(new Auto_StopFollow());
-		left_5.whenPressed(new AutoMode_RoughTerrain((int) Robot.positionChooser.getSelected()));
+		//left_5.whenPressed(new AutoMode_RoughTerrain((int) Robot.positionChooser.getSelected()));
 	}
 }
 

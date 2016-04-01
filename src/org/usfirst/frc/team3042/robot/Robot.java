@@ -47,8 +47,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
     Command autonomousCommand;
-    SendableChooser defenseChooser;
-    public static SendableChooser positionChooser;
+   // SendableChooser defenseChooser;
+  //  public static SendableChooser positionChooser;
     
     public static Logger logger;
     public static FileIO fileIO = new FileIO();
@@ -62,6 +62,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         logger = new Logger(useConsole, useFile, LOGGER_LEVEL);
+        /*
 		defenseChooser = new SendableChooser();
         defenseChooser.addDefault("Default (Do Nothing)", DefenseType.NOTHING);
         defenseChooser.addObject("Low Bar", DefenseType.LOW_BAR);
@@ -77,7 +78,7 @@ public class Robot extends IterativeRobot {
         positionChooser.addObject("Position 2", 2);
         positionChooser.addObject("Position 3", 3);
         positionChooser.addObject("Position 4", 4);
-        positionChooser.addObject("Position 5", 5);
+        positionChooser.addObject("Position 5", 5); */
     }
 	
 	/**
@@ -104,7 +105,7 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	Robot.logger.log("Autonomous Init", 1);
-    	
+    	/*
     	int defensePosition = (int) positionChooser.getSelected();
     	switch((DefenseType) defenseChooser.getSelected()) {
     		case NOTHING:
@@ -119,14 +120,14 @@ public class Robot extends IterativeRobot {
     			autonomousCommand = new AutoMode_RockWall(defensePosition);
     			break;
     		case MOAT:
-    			autonomousCommand = new AutoMode_Moat();
+    			autonomousCommand = new AutoMode_Moat(defensePosition);
     			break;
     		case RAMPARTS:
-    			autonomousCommand = new AutoMode_Ramparts();
+    			autonomousCommand = new AutoMode_Ramparts(defensePosition);
     			break;
     		default:
-    			autonomousCommand = new AutoMode_DoNothing();
-    	}
+    			autonomousCommand = new AutoMode_DoNothing(); 
+    	} */
     	
     	// schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
@@ -173,9 +174,9 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
         LiveWindow.run();
     }
-    
+    /*
     public enum DefenseType {
     	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, NOTHING;
     }
-    
+    */
 }

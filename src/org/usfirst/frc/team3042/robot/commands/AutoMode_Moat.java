@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMode_Moat extends CommandGroup {
     
-    public  AutoMode_Moat() {
+    public  AutoMode_Moat(int defensePosition) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -31,5 +31,26 @@ public class AutoMode_Moat extends CommandGroup {
     	addSequential(new Auto_ConditionalSnout(500, 500, 150));
     	addSequential(new Auto_ConditionalSnout(250, 500, 640));
     	
+    	addParallel(new Snout_SetPosition(240)); 
+    	
+    	switch(defensePosition) {
+    		case 0:
+    			break;
+    		case 1:
+    			break;
+    		case 2:
+    			break;
+    		case 3:
+    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.3, 2, 0));
+    			break;
+    		case 4:
+    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
+    			break;
+    		case 5:
+    			break;
+    	}
+    	if(defensePosition != 0) {
+    		addSequential(new Auto_AimShoot());
+    	}
     }
 }

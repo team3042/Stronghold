@@ -16,7 +16,9 @@ public class HookLiftServo_Extend extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	Robot.hookLiftServo.setServoExtended();
+    	if(Robot.snout.isFacingForward()) {
+    		Robot.hookLiftServo.setServoExtended();
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
