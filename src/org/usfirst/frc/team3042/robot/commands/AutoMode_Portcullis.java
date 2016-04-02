@@ -42,10 +42,10 @@ public class AutoMode_Portcullis extends CommandGroup {
     		case 2:
     			break;
     		case 3:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.3, 2, 0));
+    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, -0.25, 2, 0));
     			break;
     		case 4:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
+    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 0.15, 2, 0));
     			break;
     		case 5:
     			break;

@@ -1,13 +1,15 @@
 package org.usfirst.frc.team3042.robot.commands;
 
+import org.usfirst.frc.team3042.robot.commands.Auto_Drive.AutoType;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class Winch_Tape_Raise extends CommandGroup {
+public class AutoMode_Reach extends CommandGroup {
     
-    public  Winch_Tape_Raise() {
+    public  AutoMode_Reach() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -25,7 +27,6 @@ public class Winch_Tape_Raise extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new HookLift_Retract());
-    	addSequential(new Winch_Raise());
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, -4, -2));
     }
 }
