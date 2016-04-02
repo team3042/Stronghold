@@ -17,11 +17,12 @@ public class HookLift_Retract extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
+    	Robot.hookLift.retract();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.hookLift.retract();
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

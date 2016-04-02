@@ -21,26 +21,25 @@ public class HookLift_Raise extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	//if (Robot.hookLiftServo.isDeployed()) {
+    	if (Robot.hookLiftServo.isDeployed()) {
     		Robot.hookLift.raise();
-    	//}
-    	//else finished = true;
+    	}
+    	else finished = true;
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.hookLift.raise();
     	SmartDashboard.putNumber("Hook Lift Encoder", Robot.hookLift.getEncDistance());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	/*
     	if (Robot.hookLift.encoderLimitReached()) {
     		finished = true;
     		Robot.hookLift.setDeployedTrue();
     	}
-    	*/
         return finished;
     }
 

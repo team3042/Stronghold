@@ -48,6 +48,7 @@ public class OI {
 	Trigger gunner_LeftJoyUp = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.UP);
 	Trigger gunner_LeftJoyDown = new GamePadTrigger(gamePadGunner, 1, GamePadTrigger.DIRECTION.DOWN);
 	Trigger gunner_POVUp = new POVButton(gamePadGunner, 0);
+	Trigger gunner_POVDown = new POVButton(gamePadGunner, 180);
 	
 	public OI() {
 		
@@ -67,10 +68,11 @@ public class OI {
 		
 		//Winch Controls
 		gunner_POVUp.whileActive(new Winch_HookLift_Raise());
-		//left_8.whileHeld(new Winch_Release());
+		gunner_POVDown.whenActive(new HookLiftServo_Extend());
+		left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
-		gunner_Start.whileHeld(new HookLift_Raise());
+		gunner_Start.whenPressed(new HookLift_Raise());
 		gunner_Back.whileHeld(new HookLift_Retract());
 		
 		//Auto

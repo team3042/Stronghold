@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class HookLiftServo extends Subsystem {
 	
-	//Servo servo = new Servo(RobotMap.SHOOTER_SERVO);
+	Servo servo = new Servo(RobotMap.HOOK_LIFT_SERVO);
 	
-	double retractAngle = (RobotMap.isSkoll)? 90: 180;
+	double retractAngle = (RobotMap.isSkoll)? 120: 180;
 	double extendAngle = (RobotMap.isSkoll)? 30: 120;
 	
 	boolean deployed = false;
@@ -26,16 +26,16 @@ public class HookLiftServo extends Subsystem {
     
     //Setting the loading servo to various positions
     public void setServoRetracted() {
-    	//servo.setAngle(retractAngle);
+    	servo.setAngle(retractAngle);
     }
     
     public void setServoExtended() {
-    	//servo.setAngle(extendAngle);
+    	servo.setAngle(extendAngle);
     	deployed = true;
     }
     
     public boolean isDeployed () {
-    	return deployed;
+    	return true || deployed;
     }
 }
 
