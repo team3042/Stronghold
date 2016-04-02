@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
     			autonomousCommand = new AutoMode_DoNothing();
     			break;
     		case LOW_BAR:
-    			autonomousCommand = new AutoMode_LowBarSideGoal();
+    			autonomousCommand = new AutoMode_LowBarSideGoal(defensePosition);
     			break;
     		case ROUGH_TERRAIN:
     			autonomousCommand = new AutoMode_RoughTerrain(defensePosition);

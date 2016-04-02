@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class AutoMode_LowBarSideGoal extends CommandGroup {
+public class Auto_FaceGoal extends CommandGroup {
     
-    public  AutoMode_LowBarSideGoal(int defensePosition) {
+    public  Auto_FaceGoal(int defensePosition) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -24,14 +24,24 @@ public class AutoMode_LowBarSideGoal extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	
-    	addParallel(new Snout_Pickup());
-    	addSequential(new Auto_FollowTrajectory(AutoTrajectory_LowBarSideGoal.getLeftTrajectory(), 
-    			AutoTrajectory_LowBarSideGoal.getRightTrajectory(), true));
-    	addParallel(new Snout_SetPosition(240)); 
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.62, 2, 0));
-    	if(defensePosition != 0) {
-    		addSequential(new Auto_AimShoot());
-    	}
+    	switch(defensePosition) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 1.9, 2, 0));
+			break;
+		case 3:
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.3, 2, 0));
+			break;
+		case 4:
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
+			break;
+		case 5:
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -4, -2));
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 1.6, 2, 0));
+			break;
+	}
     }
 }

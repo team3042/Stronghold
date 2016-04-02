@@ -54,9 +54,9 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(96, 153);	//Range for green light
-//	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(138, 255);	//Range for green light
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(110, 248);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(92, 137);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(140, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(87, 255);	//Range for green light
 
 	//Lights Off - B123
 //	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(75, 130);
@@ -64,9 +64,9 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 255);
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(160, 255);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 255);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(160, 255);
 	
 	//Duluth Red Alliance
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
@@ -97,14 +97,17 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -37 : -63.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -45 : -63.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k480x360);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
 		camera.writeBrightness(20);
+		//camera.writeBrightness(50);//Daytime Commons
 		camera.writeExposureControl(ExposureControl.kHold);
+		//camera.writeColorLevel(100);//Daytime Commons
+		camera.writeColorLevel(50);
 	}
 	
 	public void initDefaultCommand() {
