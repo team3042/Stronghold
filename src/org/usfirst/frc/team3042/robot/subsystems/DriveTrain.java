@@ -4,6 +4,7 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
@@ -28,7 +29,7 @@ public class DriveTrain extends Subsystem {
 	CANTalon rightEncMotor = rightMotorFront;
 	
 	//Should be ADXRS450_Gyro
-	//Gyro gyro = new AnalogGyro(RobotMap.DRIVETRAIN_GYRO);
+	Gyro gyro = new ADXRS450_Gyro();
 	
 	//Zero points for the encoders
 	private int leftEncoderZero = 0, rightEncoderZero = 0;
@@ -203,7 +204,7 @@ public class DriveTrain extends Subsystem {
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
 	}
-	/*
+	
 	public void resetGyro() {
 		gyro.reset();
 	}
@@ -211,7 +212,7 @@ public class DriveTrain extends Subsystem {
 	public double getGyro() {
 		return gyro.getAngle();
 	}
-	*/
+	
 	//Motion profile functions
     public void initMotionProfile() {
     	

@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Winch_Tape_Raise extends CommandGroup {
+public class Winch_HookLift_Raise extends CommandGroup {
     
-    public  Winch_Tape_Raise() {
+    public  Winch_HookLift_Raise() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

@@ -47,8 +47,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
     Command autonomousCommand;
-   // SendableChooser defenseChooser;
-  //  public static SendableChooser positionChooser;
+    SendableChooser defenseChooser, positionChooser;
     
     public static Logger logger;
     public static FileIO fileIO = new FileIO();
@@ -62,15 +61,15 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         logger = new Logger(useConsole, useFile, LOGGER_LEVEL);
-        /*
+        
 		defenseChooser = new SendableChooser();
         defenseChooser.addDefault("Default (Do Nothing)", DefenseType.NOTHING);
         defenseChooser.addObject("Low Bar", DefenseType.LOW_BAR);
         defenseChooser.addObject("Rough Terrain", DefenseType.ROUGH_TERRAIN);
-        //chooser.addObject("Moat", new AutoMode_Moat());
+        defenseChooser.addObject("Moat", DefenseType.MOAT);
         defenseChooser.addObject("Rock Wall", DefenseType.ROCK_WALL);
-        //chooser.addObject("Ramparts", new AutoMode_Ramparts());
-        SmartDashboard.putData("Auto mode", defenseChooser);
+        defenseChooser.addObject("Ramparts", DefenseType.RAMPARTS);
+        SmartDashboard.putData("Auto Defense", defenseChooser);
         
         positionChooser = new SendableChooser();
         positionChooser.addDefault("Default (No Shot)", 0);
@@ -78,7 +77,8 @@ public class Robot extends IterativeRobot {
         positionChooser.addObject("Position 2", 2);
         positionChooser.addObject("Position 3", 3);
         positionChooser.addObject("Position 4", 4);
-        positionChooser.addObject("Position 5", 5); */
+        positionChooser.addObject("Position 5", 5); 
+        SmartDashboard.putData("Auto Position", positionChooser);
     }
 	
 	/**
@@ -174,9 +174,9 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
         LiveWindow.run();
     }
-    /*
+    
     public enum DefenseType {
     	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, NOTHING;
     }
-    */
+    
 }

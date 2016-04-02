@@ -66,7 +66,7 @@ public class OI {
 		gunner_LB.whenActive(new Snout_LayupPosition());
 		
 		//Winch Controls
-		gunner_POVUp.whileActive(new Winch_Tape_Raise());
+		gunner_POVUp.whileActive(new Winch_HookLift_Raise());
 		//left_8.whileHeld(new Winch_Release());
 		
 		//TapeShooter
@@ -83,7 +83,7 @@ public class OI {
 		right_3.whenPressed(new Auto_Aim());
 		//right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_4.whenPressed(new Auto_StopFollow());
-		//left_5.whenPressed(new AutoMode_RoughTerrain((int) Robot.positionChooser.getSelected()));
+		left_5.whenPressed(new AutoMode_RoughTerrain(3));
 	}
 }
 
