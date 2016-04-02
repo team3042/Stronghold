@@ -19,10 +19,10 @@ public class Snout extends Subsystem {
 	
 	//Pot Values
 	private double POT_ZERO = (RobotMap.isSkoll)? 790: 865;
-	private double lowerLimit = 10;
+	private double lowerLimit = 0;
 	private double raiseLimit = 690;
 	private double storage = 640;
-	private double pickup = 10; 
+	private double pickup = 0; 
 	private double shoot = 240;
 	private double layup = 350;
 	private double batter = 550;
