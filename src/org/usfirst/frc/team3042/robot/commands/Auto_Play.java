@@ -74,7 +74,7 @@ public class Auto_Play extends Command {
     		//Setting up snout trajectory point
     		CANTalon.TrajectoryPoint currentSnoutPoint = new CANTalon.TrajectoryPoint();
     		
-    		currentSnoutPoint.position = fileIO.readNextDouble();
+    		currentSnoutPoint.position = Robot.snout.POT_ZERO - fileIO.readNextDouble();
     		currentSnoutPoint.velocity = fileIO.readNextDouble();
     		currentSnoutPoint.timeDurMs = dT;
     		currentSnoutPoint.profileSlotSelect = 0;

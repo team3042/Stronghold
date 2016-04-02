@@ -18,7 +18,7 @@ public class Snout extends Subsystem {
 	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
 	
 	//Pot Values
-	private double POT_ZERO = (RobotMap.isSkoll)? 790: 865;
+	public double POT_ZERO = (RobotMap.isSkoll)? 790: 865;
 	private double lowerLimit = 10;
 	private double raiseLimit = 690;
 	private double storage = 640;

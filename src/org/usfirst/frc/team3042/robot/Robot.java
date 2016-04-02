@@ -5,6 +5,7 @@ import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBar;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBarSideGoal;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Ramparts;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_Reach;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RockWall;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_DoNothing;
@@ -69,6 +70,7 @@ public class Robot extends IterativeRobot {
         defenseChooser.addObject("Moat", DefenseType.MOAT);
         defenseChooser.addObject("Rock Wall", DefenseType.ROCK_WALL);
         defenseChooser.addObject("Ramparts", DefenseType.RAMPARTS);
+        defenseChooser.addObject("Reach", DefenseType.REACH);
         SmartDashboard.putData("Auto Defense", defenseChooser);
         
         positionChooser = new SendableChooser();
@@ -77,7 +79,7 @@ public class Robot extends IterativeRobot {
         positionChooser.addObject("Position 2", 2);
         positionChooser.addObject("Position 3", 3);
         positionChooser.addObject("Position 4", 4);
-        positionChooser.addObject("Position 5", 5); 
+        positionChooser.addObject("Position 5", 5);
         SmartDashboard.putData("Auto Position", positionChooser);
     }
 	
@@ -105,11 +107,12 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	Robot.logger.log("Autonomous Init", 1);
-    	/*
+    	
     	int defensePosition = (int) positionChooser.getSelected();
     	switch((DefenseType) defenseChooser.getSelected()) {
     		case NOTHING:
     			autonomousCommand = new AutoMode_DoNothing();
+    			break;
     		case LOW_BAR:
     			autonomousCommand = new AutoMode_LowBarSideGoal();
     			break;
@@ -125,9 +128,13 @@ public class Robot extends IterativeRobot {
     		case RAMPARTS:
     			autonomousCommand = new AutoMode_Ramparts(defensePosition);
     			break;
+    		case REACH:
+    			autonomousCommand = new AutoMode_Reach();
+    			break;
     		default:
     			autonomousCommand = new AutoMode_DoNothing(); 
-    	} */
+    			break;
+    	} 
     	
     	// schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
@@ -176,7 +183,7 @@ public class Robot extends IterativeRobot {
     }
     
     public enum DefenseType {
-    	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, NOTHING;
+    	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, REACH, NOTHING;
     }
     
 }
