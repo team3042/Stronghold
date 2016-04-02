@@ -20,12 +20,8 @@ public class HookLift_Raise extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	
-    	if (Robot.hookLiftServo.isDeployed()) {
-    		Robot.hookLift.raise();
-    	}
-    	else finished = true;
-    	
+    		
+    	finished = !Robot.hookLiftServo.isDeployed();
     }
 
     // Called repeatedly when this Command is scheduled to run

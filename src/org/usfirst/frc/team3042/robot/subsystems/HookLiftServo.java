@@ -35,7 +35,11 @@ public class HookLiftServo extends Subsystem {
     }
     
     public boolean isDeployed () {
-    	return true || deployed;
+    	return deployed;
+    }
+    
+    public void resetDeployed() {
+    	deployed = false;
     }
 }
 

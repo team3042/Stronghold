@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class Winch_Raise extends Command {
+	
+	double winchLimit = 59000;
 
     public Winch_Raise() {
         // Use requires() here to declare subsystem dependencies
@@ -17,14 +19,11 @@ public class Winch_Raise extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    
-    	if (Robot.hookLift.isDeployed()) {
-    		Robot.winch.raise();
-    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (Robot.hookLift.getEncDistance() < winchLimit) Robot.winch.raise();
     }
 
     // Make this return true when this Command no longer needs to run execute()

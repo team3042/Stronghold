@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
+import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Winch_Stop;
 
@@ -26,7 +27,11 @@ public class Winch extends Subsystem {
     }
     
     public void raise() {
-    	setSpeed(-winchSpeed);
+    	double speed = 0;
+    	if (Robot.hookLift.isDeployed()) {
+    		speed = -winchSpeed;
+    	}
+    	setSpeed(speed);
     }
     
     public void release() {

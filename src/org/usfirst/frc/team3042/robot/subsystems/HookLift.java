@@ -37,7 +37,11 @@ public class HookLift extends Subsystem {
     }
     
     public void raise() {
-    	setSpeed((encoderLimitReached()) ? 0 : raiseSpeed);
+    	double speed = 0;
+    	if (Robot.hookLiftServo.isDeployed() && !encoderLimitReached()) {
+    		speed = raiseSpeed;
+    	}
+    	setSpeed(speed);
     }
     
     public void retract() {
@@ -54,7 +58,7 @@ public class HookLift extends Subsystem {
 	}
 	
 	public boolean encoderLimitReached() {
-		return getEncDistance() >= encLimit;
+		return getEncDistance() >= (encLimit-tolerance);
 	} 
 	
 	public boolean encoderZeroReached() {
@@ -67,11 +71,15 @@ public class HookLift extends Subsystem {
 	}
 	
 	public boolean isDeployed() {
-		return true || deployed;
+		return deployed;
 	}
 	
 	public void setDeployedTrue() {
 		deployed = true;
+	}
+	
+	public void resetDeploy() {
+		deployed = false;
 	}
 }
 
