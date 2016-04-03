@@ -27,15 +27,14 @@ public class AutoMode_Moat extends CommandGroup {
     	
     	addParallel(new Snout_Storage());
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -12, -3.5));
-    //	addSequential(new Auto_ConditionalSnout(100, 6000, 500));
-    //	addSequential(new Auto_ConditionalSnout(500, 500, 150));
-    //	addSequential(new Auto_ConditionalSnout(250, 500, 640));
     	
-    	addParallel(new Snout_SetPosition(240)); 
+    	addParallel(new Snout_AutoShootPosition()); 
     	
-    	addSequential(new Auto_FaceGoal(defensePosition));
+    	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {
     		addSequential(new Auto_AimShoot());
     	}
+    	
+    	addSequential(new Snout_Storage());
     }
 }

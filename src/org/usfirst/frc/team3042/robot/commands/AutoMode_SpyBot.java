@@ -25,10 +25,11 @@ public class AutoMode_SpyBot extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addParallel(new Snout_SetPosition(240));
+    	addParallel(new Snout_AutoShootPosition());
     	addSequential(new Auto_FollowTrajectory(AutoTrajectory_SpyBot.getLeftTrajectory(), 
     			AutoTrajectory_SpyBot.getRightTrajectory(), false));
     	addSequential(new Auto_AimShoot());
     	
+    	addSequential(new Snout_Storage());
     }
 }

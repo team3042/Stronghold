@@ -28,27 +28,13 @@ public class AutoMode_RoughTerrain extends CommandGroup {
     	addParallel(new Snout_Storage());
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -8, -3));
     	
-    	addParallel(new Snout_SetPosition(240)); 
+    	addParallel(new Snout_AutoShootPosition()); 
     	
-    	switch(defensePosition) {
-    		case 0:
-    			break;
-    		case 1:
-    			break;
-    		case 2:
-    			break;
-    		case 3:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.3, 2, 0));
-    			break;
-    		case 4:
-    			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
-    			break;
-    		case 5:
-    			break;
-    	}
+    	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {
     		addSequential(new Auto_AimShoot());
     	}
     	
+    	addSequential(new Snout_Storage());
     }
 }

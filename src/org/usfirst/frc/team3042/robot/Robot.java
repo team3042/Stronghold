@@ -4,10 +4,13 @@ package org.usfirst.frc.team3042.robot;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBar;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBarSideGoal;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_Portcullis;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Ramparts;
-import org.usfirst.frc.team3042.robot.commands.AutoMode_Reach;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_ReachForward;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_ReachReverse;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RockWall;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
+import org.usfirst.frc.team3042.robot.commands.AutoMode_ChevalDeFrise;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_DoNothing;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
@@ -70,7 +73,10 @@ public class Robot extends IterativeRobot {
         defenseChooser.addObject("Moat", DefenseType.MOAT);
         defenseChooser.addObject("Rock Wall", DefenseType.ROCK_WALL);
         defenseChooser.addObject("Ramparts", DefenseType.RAMPARTS);
-        defenseChooser.addObject("Reach", DefenseType.REACH);
+        defenseChooser.addObject("Cheval de Frise", DefenseType.CHEVAL_DE_FRISE);
+        defenseChooser.addObject("Portcullis", DefenseType.PORTCULLIS);
+        defenseChooser.addObject("Reach Forward", DefenseType.REACH_FORWARD);
+        defenseChooser.addObject("Reach Reverse", DefenseType.REACH_REVERSE);
         SmartDashboard.putData("Auto Defense", defenseChooser);
         
         positionChooser = new SendableChooser();
@@ -128,8 +134,17 @@ public class Robot extends IterativeRobot {
     		case RAMPARTS:
     			autonomousCommand = new AutoMode_Ramparts(defensePosition);
     			break;
-    		case REACH:
-    			autonomousCommand = new AutoMode_Reach();
+    		case CHEVAL_DE_FRISE:
+    			autonomousCommand = new AutoMode_ChevalDeFrise(defensePosition);
+    			break;
+    		case PORTCULLIS:
+    			autonomousCommand = new AutoMode_Portcullis(defensePosition);
+    			break;
+    		case REACH_FORWARD:
+    			autonomousCommand = new AutoMode_ReachForward();
+    			break;
+    		case REACH_REVERSE:
+    			autonomousCommand = new AutoMode_ReachReverse();
     			break;
     		default:
     			autonomousCommand = new AutoMode_DoNothing(); 
@@ -169,12 +184,11 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
         SmartDashboard.putNumber("Potentiometer", snout.getPotValue());
-       // SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
+    	SmartDashboard.putNumber("Hook Lift Encoder", hookLift.getEncDistance());
+        //SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
         
         //SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
         //SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
-    	    	
-    	//SmartDashboard.putNumber("Tape Enc", tapeShooter.getEncDistance());
     }
     
     /**
@@ -185,7 +199,7 @@ public class Robot extends IterativeRobot {
     }
     
     public enum DefenseType {
-    	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, REACH, NOTHING;
+    	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, REACH_FORWARD, REACH_REVERSE, NOTHING;
     }
     
 }

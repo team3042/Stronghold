@@ -25,6 +25,7 @@ public class Snout extends Subsystem {
 	private double storage = 640;
 	private double pickup = 0; 
 	private double shoot = 240;
+	private double autoShoot = 240;
 	private double layup = 350;
 	private double batter = 550;
 	
@@ -182,6 +183,10 @@ public class Snout extends Subsystem {
     
     public void goToShoot() {
     	setPosition(shoot);
+    }
+    
+    public void goToAutoShoot() {
+    	setPosition(autoShoot);
     }
     
     public void goToLayup() {

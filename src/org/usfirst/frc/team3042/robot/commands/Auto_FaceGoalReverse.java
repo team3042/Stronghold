@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Auto_FaceGoal extends CommandGroup {
+public class Auto_FaceGoalReverse extends CommandGroup {
     
-    public  Auto_FaceGoal(int defensePosition) {
+    public  Auto_FaceGoalReverse(int defensePosition) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
