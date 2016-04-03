@@ -58,7 +58,7 @@ public class HookLift extends Subsystem {
 	}
 	
 	public boolean encoderLimitReached() {
-		return getEncDistance() >= (encLimit-tolerance);
+		return getEncDistance() >= encLimit;
 	} 
 	
 	public boolean encoderZeroReached() {
