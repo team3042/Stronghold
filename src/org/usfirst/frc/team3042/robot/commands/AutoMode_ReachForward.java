@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3042.robot.commands;
 
-import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.commands.Auto_Drive.AutoType;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -8,9 +7,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class AutoMode_ChevalDeFrise extends CommandGroup {
+public class AutoMode_ReachForward extends CommandGroup {
     
-    public  AutoMode_ChevalDeFrise(int defensePosition) {
+    public  AutoMode_ReachForward() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -28,17 +27,6 @@ public class AutoMode_ChevalDeFrise extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	//TODO Determine exact distances and snout position
-    	addParallel(new Snout_ShootPosition());
     	addSequential(new Auto_Drive(AutoType.STRAIGHT, 4, 2));
-    	addSequential(new Snout_SetPosition(50));
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 6, 3));
-    	
-    	addParallel(new Snout_AutoShootPosition());
-    	
-    	addSequential(new Auto_FaceGoalForwards(defensePosition));
-    	if(defensePosition != 0) {
-    		addSequential(new Auto_AimShoot());
-    	}
     }
 }

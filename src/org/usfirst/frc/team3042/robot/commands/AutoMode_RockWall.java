@@ -30,9 +30,9 @@ public class AutoMode_RockWall extends CommandGroup {
     	//TODO Find values for snout positioning
     	addParallel(new Auto_ConditionalSnout(140, 5000, 640));
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -3));
-    	addParallel(new Snout_SetPosition(240));
+    	addParallel(new Snout_AutoShootPosition());
     	
-    	addSequential(new Auto_FaceGoal(defensePosition));
+    	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {
     		addSequential(new Auto_AimShoot());
     	}
