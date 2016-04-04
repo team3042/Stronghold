@@ -30,9 +30,9 @@ public class AutoMode_ChevalDeFrise extends CommandGroup {
     	
     	//TODO Determine exact distances and snout position
     	addParallel(new Snout_ShootPosition());
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 4, 2));
-    	addSequential(new Snout_SetPosition(50));
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 6, 3));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 3.5, 2));
+    	addSequential(new Snout_SetPosition(20));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 6.5, 3));
     	
     	addParallel(new Snout_AutoShootPosition());
     	

@@ -28,9 +28,9 @@ public class AutoMode_Portcullis extends CommandGroup {
         // arm.
     	
     	addParallel(new Snout_Pickup());
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 4, 2));
-    	addParallel(new Snout_SetPosition(300));
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 6, 2));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 3.5, 2));
+    	addParallel(new Snout_SetPosition(360));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 6.5, 2));
     	
     	addParallel(new Snout_AutoShootPosition());
     	
