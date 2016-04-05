@@ -27,6 +27,6 @@ public class AutoMode_ReachForward extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 3.5, 2));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 2.56, 2));
     }
 }

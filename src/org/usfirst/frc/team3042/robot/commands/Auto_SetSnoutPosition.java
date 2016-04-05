@@ -7,29 +7,32 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Winch_Raise extends Command {
+public class Auto_SetSnoutPosition extends Command {
 	
-	double winchLimit = 60000;
+	double position;
+	double tolerance = 10;
 
-    public Winch_Raise() {
+    public Auto_SetSnoutPosition(double position) {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.winch);
+    	requires(Robot.snout);
+    	
+    	this.position = position;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	if (Robot.hookLift.getEncDistance() < winchLimit) Robot.winch.raise();
+    	
+    	Robot.snout.setPosition(position);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.snout.nearSetpoint();
     }
 
     // Called once after isFinished returns true

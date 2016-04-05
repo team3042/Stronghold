@@ -4,6 +4,7 @@ import org.usfirst.frc.team3042.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -46,6 +47,8 @@ public class DriveTrain_TankDrive extends Command {
         else if (Robot.oi.right_1.get()){
             leftPower = rightPower;
         }
+        
+        SmartDashboard.putNumber("Left Power", leftPower);
         
         Robot.driveTrain.setMotors(leftPower, rightPower);
     }
