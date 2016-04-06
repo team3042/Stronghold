@@ -48,7 +48,6 @@ public class DriveTrain_TankDrive extends Command {
             leftPower = rightPower;
         }
         
-        SmartDashboard.putNumber("Left Power", leftPower);
         
         Robot.driveTrain.setMotors(leftPower, rightPower);
     }

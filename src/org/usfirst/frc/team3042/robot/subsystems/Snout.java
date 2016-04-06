@@ -35,7 +35,7 @@ public class Snout extends Subsystem {
 	private double p2Zone = 5, d2Zone = 2, p2 = 35;
 	private double fZone = 3, dF = 0.0004;
 	
-	double potGoal, tolerance = 5;
+	double potGoal, tolerance = 20;
 	
 	//Dynamic f-gain to counter gravity
 	double horizontalPotValue = 25;// = measured
