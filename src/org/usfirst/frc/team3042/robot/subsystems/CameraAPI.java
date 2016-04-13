@@ -402,11 +402,11 @@ public class CameraAPI extends Subsystem {
 	}
 	
 	private Image unfilteredImage;
-	//A method that allows other classes to utilize the camera classes ability to anazlyze frames
+	//A method that allows other classes to utilize the camera classes ability to analyze frames
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
 		
 		//Get an image from the camera
-		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unfilteredFrame);
 		unfilteredImage = unfilteredFrame;
 		
