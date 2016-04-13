@@ -22,7 +22,7 @@ public class Shooter_Shoot extends Command {
     	//Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 4);
     	//Robot.logger.log("Potentiometer Value= " + Robot.snout.getPotValue(), 4);
     	//Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
-    	//Robot.camera.outputCleanImage();
+    	Robot.camera.outputCleanImage();
     	
     }
 

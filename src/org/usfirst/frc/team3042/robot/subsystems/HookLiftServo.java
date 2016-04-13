@@ -13,8 +13,8 @@ public class HookLiftServo extends Subsystem {
 	
 	Servo servo = new Servo(RobotMap.HOOK_LIFT_SERVO);
 	
-	double retractAngle = (RobotMap.isSkoll)? 120: 180;
-	double extendAngle = (RobotMap.isSkoll)? 30: 120;
+	double retractAngle = (RobotMap.isSkoll)? 120: 120;
+	double extendAngle = (RobotMap.isSkoll)? 30: 200;
 	
 	boolean deployed = false;
 	

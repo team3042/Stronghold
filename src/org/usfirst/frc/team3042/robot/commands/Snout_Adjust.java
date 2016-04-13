@@ -51,7 +51,7 @@ public class Snout_Adjust extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
-    	double distance = 1.1 * Robot.camera.getDistToTarget();
+    	double distance = Robot.camera.getDistToTarget();
     	
 		potGoal = Robot.snout.getPotValue();
 		

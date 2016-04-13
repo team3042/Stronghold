@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
     Command autonomousCommand;
-    SendableChooser defenseChooser, positionChooser;
+    SendableChooser defenseChooser, positionChooser, allianceChooser;
     
     public static Logger logger;
     public static FileIO fileIO = new FileIO();
@@ -87,6 +87,10 @@ public class Robot extends IterativeRobot {
         positionChooser.addObject("Position 4", 4);
         positionChooser.addObject("Position 5", 5);
         SmartDashboard.putData("Auto Position", positionChooser);
+        
+        allianceChooser = new SendableChooser();
+        allianceChooser.addDefault("Red Alliance", Alliance.RED_ALLIANCE);
+        allianceChooser.addObject("Blue Alliance", Alliance.BLUE_ALLIANCE);
     }
 	
 	/**
@@ -113,7 +117,10 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	Robot.logger.log("Autonomous Init", 1);
-    	
+    	/*
+    	Alliance alliance = (Alliance) allianceChooser.getSelected();
+    	camera.setHSVValues(alliance);
+    	*/
     	int defensePosition = (int) positionChooser.getSelected();
     	switch((DefenseType) defenseChooser.getSelected()) {
     		case NOTHING:
@@ -187,8 +194,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Hook Lift Encoder", hookLift.getEncDistance());
         //SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
         
-        //SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
-        //SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
+        SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
+        SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());
     }
     
     /**
@@ -200,6 +207,10 @@ public class Robot extends IterativeRobot {
     
     public enum DefenseType {
     	ROCK_WALL, ROUGH_TERRAIN, LOW_BAR, MOAT, RAMPARTS, CHEVAL_DE_FRISE, PORTCULLIS, REACH_FORWARD, REACH_REVERSE, NOTHING;
+    }
+    
+    public enum Alliance {
+    	RED_ALLIANCE, BLUE_ALLIANCE;
     }
     
 }

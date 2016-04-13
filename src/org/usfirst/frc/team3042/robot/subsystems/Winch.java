@@ -28,9 +28,9 @@ public class Winch extends Subsystem {
     
     public void raise() {
     	double speed = 0;
-    	if (Robot.hookLift.isDeployed()) {
+    	//if (Robot.hookLiftServo.isDeployed()) {
     		speed = -winchSpeed;
-    	}
+    	//}
     	setSpeed(speed);
     }
     

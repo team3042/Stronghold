@@ -16,7 +16,7 @@ public class Snout_HoldPosition extends Command {
 	
 	Joystick gamepad = Robot.oi.gamePadGunner;
 	int axis = 1;
-	double deadzone = 0.05;
+	double deadzone = 0.07;
 
     public Snout_HoldPosition() {
         // Use requires() here to declare subsystem dependencies
@@ -36,6 +36,7 @@ public class Snout_HoldPosition extends Command {
     	if (Math.abs(currentY) > deadzone) {
     		currentSetPoint = Robot.snout.safetyTest(currentY * scale + currentSetPoint);
     		Robot.snout.setPosition(currentSetPoint);
+    		//Robot.logger.log("JoystickValue: " + currentY, 2);
     	}
     	else {
     		Robot.snout.adjustPGain();

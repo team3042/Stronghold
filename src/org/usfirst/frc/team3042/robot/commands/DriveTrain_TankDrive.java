@@ -19,7 +19,7 @@ public class DriveTrain_TankDrive extends Command {
     Timer time = new Timer();
     double[] oldTime = new double[] {0, 0};
     double[] currentPower = new double[] {0,0};
-    double maxAccel = 4; //motor power per second
+    double maxAccel = 3.6; //motor power per second
 	
     public DriveTrain_TankDrive() {
     	requires(Robot.driveTrain);

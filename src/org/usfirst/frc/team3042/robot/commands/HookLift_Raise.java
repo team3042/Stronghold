@@ -21,7 +21,7 @@ public class HookLift_Raise extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     		
-    	finished = !Robot.hookLiftServo.isDeployed();
+    	//finished = !Robot.hookLiftServo.isDeployed();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -30,12 +30,13 @@ public class HookLift_Raise extends Command {
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
+    protected boolean isFinished() {/*
     	if (Robot.hookLift.encoderLimitReached()) {
     		finished = true;
     		Robot.hookLift.setDeployedTrue();
     	}
-        return finished;
+    	*/
+        return false;
     }
 
     // Called once after isFinished returns true

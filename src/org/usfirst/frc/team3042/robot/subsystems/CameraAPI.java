@@ -38,6 +38,8 @@ public class CameraAPI extends Subsystem {
 	
 	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
 	
+	
+	
 	//Our ranges for HSV image acquisition 
 	/* From the 2015 example
 	NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(101, 64);	
@@ -69,9 +71,9 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(62, 170);
 	
 	//Commons Evening
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(93, 140);
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(158, 255);
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(76, 255);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(93, 140);
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(158, 255);
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(76, 255);
 	
 	//Duluth Red Alliance
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
@@ -88,6 +90,37 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(44, 255);
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(83, 255);
 	
+	
+	
+	//North Star 
+	private static boolean blueAlliance = false;
+	
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(
+			(blueAlliance)? (0*255/180) : (63*255/180), (blueAlliance)? (100*255/180) : (97*255/180));
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(
+			(blueAlliance)? 0 : 80, (blueAlliance)? 118 : 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(
+			(blueAlliance)? 140 : 138, (blueAlliance)? 255 : 255);
+			
+	/*
+	//North Star Red Alliance
+	private static NIVision.Range BLUE_HUE_RANGE = new NIVision.Range(0 * 255 / 180, 100 * 255 / 180);
+	private static NIVision.Range BLUE_SAT_RANGE = new NIVision.Range(0, 118);
+	private static NIVision.Range BLUE_VAL_RANGE = new NIVision.Range(140, 255);
+	*/
+	//North Star Blue Alliance
+	/*
+	private static NIVision.Range BLUE_HUE_RANGE = new NIVision.Range(63 * 255 / 180, 97 * 255 / 180);
+	private static NIVision.Range BLUE_SAT_RANGE = new NIVision.Range(80, 255);
+	private static NIVision.Range BLUE_VAL_RANGE = new NIVision.Range(138, 255);
+	*/
+	//Practice Field 
+	/*
+	private static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(63 * 255 / 180, 97 * 255 / 180);
+	private static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(80, 255);
+	private static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(138, 255);
+	*/
+	
 	//Variables describing our camera
 	double VIEW_ANGLE = 64; //default view angle for axis m1013
 	
@@ -102,7 +135,7 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -52 : -63.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -52 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
@@ -138,6 +171,21 @@ public class CameraAPI extends Subsystem {
 		{
 			return (int)(r1.area - r2.area);
 		}
+	}
+	
+	public void setHSVValues(Robot.Alliance alliance) {
+		if(alliance == Robot.Alliance.BLUE_ALLIANCE) {
+			//setCameraValues(BLUE_HUE_RANGE, BLUE_SAT_RANGE, BLUE_VAL_RANGE);
+		}
+		else {
+			//setCameraValues(RED_HUE_RANGE, RED_SAT_RANGE, RED_VAL_RANGE);
+		}
+	}
+	
+	private void setCameraValues(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange) {
+		TARGET_HUE_RANGE = hueRange;
+		TARGET_SAT_RANGE = satRange;
+		TARGET_VAL_RANGE = valRange;
 	}
 	
 	//Get the center of the camera image minus the center of the particle/target
