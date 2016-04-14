@@ -19,6 +19,7 @@ import org.usfirst.frc.team3042.robot.subsystems.Snout;
 import org.usfirst.frc.team3042.robot.subsystems.ShooterServo;
 import org.usfirst.frc.team3042.robot.subsystems.HookLift;
 import org.usfirst.frc.team3042.robot.subsystems.HookLiftServo;
+import org.usfirst.frc.team3042.robot.subsystems.LEDSwitch;
 import org.usfirst.frc.team3042.robot.subsystems.Winch;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -47,6 +48,7 @@ public class Robot extends IterativeRobot {
 	public static final CameraAPI camera = new CameraAPI();
 	public static final DriversCamera driversCamera = new DriversCamera();
 	public static OI oi;
+	public static final LEDSwitch ledSwitch = new LEDSwitch();
 
     Command autonomousCommand;
     SendableChooser defenseChooser, positionChooser, allianceChooser;
