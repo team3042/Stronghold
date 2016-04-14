@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBar;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_LowBarSideGoal;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Moat;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_Portcullis;
@@ -22,7 +21,6 @@ import org.usfirst.frc.team3042.robot.subsystems.HookLift;
 import org.usfirst.frc.team3042.robot.subsystems.HookLiftServo;
 import org.usfirst.frc.team3042.robot.subsystems.Winch;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;

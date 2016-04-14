@@ -7,7 +7,6 @@ import com.ni.vision.NIVision.Image;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /**
  *

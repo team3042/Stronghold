@@ -9,8 +9,6 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.ContourPoint;
-import com.ni.vision.NIVision.GetPointsOnContourResult;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ImageType;
 import com.ni.vision.NIVision.OverlayTextOptions;
@@ -20,7 +18,6 @@ import com.ni.vision.NIVision.PointDouble;
 import com.ni.vision.NIVision.Rect;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
 import edu.wpi.first.wpilibj.vision.AxisCamera.Resolution;
@@ -161,6 +158,7 @@ public class CameraAPI extends Subsystem {
 		public double rightHeight;
 		public Image unfilteredImage;
 		public Image image;
+		public double convexHullPerimeter;
 		
 		public int compareTo(ParticleReport r)
 		{
@@ -310,6 +308,7 @@ public class CameraAPI extends Subsystem {
 				
 				//I only set these values after we find the largest particle.
 				report.convexHullArea = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+				report.convexHullPerimeter = NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_PERIMETER);
 				report.perimeter = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_PERIMETER);
 				report.boundingBox.left = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
 				report.boundingBox.width = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
@@ -317,9 +316,10 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 
-				isTarget = ConvexHullAreaScore(report) >= SCORE_MIN;
-				//this.TrapezoidScore(report) >= SCORE_MIN && 
-				//this.ConvexHullAreaScore(report)>= SCORE_MIN; //&&
+				isTarget = ConvexHullAreaScore(report) >= SCORE_MIN &&
+				this.ConvexHullPerimeterScore(report) >= SCORE_MIN &&
+				this.PlenimeterScore(report) >= SCORE_MIN; //&&
+				//this.TrapezoidScore(report) >= SCORE_MIN &&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
 				//Robot.logger.log("ConvexHull Score: "+ConvexHullAreaScore(report), 5);
 				if(isTarget){
@@ -415,6 +415,21 @@ public class CameraAPI extends Subsystem {
 		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredFrame, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
 		
 		return filteredBinaryFrame;
+	}
+	
+	public Image getLightSubtractedImage() {
+		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		
+		//TODO Add trigger to turn LEDs on and potential wait
+		
+		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		
+		Image subtractedFrame = null;
+		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
+		
+		outPutImagePNG(subtractedFrame, "Subtracted Image");
+		return subtractedFrame;
+		
 	}
 	
 	//A method that filters out small particles from a binary image
@@ -535,7 +550,25 @@ public class CameraAPI extends Subsystem {
 	 */
 	public double ConvexHullAreaScore(ParticleReport2 report)
 	{
-		return ratioToScore((report.convexHullArea/report.filledArea)/3);
+		return ratioToScore((report.convexHullArea/report.filledArea) / 3.0);
+	}
+	
+	/**
+	 * Method to score convex hull perimeter compared to perimeter of U shape
+	 * Expected ratio is roughly 84.5 / 64
+	 */
+	public double ConvexHullPerimeterScore(ParticleReport2 report)
+	{
+		return ratioToScore((report.perimeter / report.convexHullPerimeter) * 65 / 84.5);
+	}
+	
+	/**
+	 * Method to score perimeter squared compared to area
+	 * Expected ratio is roughly 84.5^2 / 76
+	 */
+	public double PlenimeterScore(ParticleReport2 report)
+	{
+		return ratioToScore((report.perimeter * report.perimeter / report.area) * 76 / (84.5 * 84.5));
 	}
 
 	/**
