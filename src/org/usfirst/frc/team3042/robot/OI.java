@@ -31,6 +31,7 @@ public class OI {
 	public Button right_1 = new JoystickButton(joystickRight, 1);
 	public Button right_3 = new JoystickButton(joystickRight, 3);
 	public Button right_4 = new JoystickButton(joystickRight, 4);
+	public Button right_5 = new JoystickButton(joystickRight, 5);
 	
 	//Gampad buttons
 	Button gunner_A = new JoystickButton(gamePadGunner, 1);
@@ -87,6 +88,9 @@ public class OI {
 		//left_4.whenPressed(new Auto_StopFollow());
 		//left_5.whenPressed(new AutoMode_Ramparts(4));
 		right_4.whenPressed(new CameraAPI_TakeCalibrationImage());
+		
+		//Testing
+		right_5.whenPressed(new CameraAPI_SubtractionTest());
 	}
 }
 

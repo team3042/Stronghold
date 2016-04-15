@@ -7,11 +7,12 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class LEDSwitch_SetOff extends Command {
+public class CameraAPI_SubtractionTest extends Command {
 
-    public LEDSwitch_SetOff() {
+    public CameraAPI_SubtractionTest() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(Robot.camera);
     	requires(Robot.ledSwitch);
     }
 
@@ -19,7 +20,7 @@ public class LEDSwitch_SetOff extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.ledSwitch.setOff();
+    	Robot.camera.getLightSubtractedImage();
     }
 
     // Called repeatedly when this Command is scheduled to run

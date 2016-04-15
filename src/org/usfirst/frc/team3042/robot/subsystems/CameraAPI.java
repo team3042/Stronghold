@@ -17,6 +17,7 @@ import com.ni.vision.NIVision.Point;
 import com.ni.vision.NIVision.PointDouble;
 import com.ni.vision.NIVision.Rect;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 import edu.wpi.first.wpilibj.vision.AxisCamera.ExposureControl;
@@ -417,18 +418,28 @@ public class CameraAPI extends Subsystem {
 		return filteredBinaryFrame;
 	}
 	
-	public Image getLightSubtractedImage() {
-		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+	public void getLightSubtractedImage() {
+		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		camera.getImage(unlitFrame);
 		
-		//TODO Add trigger to turn LEDs on and potential wait
+		Robot.ledSwitch.setOn();
 		
-		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		Timer timer = new Timer();
+		timer.start();
+		while(timer.get() < 0.2);
 		
-		Image subtractedFrame = null;
+		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		camera.getImage(litFrame);
+		
+		Robot.ledSwitch.setOff();
+		
+		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
 		
-		outPutImagePNG(subtractedFrame, "Subtracted Image");
-		return subtractedFrame;
+		outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
+		outputImage(unlitFrame, "UnlitFrame" + generateFileName());
+		outputImage(litFrame, "LitFrame" + generateFileName());
+		//return subtractedFrame;
 		
 	}
 	
