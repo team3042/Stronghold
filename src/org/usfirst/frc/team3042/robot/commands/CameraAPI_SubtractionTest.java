@@ -20,7 +20,7 @@ public class CameraAPI_SubtractionTest extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.camera.getLightSubtractedImage();
+    	Robot.camera.getSubtractedFrame();
     }
 
     // Called repeatedly when this Command is scheduled to run

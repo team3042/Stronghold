@@ -409,6 +409,9 @@ public class CameraAPI extends Subsystem {
 		//Get an image from the camera
 		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unfilteredFrame);
+		
+		Image subtractedFrame = getSubtractedFrame();
+		
 		unfilteredImage = unfilteredFrame;
 		
 		//Filter the image from the camera through an HSV filter
@@ -418,17 +421,17 @@ public class CameraAPI extends Subsystem {
 		return filteredBinaryFrame;
 	}
 	
-	public void getLightSubtractedImage() {
-		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+	public Image getSubtractedFrame() {
+		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unlitFrame);
 		
 		Robot.ledSwitch.setOn();
 		
 		Timer timer = new Timer();
 		timer.start();
-		while(timer.get() < 0.2);
+		while(timer.get() < 0.2); //TODO test shorter timeouts
 		
-		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(litFrame);
 		
 		Robot.ledSwitch.setOff();
@@ -439,8 +442,7 @@ public class CameraAPI extends Subsystem {
 		outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
 		outputImage(unlitFrame, "UnlitFrame" + generateFileName());
 		outputImage(litFrame, "LitFrame" + generateFileName());
-		//return subtractedFrame;
-		
+		return subtractedFrame;
 	}
 	
 	//A method that filters out small particles from a binary image
