@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.LEDSwitch_SetOff;
@@ -11,8 +12,9 @@ import org.usfirst.frc.team3042.robot.commands.LEDSwitch_SetOn;
  */
 public class LEDSwitch extends Subsystem {
 	
-	Relay LEDSpike = new Relay(RobotMap.LED_SWITCH);
-	
+	Solenoid LEDSolenoid = new Solenoid(RobotMap.LED_SWITCH);
+	Solenoid LEDSolenoid2 = new Solenoid(2);
+		
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -20,11 +22,13 @@ public class LEDSwitch extends Subsystem {
     }
     
     public void setOn(){
-    	LEDSpike.set(Relay.Value.kReverse);
+    	LEDSolenoid.set(true);
+    	LEDSolenoid2.set(true);
     }
     
     public void setOff(){
-    	LEDSpike.set(Relay.Value.kOff);
+    	LEDSolenoid.set(false);
+    	LEDSolenoid2.set(false);
     }
 }
 

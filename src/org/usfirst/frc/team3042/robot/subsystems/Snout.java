@@ -23,8 +23,10 @@ public class Snout extends Subsystem {
 	private double raiseLimit = 690;
 	private double storage = 624;
 	private double pickup = 0; 
-	private double shoot = 240;
+	//private double shoot = 240;
 	private double autoShoot = 240;
+	private double arcOuterworksShoot = 266;
+	private double arcCloseShoot = 310;
 	private double layup = 350;
 	private double batter = 550;
 	
@@ -113,6 +115,10 @@ public class Snout extends Subsystem {
     	return (potValue - horizontalPotValue) * radiansPerPotValue;
     }
     
+    private double getPotValue(double angle) {
+    	return horizontalPotValue + angle / radiansPerPotValue;
+    }
+    
     public void setFGain (double targetPotValue) {
     	double theta = getAngle(targetPotValue);
     	double kF = motorScalar * Math.cos(theta) / (POT_ZERO - targetPotValue);
@@ -181,7 +187,11 @@ public class Snout extends Subsystem {
     }
     
     public void goToShoot() {
-    	setPosition(shoot);
+    	setPosition(arcOuterworksShoot);
+    }
+    
+    public void goToCloseShoot() {
+    	setPosition(arcCloseShoot);
     }
     
     public void goToAutoShoot() {

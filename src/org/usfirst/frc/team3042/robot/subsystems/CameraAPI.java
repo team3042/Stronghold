@@ -54,9 +54,9 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(92, 137);	//Range for green light
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(140, 255);	//Range for green light
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(87, 255);	//Range for green light
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
 	
 	//Chanhassen
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(85, 255);	//Range for green light
@@ -73,24 +73,8 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(158, 255);
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(76, 255);
 	
-	//Duluth Red Alliance
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(30, 149);
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 231);
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(149, 242);
-	
-	//Duluth Blue Alliance(NOT CALIBRATED!!!!!!!!!!!!!!!)
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(48, 150);
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 222);
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(163, 255);
-	
-	//Duluth Pits
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(93, 154);
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(44, 255);
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(83, 255);
-	
-	
-	
 	//North Star 
+	/*
 	private static boolean blueAlliance = false;
 	
 	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(
@@ -99,7 +83,7 @@ public class CameraAPI extends Subsystem {
 			(blueAlliance)? 0 : 80, (blueAlliance)? 118 : 255);
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(
 			(blueAlliance)? 140 : 138, (blueAlliance)? 255 : 255);
-			
+		*/	
 	/*
 	//North Star Red Alliance
 	private static NIVision.Range BLUE_HUE_RANGE = new NIVision.Range(0 * 255 / 180, 100 * 255 / 180);
@@ -139,7 +123,7 @@ public class CameraAPI extends Subsystem {
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k480x360);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(20);
+		camera.writeBrightness(50);
 		//camera.writeBrightness(50);//Daytime Commons
 		camera.writeExposureControl(ExposureControl.kHold);
 		//camera.writeColorLevel(100);//Daytime Commons
@@ -273,7 +257,7 @@ public class CameraAPI extends Subsystem {
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	filterOutSmallParticles(binaryImage, 0, 100);
+    	filterOutSmallParticles(binaryImage, 10, 172800);
     	Image filledImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		NIVision.imaqFillHoles(filledImage, binaryImage, 1);
 		NIVision.imaqConvexHull(binaryImage, filledImage, 1);
@@ -317,11 +301,12 @@ public class CameraAPI extends Subsystem {
 				report.boundingBox.height = (int)NIVision.imaqMeasureParticle(binaryImage, report.particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
 				report.filledArea = NIVision.imaqMeasureParticle(filledImage, report.particleIndex, 0, NIVision.MeasurementType.MT_AREA);
 
-				isTarget = ConvexHullAreaScore(report) >= SCORE_MIN &&
-				this.ConvexHullPerimeterScore(report) >= SCORE_MIN &&
-				this.PlenimeterScore(report) >= SCORE_MIN; //&&
-				//this.TrapezoidScore(report) >= SCORE_MIN &&
+				isTarget = ConvexHullAreaScore(report) >= SCORE_MIN; // &&
 				//this.aspectRatioScore(report)>=SCORE_MIN;
+				//this.ConvexHullPerimeterScore(report) >= SCORE_MIN &&
+				//this.PlenimeterScore(report) >= SCORE_MIN; //&&
+				//this.TrapezoidScore(report) >= SCORE_MIN &&
+				
 				//Robot.logger.log("ConvexHull Score: "+ConvexHullAreaScore(report), 5);
 				if(isTarget){
 					currentTargetIndex = i;
@@ -407,41 +392,45 @@ public class CameraAPI extends Subsystem {
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
 		
 		//Get an image from the camera
-		Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		camera.getImage(unfilteredFrame);
+		//Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		//camera.getImage(unfilteredFrame);
 		
 		Image subtractedFrame = getSubtractedFrame();
 		
-		unfilteredImage = unfilteredFrame;
+		unfilteredImage = subtractedFrame;
 		
 		//Filter the image from the camera through an HSV filter
 		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredFrame, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
-		
+		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredImage, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
+		//outputImage(unfilteredImage, "FilteredImage" + generateFileName());
 		return filteredBinaryFrame;
 	}
 	
 	public Image getSubtractedFrame() {
+		Timer timer = new Timer();
 		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unlitFrame);
+		timer.start();
+		while(timer.get() < 0.2);
 		
 		Robot.ledSwitch.setOn();
 		
-		Timer timer = new Timer();
+		timer.reset();
 		timer.start();
-		while(timer.get() < 0.2); //TODO test shorter timeouts
+		while(timer.get() < 0.25); //TODO test shorter timeouts
 		
 		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(litFrame);
 		
 		Robot.ledSwitch.setOff();
-		
+		Robot.logger.log("Beginning subtraction", 3);
 		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
+		Robot.logger.log("End subtraction", 3);
 		
-		outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
-		outputImage(unlitFrame, "UnlitFrame" + generateFileName());
-		outputImage(litFrame, "LitFrame" + generateFileName());
+		//outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
+		//outputImage(unlitFrame, "UnlitFrame" + generateFileName());
+		//outputImage(litFrame, "LitFrame" + generateFileName());
 		return subtractedFrame;
 	}
 	
@@ -450,7 +439,7 @@ public class CameraAPI extends Subsystem {
 		NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
 		
-		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, lowerPercentage, upperPercentage, 0, 0);
+		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA, lowerPercentage, upperPercentage, 0, 0);
 		
 		NIVision.imaqParticleFilter4(image, image, criteria, filterOptions, null);
 	}

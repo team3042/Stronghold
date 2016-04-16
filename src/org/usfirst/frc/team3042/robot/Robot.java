@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
     
     public static Logger logger;
     public static FileIO fileIO = new FileIO();
-    private int LOGGER_LEVEL = 2;
+    private int LOGGER_LEVEL = 5;
     boolean useConsole = true, useFile = true;
 
     /**
@@ -91,6 +91,8 @@ public class Robot extends IterativeRobot {
         allianceChooser = new SendableChooser();
         allianceChooser.addDefault("Red Alliance", Alliance.RED_ALLIANCE);
         allianceChooser.addObject("Blue Alliance", Alliance.BLUE_ALLIANCE);
+        
+        SmartDashboard.putNumber("Shoot Speed", 4500);
     }
 	
 	/**

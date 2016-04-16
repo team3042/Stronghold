@@ -14,7 +14,7 @@ public class Auto_RotateAlt extends Command {
  
 	int cyclesTolerance = 4;
 	double rotationsPerPixel = (RobotMap.isSkoll) ? 0.002070 : 0.002070;
-	double timeout = 2.0;
+	double timeout = 5.0;
 	
     public Auto_RotateAlt() {
         // Use requires() here to declare subsystem dependencies
@@ -28,12 +28,13 @@ public class Auto_RotateAlt extends Command {
     	
     	Robot.camera.outputCleanImage();
     	
-    	timer.reset();
-    	timer.start();
+    	
     	double offset = Robot.camera.getRotationOffset();
     	if(Robot.snout.isBackwards()) {
 			offset *= -1;
 		}
+    	timer.reset();
+    	timer.start();
     	Robot.logger.log("Rotation Offset = "+offset, 2);
     	double leftTarget = offset * rotationsPerPixel;
 		double rightTarget = -offset * rotationsPerPixel;

@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Shooter_Stop;
@@ -18,9 +19,9 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	double leftShootSpeed = 4500, rightShootSpeed = 5000;
+	double leftShootSpeed = 3010, rightShootSpeed = 3010;
 	double batterShootSpeed = 2750, intakeSpeed = 2000;
-	double toleranceRPM = 200;
+	double toleranceRPM = 150;
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
