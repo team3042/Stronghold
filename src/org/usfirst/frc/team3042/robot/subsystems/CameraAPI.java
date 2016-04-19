@@ -390,47 +390,48 @@ public class CameraAPI extends Subsystem {
 	private Image unfilteredImage;
 	//A method that allows other classes to utilize the camera classes ability to analyze frames
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
-		
-		//Get an image from the camera
-		//Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		//camera.getImage(unfilteredFrame);
-		
 		Image subtractedFrame = getSubtractedFrame();
 		
 		unfilteredImage = subtractedFrame;
 		
 		//Filter the image from the camera through an HSV filter
 		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredImage, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
-		//outputImage(unfilteredImage, "FilteredImage" + generateFileName());
+		NIVision.imaqColorThreshold(filteredBinaryFrame, subtractedFrame, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
+
 		return filteredBinaryFrame;
 	}
 	
 	public Image getSubtractedFrame() {
 		Timer timer = new Timer();
+		double waitTime = 0.2;
+		
+		//Get Unlit Frame
 		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unlitFrame);
-		timer.start();
-		while(timer.get() < 0.2);
-		
-		Robot.ledSwitch.setOn();
-		
 		timer.reset();
 		timer.start();
-		while(timer.get() < 0.25); //TODO test shorter timeouts
+		while(timer.get() < waitTime);
+
+		//Turn Light On
+		Robot.ledSwitch.setOn();		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
 		
+		//Get Lit Frame
 		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(litFrame);
-		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+
+		//Turn Light Off
 		Robot.ledSwitch.setOff();
-		Robot.logger.log("Beginning subtraction", 3);
+		
+		//Subtract Lit - Unlit
 		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
-		Robot.logger.log("End subtraction", 3);
 		
-		//outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
-		//outputImage(unlitFrame, "UnlitFrame" + generateFileName());
-		//outputImage(litFrame, "LitFrame" + generateFileName());
 		return subtractedFrame;
 	}
 	
