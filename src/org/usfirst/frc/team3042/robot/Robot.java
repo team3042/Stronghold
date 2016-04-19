@@ -12,6 +12,7 @@ import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_ChevalDeFrise;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_DoNothing;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
+import org.usfirst.frc.team3042.robot.subsystems.CameraOpenCV;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
@@ -46,6 +47,7 @@ public class Robot extends IterativeRobot {
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
+	public static final CameraOpenCV cameraCV = new CameraOpenCV();
 	public static final DriversCamera driversCamera = new DriversCamera();
 	public static OI oi;
 	public static final LEDSwitch ledSwitch = new LEDSwitch();

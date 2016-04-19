@@ -42,6 +42,14 @@ public class CameraOpenCV extends Subsystem {
 	Scalar lowerHSVBound = new Scalar(0, 62, 57, 0);
 	Scalar upperHSVBound = new Scalar(95, 255, 255, 0);
 	
+	//Blue Alliance
+	Scalar blueLowerHSVBound = new Scalar(0, 62, 57, 0);
+	Scalar blueUpperHSVBound = new Scalar(95, 255, 255, 0);
+	
+	//Red Alliance
+	Scalar redLowerHSVBound = new Scalar(0, 62, 57, 0);
+	Scalar redUpperHSVBound = new Scalar(95, 255, 255, 0);
+	
 	//If off to the right make less negative, to the left change to more negative
 	final double OFFSET_ZERO = (RobotMap.isSkoll) ? -52 : -47.5;
 	final double FOCAL_LENGTH = 0.5 * 360 / Math.tan(1.17 / 2); //TODO replace 1.17 with horizontal FOV
@@ -125,6 +133,20 @@ public class CameraOpenCV extends Subsystem {
     	else {
     		Robot.logger.log("No camera found", 2);
     	}
+    }
+    
+    public void setHSVValues(Robot.Alliance alliance) {
+		if(alliance == Robot.Alliance.BLUE_ALLIANCE) {
+			setCameraValues(blueLowerHSVBound, blueUpperHSVBound);
+		}
+		else {
+			setCameraValues(redLowerHSVBound, redUpperHSVBound);
+		}
+	}
+    
+    private void setCameraValues(Scalar lowerHSVBound, Scalar upperHSVBound) {
+    	this.lowerHSVBound = lowerHSVBound;
+    	this.upperHSVBound = upperHSVBound;
     }
     
     private Mat getImage() {
