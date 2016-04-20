@@ -19,7 +19,7 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	double leftShootSpeed = 3010, rightShootSpeed = 3010;
+	double leftShootSpeed = 3010, rightShootSpeed = 2850;
 	double batterShootSpeed = 2750, intakeSpeed = 2000;
 	double toleranceRPM = 150;
 	

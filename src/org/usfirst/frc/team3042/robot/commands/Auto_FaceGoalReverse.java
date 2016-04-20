@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3042.robot.commands;
 
+import org.usfirst.frc.team3042.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -24,6 +26,7 @@ public class Auto_FaceGoalReverse extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
+    	addParallel(new Snout_Storage());
     	switch(defensePosition) {
 		case 0:
 			break;
@@ -42,6 +45,7 @@ public class Auto_FaceGoalReverse extends CommandGroup {
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -4, -2));
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 1.6, 2, 0));
 			break;
-	}
+    	}
+    	addSequential(new Auto_GoToAutoShoot(defensePosition));
     }
 }

@@ -44,6 +44,7 @@ public class Auto_FaceGoalForwards extends CommandGroup {
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 4, 2));
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 1.02, 2, 0));
 			break;
-	}
+    	}
+    	addSequential(new Auto_GoToAutoShoot(defensePosition));
     }
 }
