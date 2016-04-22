@@ -29,7 +29,7 @@ public class AutoMode_Ramparts extends CommandGroup {
     	addParallel(new Auto_ConditionalSnout(240, 5000, 640));
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -10, -3));
     	
-    	addParallel(new Snout_AutoShootPosition()); 
+    	//addParallel(new Snout_AutoShootPosition()); 
     	
     	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {

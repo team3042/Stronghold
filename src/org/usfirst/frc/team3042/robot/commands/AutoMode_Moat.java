@@ -28,7 +28,7 @@ public class AutoMode_Moat extends CommandGroup {
     	addParallel(new Snout_Storage());
     	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -12, -3.5));
     	
-    	addParallel(new Snout_AutoShootPosition()); 
+    	//addParallel(new Snout_AutoShootPosition()); 
     	
     	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {
