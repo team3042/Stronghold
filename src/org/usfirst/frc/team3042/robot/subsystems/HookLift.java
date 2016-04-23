@@ -13,7 +13,7 @@ public class HookLift extends Subsystem {
     	
 	CANTalon liftTalon = new CANTalon(RobotMap.HOOK_LIFT_TALON);
 	
-	final double raiseSpeed = (RobotMap.isSkoll)? 0.75 : 0.75, lowerSpeed = (RobotMap.isSkoll)? 0.75 : 0.75;
+	final double raiseSpeed = (RobotMap.isSkoll)? 0.85 : 0.85, lowerSpeed = (RobotMap.isSkoll)? 0.75 : 0.75;
 	int encoderZero;
 	final double encLimit = 47000;
 	final double tolerance = 500;

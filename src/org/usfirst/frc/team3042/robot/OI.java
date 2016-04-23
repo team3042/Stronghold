@@ -90,7 +90,7 @@ public class OI {
 		right_4.whenPressed(new CameraAPI_TakeCalibrationImage());
 		
 		//Testing
-		right_5.whileHeld(new CameraAPI_SubtractionTest());
+		right_5.whenPressed(new CameraAPI_SubtractionTest());
 	}
 }
 

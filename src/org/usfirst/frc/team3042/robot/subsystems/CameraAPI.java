@@ -54,9 +54,15 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
+	
+	//Errors/calculators practice
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0*255/180, 180*255/180);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(65*255/180, 90*255/180);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(30, 255);
 	
 	//Chanhassen
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(85, 255);	//Range for green light
@@ -117,13 +123,13 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -57 : -47.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -50.5 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k480x360);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(50);
+		camera.writeBrightness(0);
 		//camera.writeBrightness(50);//Daytime Commons
 		camera.writeExposureControl(ExposureControl.kHold);
 		//camera.writeColorLevel(100);//Daytime Commons
@@ -257,7 +263,7 @@ public class CameraAPI extends Subsystem {
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	filterOutSmallParticles(binaryImage, 10, 172800);
+    	filterOutSmallParticles(binaryImage, 200, 172800);
     	Image filledImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		NIVision.imaqFillHoles(filledImage, binaryImage, 1);
 		NIVision.imaqConvexHull(binaryImage, filledImage, 1);

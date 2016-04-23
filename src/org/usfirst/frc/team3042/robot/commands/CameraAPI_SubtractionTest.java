@@ -11,14 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class CameraAPI_SubtractionTest extends Command {
-
-	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
-	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
-	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
-	
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 255);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(0, 255);	//Range for green light
 	
     public CameraAPI_SubtractionTest() {
         // Use requires() here to declare subsystem dependencies
@@ -31,8 +23,11 @@ public class CameraAPI_SubtractionTest extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Image testImage = Robot.camera.getSubtractedFrame();
-    	//Image testImage = Robot.camera.getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
+    	//Image testImage = Robot.camera.getSubtractedFrame();
+    	Image testImage = Robot.camera.getHSVFilteredCameraFrame(
+    			Robot.camera.TARGET_HUE_RANGE, 
+    			Robot.camera.TARGET_SAT_RANGE, 
+    			Robot.camera.TARGET_VAL_RANGE);
     	
     	Robot.camera.outputImage(testImage, "filterTest.png");
     }

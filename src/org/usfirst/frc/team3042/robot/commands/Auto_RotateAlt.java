@@ -26,7 +26,7 @@ public class Auto_RotateAlt extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.camera.outputCleanImage();
+    	//Robot.camera.outputCleanImage();
     	
     	
     	double offset = Robot.camera.getRotationOffset();

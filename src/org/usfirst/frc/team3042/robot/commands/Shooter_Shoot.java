@@ -2,12 +2,15 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
 public class Shooter_Shoot extends Command {
+	
+	Timer timer = new Timer();
 	
     public Shooter_Shoot() {
     	requires(Robot.shooter);
@@ -18,17 +21,21 @@ public class Shooter_Shoot extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	Robot.shooter.spinToShoot();
+    	
+    	timer.reset();
+    	timer.start();
+    	
     	//Robot.logger.log("Camera Distance = "+Robot.camera.getDistToTarget(), 4);
     	//Robot.logger.log("Potentiometer Value= " + Robot.snout.getPotValue(), 4);
     	//Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
-    	Robot.camera.outputCleanImage();
+    	//Robot.camera.outputCleanImage();
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {  
     	//SmartDashboard.putNumber("Shooter Left", Robot.shooter.getEncoderRPMLeft());
-    	if (Robot.shooter.readyToShoot()) {
+    	if (Robot.shooter.readyToShoot() || timer.get() > 4) {
     		Robot.shooterServo.setServoExtended();
     	}
     }

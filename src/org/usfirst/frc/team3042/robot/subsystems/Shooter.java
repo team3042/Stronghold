@@ -19,14 +19,14 @@ public class Shooter extends Subsystem {
 	//Set starting points for the encoders
 	int talonLeftZero = 0, talonRightZero = 0;
 	
-	double leftShootSpeed = 3010, rightShootSpeed = 2850;
+	double leftShootSpeed = 3360, rightShootSpeed = 2750;
 	double batterShootSpeed = 2750, intakeSpeed = 2000;
 	double toleranceRPM = 150;
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
 	public double leftF = (RobotMap.isSkoll)? 0.024: 0.0272, 
-			rightF = (RobotMap.isSkoll)? 0.025: 0.0272;
+			rightF = (RobotMap.isSkoll)? 0.0264: 0.0272;
 
 	public Shooter() {
 		//Setting Talon settings
