@@ -13,6 +13,8 @@ public class DriveTrain_TankDrive extends Command {
 	//Scale the joystick values to restrict maximum speed
     private final double speedScale = 1.0;
     
+    private final double deadzone = 0.07;
+    
     //Inertial dampening
     final int LEFT = 0, RIGHT = 1;
     Timer time = new Timer();
@@ -36,6 +38,9 @@ public class DriveTrain_TankDrive extends Command {
     	
     	double leftPower = -Robot.oi.joystickLeft.getY() * speedScale;
         double rightPower = -Robot.oi.joystickRight.getY() * speedScale;
+        
+        leftPower = (Math.abs(leftPower) < deadzone)? 0 : leftPower;
+        rightPower = (Math.abs(rightPower) < deadzone)? 0 : rightPower;
         
         leftPower = restrictAccel(leftPower, LEFT);
         rightPower = restrictAccel(rightPower, RIGHT);

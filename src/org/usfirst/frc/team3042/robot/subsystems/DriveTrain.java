@@ -40,12 +40,12 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	public double kP = 1, kI = 0, kD = 0;
 	public double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
-	double pPos = 1.3, iPos = 0.008, fPos = 0;
+	double pPos = 1.3, iPos = 0.015, fPos = 0;
 	int iZone = 150;
 	
 	//Values for checking if near setpoint
 	double leftSetpoint, rightSetpoint;
-	double tolerance = 5.0 / encCounts;
+	double tolerance = 4.0 / encCounts;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {

@@ -28,17 +28,17 @@ public class AutoMode_Portcullis extends CommandGroup {
         // arm.
     	
     	addParallel(new Snout_Pickup());
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 2.56, 2));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 3.26, 2));
     	addParallel(new Snout_SetPosition(360));
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 5.5, 2.5));
+    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 5, 2));
     	
-    	//addParallel(new Snout_AutoShootPosition());
+    	addParallel(new Snout_AutoShootPosition());
     	
     	addSequential(new Auto_FaceGoalForwards(defensePosition));
     	if(defensePosition != 0) {
     		addSequential(new Auto_AimShoot());
     	}
     	
-    	addSequential(new Snout_Storage());
+    	addSequential(new Snout_Storage()); 
     }
 }

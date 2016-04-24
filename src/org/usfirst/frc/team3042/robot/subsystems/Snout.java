@@ -30,7 +30,7 @@ public class Snout extends Subsystem {
 	private double layup = 350;
 	private double batter = 550;
 	private double[] autoShootPosition = new double[]
-			{266, 266,266,266,266};
+			{266, 266, 266, 266, 266, 266};
 	
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
 	private int iZone = 15;

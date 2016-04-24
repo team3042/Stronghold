@@ -74,7 +74,7 @@ public class Robot extends IterativeRobot {
         defenseChooser.addObject("Rock Wall", DefenseType.ROCK_WALL);
         defenseChooser.addObject("Ramparts", DefenseType.RAMPARTS);
         defenseChooser.addObject("Cheval de Frise", DefenseType.CHEVAL_DE_FRISE);
-        //defenseChooser.addObject("Portcullis", DefenseType.PORTCULLIS);
+        defenseChooser.addObject("Portcullis", DefenseType.PORTCULLIS);
         defenseChooser.addObject("Reach Forward", DefenseType.REACH_FORWARD);
         defenseChooser.addObject("Reach Reverse", DefenseType.REACH_REVERSE);
         SmartDashboard.putData("Auto Defense", defenseChooser);

@@ -42,8 +42,7 @@ public class Auto_FaceGoalReverse extends CommandGroup {
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 2.7, 2, 0));
 			break;
 		case 5:
-			addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -4, -2));
-			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 1.6, 2, 0));
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 2.1, 2, 0));
 			break;
     	}
     	addSequential(new Auto_GoToAutoShoot(defensePosition));

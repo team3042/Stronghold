@@ -23,11 +23,13 @@ public class CameraAPI_SubtractionTest extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	//Image testImage = Robot.camera.getSubtractedFrame();
-    	Image testImage = Robot.camera.getHSVFilteredCameraFrame(
+    	Image testImage = Robot.camera.getSubtractedFrame();
+    	//Image litFrame = Robot.camera.getLitFrame();
+    	//Image unlitFrame = Robot.camera.getUnlitFrame();
+    	/*Image testImage = Robot.camera.getHSVFilteredCameraFrame(
     			Robot.camera.TARGET_HUE_RANGE, 
     			Robot.camera.TARGET_SAT_RANGE, 
-    			Robot.camera.TARGET_VAL_RANGE);
+    			Robot.camera.TARGET_VAL_RANGE); */
     	
     	Robot.camera.outputImage(testImage, "filterTest.png");
     }

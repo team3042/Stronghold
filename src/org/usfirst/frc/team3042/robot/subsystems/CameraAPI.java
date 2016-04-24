@@ -123,7 +123,7 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -50.5 : -47.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -54 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
@@ -438,7 +438,39 @@ public class CameraAPI extends Subsystem {
 		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
 		
+		outputImage(unlitFrame, "unlitFrame.png");
+		outputImage(litFrame, "litFrame.png");
+		
 		return subtractedFrame;
+	}
+	
+	public Image getLitFrame() {
+		Timer timer = new Timer();
+		double waitTime = 0.2;
+		//Turn Light On
+		Robot.ledSwitch.setOn();		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+				
+		//Get Lit Frame
+		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		camera.getImage(litFrame);
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+
+		//Turn Light Off
+		Robot.ledSwitch.setOff();
+		
+		return litFrame;
+	}
+	
+	public Image getUnlitFrame() {
+		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		camera.getImage(unlitFrame);
+		
+		return unlitFrame;
 	}
 	
 	//A method that filters out small particles from a binary image
