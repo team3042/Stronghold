@@ -26,6 +26,8 @@ public class Auto_Drive extends Command {
 	
 	double wheelbaseWidth = 2.4;
 	
+	AutoType autoType;
+	
 	AutoTrajectory_MotionProfile motionProfileLeft;
 	AutoTrajectory_MotionProfile motionProfileRight;
 	
@@ -35,6 +37,8 @@ public class Auto_Drive extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);
+    	
+    	this.autoType = autoType;
     	
     	if(autoType == AutoType.STRAIGHT) {
     		leftDistance = distance;
@@ -123,6 +127,12 @@ public class Auto_Drive extends Command {
     			Robot.driveTrain.pushPoints(leftTrajectory[i], zeroPoint);
     		}
     	}
+    	
+    	if(autoType != AutoType.STRAIGHT) {
+    		Robot.driveTrain.tempReverseLeft();
+    	}
+    	
+    	Robot.driveTrain.setMotors(0.7, 0.7);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -153,6 +163,7 @@ public class Auto_Drive extends Command {
     protected void end() {
     	Robot.logger.log("End", 1);
     	Robot.driveTrain.disableMotionProfile();
+    	Robot.driveTrain.tempUnreverseLeft();
     }
 
     // Called when another command which requires one or more of the same
@@ -160,6 +171,7 @@ public class Auto_Drive extends Command {
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
     	Robot.driveTrain.disableMotionProfile();
+    	Robot.driveTrain.tempUnreverseLeft();
     }
     
     public enum AutoType {

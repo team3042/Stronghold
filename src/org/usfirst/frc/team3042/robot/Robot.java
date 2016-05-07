@@ -12,6 +12,7 @@ import org.usfirst.frc.team3042.robot.commands.AutoMode_RoughTerrain;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_ChevalDeFrise;
 import org.usfirst.frc.team3042.robot.commands.AutoMode_DoNothing;
 import org.usfirst.frc.team3042.robot.subsystems.CameraAPI;
+import org.usfirst.frc.team3042.robot.subsystems.DefenseExtendServo;
 import org.usfirst.frc.team3042.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3042.robot.subsystems.DriversCamera;
 import org.usfirst.frc.team3042.robot.subsystems.Shooter;
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
 	public static final Snout snout = new Snout();
 	public static final HookLift hookLift = new HookLift();
 	public static final HookLiftServo hookLiftServo = new HookLiftServo();
+	//public static final DefenseExtendServo defenseServo = new DefenseExtendServo();
 	public static final Winch winch = new Winch();
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final CameraAPI camera = new CameraAPI();
@@ -92,7 +94,7 @@ public class Robot extends IterativeRobot {
         allianceChooser.addDefault("Red Alliance", Alliance.RED_ALLIANCE);
         allianceChooser.addObject("Blue Alliance", Alliance.BLUE_ALLIANCE);
         
-        SmartDashboard.putNumber("Shoot Speed", 4500);
+        //SmartDashboard.putNumber("Shoot Speed", 4500);
     }
 	
 	/**
@@ -192,9 +194,11 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();  
         SmartDashboard.putNumber("Left Shooter Speed", shooter.getEncoderRPMLeft());
         SmartDashboard.putNumber("Right Shooter Speed", shooter.getEncoderRPMRight());
+        //SmartDashboard.putNumber("Right Shooter Speed", hookLift.liftTalon.getEncPosition());
+        //SmartDashboard.putNumber("Right Shooter Speed", driveTrain.rightMotorRear.getSpeed());
         SmartDashboard.putNumber("Potentiometer", snout.getPotValue());
     	SmartDashboard.putNumber("Hook Lift Encoder", hookLift.getEncDistance());
-        //SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
+        SmartDashboard.putNumber("Gyroscope", driveTrain.getGyro());
         
         SmartDashboard.putNumber("Left Drive Position", Robot.driveTrain.getLeftEncoder());
         SmartDashboard.putNumber("Right Drive Position", Robot.driveTrain.getRightEncoder());

@@ -28,7 +28,7 @@ public class Auto_AimShoot extends CommandGroup {
     	addSequential(new Auto_RotateAlt());
     	//addSequential(new Snout_Adjust());
     	addSequential(new Auto_RotateAlt());
-    	addSequential(new Auto_RotateAlt());
+    	//addSequential(new Auto_RotateAlt());
     	addSequential(new Auto_Shoot());
     }
 }

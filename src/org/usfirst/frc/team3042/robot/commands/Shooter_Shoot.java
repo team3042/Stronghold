@@ -2,6 +2,8 @@ package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
 
+import com.ni.vision.NIVision.Image;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -15,6 +17,8 @@ public class Shooter_Shoot extends Command {
     public Shooter_Shoot() {
     	requires(Robot.shooter);
     	requires(Robot.shooterServo);
+    	requires(Robot.camera);
+    	requires(Robot.ledSwitch);
     }
 
     // Called just before this Command runs the first time
@@ -29,6 +33,9 @@ public class Shooter_Shoot extends Command {
     	//Robot.logger.log("Potentiometer Value= " + Robot.snout.getPotValue(), 4);
     	//Robot.logger.log("Offset: " + Robot.camera.getRotationOffset(), 4);
     	//Robot.camera.outputCleanImage();
+    	
+    	//Image testImage = Robot.camera.getSubtractedFrame();
+    	//Robot.camera.outputImage(testImage, Robot.camera.generateFileName());
     	
     }
 

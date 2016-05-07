@@ -25,8 +25,8 @@ public class Shooter extends Subsystem {
 	
 	//Closed-Loop PIDF values
 	double P = 0.01, I = 0, D = 0;
-	public double leftF = (RobotMap.isSkoll)? 0.024: 0.0272, 
-			rightF = (RobotMap.isSkoll)? 0.0264: 0.0272;
+	public double leftF = (RobotMap.isSkoll)? 0.024: 0.025, 
+			rightF = (RobotMap.isSkoll)? 0.0264: 0.0263;
 
 	public Shooter() {
 		//Setting Talon settings
@@ -34,6 +34,7 @@ public class Shooter extends Subsystem {
 		talonRight.reverseOutput(false);
 		talonLeft.setInverted(true);
 		talonRight.setInverted(false);
+		
 			
 		initEncoders();		
 		setPIDF();

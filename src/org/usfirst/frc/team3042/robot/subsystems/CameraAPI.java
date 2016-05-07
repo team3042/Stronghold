@@ -59,10 +59,10 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
 	
 	//Errors/calculators practice
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0*255/180, 180*255/180);
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(11*255/180, 60*255/180);
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(65*255/180, 90*255/180);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(30, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(85, 255);
 	
 	//Chanhassen
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(85, 255);	//Range for green light
@@ -409,7 +409,7 @@ public class CameraAPI extends Subsystem {
 	
 	public Image getSubtractedFrame() {
 		Timer timer = new Timer();
-		double waitTime = 0.2;
+		double waitTime = 0.3;
 		
 		//Get Unlit Frame
 		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
@@ -438,8 +438,8 @@ public class CameraAPI extends Subsystem {
 		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
 		
-		outputImage(unlitFrame, "unlitFrame.png");
-		outputImage(litFrame, "litFrame.png");
+		//outputImage(unlitFrame, "unlitFrame4.png");
+		//outputImage(litFrame, "litFrame4.png");
 		
 		return subtractedFrame;
 	}

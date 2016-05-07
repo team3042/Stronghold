@@ -20,7 +20,7 @@ public class DriveTrain extends Subsystem {
 	public CANTalon leftMotorFront = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_1);
 	CANTalon leftMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_2);
 	CANTalon rightMotorFront = new CANTalon(RobotMap.DRIVETAIN_TALON_RIGHT_1);
-	CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
+	public CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
 	
 	//Set which of the motors has the encoder attached
 	CANTalon leftEncMotor = leftMotorFront;
@@ -72,7 +72,7 @@ public class DriveTrain extends Subsystem {
     	
     	initEncoders();
     	
-    	//gyro.reset();
+    	gyro.reset();
     	
     	//Starting talons processing motion profile
     	leftMotorFront.changeMotionControlFramePeriod(5);
@@ -96,6 +96,16 @@ public class DriveTrain extends Subsystem {
     	leftMotorFront.setF(kF);
     	rightMotorFront.setF(kF);
     	
+	}
+	
+	public void tempReverseLeft() {
+    	//leftMotorFront.setInverted(true);
+    	//leftMotorFront.reverseOutput(true);
+	}
+	
+	public void tempUnreverseLeft() {
+    	//leftMotorFront.setInverted(false);
+    	//leftMotorFront.reverseOutput(false);
 	}
 	
 	void initEncoders() {

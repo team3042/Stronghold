@@ -24,13 +24,14 @@ public class Snout extends Subsystem {
 	private double storage = 624;
 	private double pickup = 0; 
 	//private double shoot = 240;
+	private double lowGoal = 73;
 	private double autoShoot = 240;
-	private double arcOuterworksShoot = 256;
+	private double arcOuterworksShoot = 280;
 	private double arcCloseShoot = 310;
 	private double layup = 350;
 	private double batter = 550;
 	private double[] autoShootPosition = new double[]
-			{266, 266, 266, 266, 266, 266};
+			{280, 280, 280, 280, 280, 280};
 	
 	private double p = 5, i = 0.00, d = 0; //i = 0.009
 	private int iZone = 15;
@@ -206,6 +207,10 @@ public class Snout extends Subsystem {
     
     public void goToBatter() {
     	setPosition(batter);
+    }
+    
+    public void goToLowGoal() {
+    	setPosition(lowGoal);
     }
     
     public void setToCurrentPosition() {
