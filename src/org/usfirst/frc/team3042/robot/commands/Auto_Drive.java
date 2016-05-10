@@ -127,12 +127,6 @@ public class Auto_Drive extends Command {
     			Robot.driveTrain.pushPoints(leftTrajectory[i], zeroPoint);
     		}
     	}
-    	
-    	if(autoType != AutoType.STRAIGHT) {
-    		Robot.driveTrain.tempReverseLeft();
-    	}
-    	
-    	Robot.driveTrain.setMotors(0.7, 0.7);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -163,7 +157,6 @@ public class Auto_Drive extends Command {
     protected void end() {
     	Robot.logger.log("End", 1);
     	Robot.driveTrain.disableMotionProfile();
-    	Robot.driveTrain.tempUnreverseLeft();
     }
 
     // Called when another command which requires one or more of the same
@@ -171,7 +164,6 @@ public class Auto_Drive extends Command {
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
     	Robot.driveTrain.disableMotionProfile();
-    	Robot.driveTrain.tempUnreverseLeft();
     }
     
     public enum AutoType {

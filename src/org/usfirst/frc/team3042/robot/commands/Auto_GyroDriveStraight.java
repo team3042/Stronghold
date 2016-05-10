@@ -51,6 +51,10 @@ public class Auto_GyroDriveStraight extends Command {
     	
     	profile = motionProfile.calculateProfileRaw();
     	
+    	finished = false;
+    	goalPosition = 0;
+    	goalSpeed = 0;
+    	
     	timer.reset();
     	timer.start();
     }
@@ -62,11 +66,11 @@ public class Auto_GyroDriveStraight extends Command {
     	
     	double currentHeading = Robot.driveTrain.getGyro();
     	
-    	double leftSpeed = goalSpeed - pTurn * currentHeading; // + pPos * currentLeftError; // ;
-    	double rightSpeed = goalSpeed + pTurn * currentHeading; // + pPos * currentRightError; // ;
+    	double leftSpeed = goalSpeed - pTurn * currentHeading; // + pPos * currentLeftError;
+    	double rightSpeed = goalSpeed + pTurn * currentHeading; // + pPos * currentRightError;
     	
-    	Robot.logger.log("\nTurn Corrected Left = " + (leftSpeed - pTurn * currentHeading) +
-    			"\nTurn Corrected Right = " + (rightSpeed + pTurn * currentHeading), 4);
+    	Robot.logger.log("\nTurn Corrected Left = " + (leftSpeed - pTurn * currentHeading + pPos * currentLeftError) +
+    			"\nTurn Corrected Right = " + (rightSpeed + pTurn * currentHeading + pPos * currentRightError), 4);
     	
     	Robot.driveTrain.setMotorsRaw(leftSpeed, rightSpeed);
     	
@@ -86,11 +90,9 @@ public class Auto_GyroDriveStraight extends Command {
     						(profile[i][2] - profile[i-1][2]) /
     						(profile[i][0] - profile[i-1][0]);
     				
-    				//goalPosition = profile[i-1][1];
-    				//goalSpeed = profile[i-1][2];
     				//Converting from RPM to a percentage
     				goalSpeed = Robot.driveTrain.kF * goalSpeed * Robot.driveTrain.encCounts / 1023 / 60;
-    				goalPosition *= Robot.driveTrain.encCounts;
+    				goalPosition *= Robot.driveTrain.encCounts * 4;
     				break;
     			}
     		}
@@ -110,7 +112,6 @@ public class Auto_GyroDriveStraight extends Command {
     protected void end() {
     	Robot.logger.log("End", 1);
     	
-    	timer.stop();
     	Robot.driveTrain.setMotorsRaw(0, 0);
     }
 
@@ -119,7 +120,6 @@ public class Auto_GyroDriveStraight extends Command {
     protected void interrupted() {
     	Robot.logger.log("Interrupt", 1);
     	
-    	timer.stop();
     	Robot.driveTrain.setMotorsRaw(0, 0);
     }
 }

@@ -28,7 +28,6 @@ public class Auto_RotateAlt extends Command {
     	
     	//Robot.camera.outputCleanImage();
     	
-    	Robot.driveTrain.tempReverseLeft();
     	
     	double offset = Robot.camera.getRotationOffset();
     	if(Robot.snout.isBackwards()) {
@@ -56,7 +55,6 @@ public class Auto_RotateAlt extends Command {
     protected void end() {
     	Robot.logger.log("End", 1);
     	
-    	Robot.driveTrain.tempUnreverseLeft();
     }
 
     // Called when another command which requires one or more of the same
@@ -64,6 +62,5 @@ public class Auto_RotateAlt extends Command {
     protected void interrupted() {
     	Robot.logger.log("Interrupted", 1);
     	
-    	Robot.driveTrain.tempUnreverseLeft();
     }
 }
