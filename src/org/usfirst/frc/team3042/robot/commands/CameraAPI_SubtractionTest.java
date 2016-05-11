@@ -31,7 +31,7 @@ public class CameraAPI_SubtractionTest extends Command {
     			Robot.camera.TARGET_SAT_RANGE, 
     			Robot.camera.TARGET_VAL_RANGE); */
     	
-    	Robot.camera.outputImage(testImage, "filterTest4.png");
+    	Robot.camera.outputImage(testImage, "filterTest.png");
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Snout extends Subsystem {
 	
-	public CANTalon talonRotate = new CANTalon(RobotMap.SHOOTER_ARM_TALON);
+	public CANTalon talonRotate = new CANTalon(RobotMap.SNOUT_TALON);
 	
 	//Pot Values
 

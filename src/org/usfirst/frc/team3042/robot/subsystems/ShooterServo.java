@@ -13,8 +13,8 @@ public class ShooterServo extends Subsystem {
 	
 	Servo servo = new Servo(RobotMap.SHOOTER_SERVO);
 	
-	double retractAngle = (RobotMap.isSkoll)? 90: 180;
-	double extendAngle = (RobotMap.isSkoll)? 30: 120;
+	double retractAngle = (RobotMap.isSkoll)? 180: 180;
+	double extendAngle = (RobotMap.isSkoll)? 120: 120;
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.

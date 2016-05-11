@@ -96,7 +96,7 @@ public class OI {
 		//Testing
 		right_5.whenPressed(new CameraAPI_SubtractionTest());
 		//right_5.whileHeld(new LEDSwitch_SetOn());
-		right_4.whenPressed(new Auto_GyroDriveStraight(20, 2));
+		right_4.whenPressed(new Auto_GyroDriveStraight(2, 1));
 	}
 }
 

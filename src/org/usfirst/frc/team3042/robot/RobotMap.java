@@ -16,7 +16,7 @@ public class RobotMap {
 	public static final int DRIVETRAIN_TALON_RIGHT_2 = (isSkoll)? 10 : 2;
 	public static final int SHOOTER_TALON_LEFT = (isSkoll)? 3 : 17;
 	public static final int SHOOTER_TALON_RIGHT = (isSkoll)? 15 : 5;
-	public static final int SHOOTER_ARM_TALON = (isSkoll)? 16 : 7;
+	public static final int SNOUT_TALON = (isSkoll)? 16 : 7;
 	public static final int HOOK_LIFT_TALON = (isSkoll)? 12 : 8;
 	public static final int WINCH_TALON = (isSkoll)? 9 : 1;
 	

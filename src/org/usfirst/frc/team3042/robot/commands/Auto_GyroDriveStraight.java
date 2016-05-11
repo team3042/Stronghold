@@ -23,7 +23,7 @@ public class Auto_GyroDriveStraight extends Command {
 	double goalPosition = 0, goalSpeed = 0;
 	
 	//Proportional values for control of encoder position and heading
-	double pPos = 1.0 / 360, pTurn = 0.005;
+	double pPos = 1.0 / 1440, pTurn = 0.01;
 		
 	AutoTrajectory_MotionProfile motionProfile;
 	
@@ -61,16 +61,16 @@ public class Auto_GyroDriveStraight extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double currentLeftError = goalPosition - Robot.driveTrain.getLeftEncoder();
+    	double currentLeftError = goalPosition -  Robot.driveTrain.getLeftEncoder();
     	double currentRightError = goalPosition - Robot.driveTrain.getRightEncoder();
     	
     	double currentHeading = Robot.driveTrain.getGyro();
     	
-    	double leftSpeed = goalSpeed - pTurn * currentHeading; // + pPos * currentLeftError;
-    	double rightSpeed = goalSpeed + pTurn * currentHeading; // + pPos * currentRightError;
+    	double leftSpeed = goalSpeed - pTurn * currentHeading + pPos * currentLeftError;
+    	double rightSpeed = goalSpeed + pTurn * currentHeading + pPos * currentRightError;
     	
-    	Robot.logger.log("\nTurn Corrected Left = " + (leftSpeed - pTurn * currentHeading + pPos * currentLeftError) +
-    			"\nTurn Corrected Right = " + (rightSpeed + pTurn * currentHeading + pPos * currentRightError), 4);
+    	Robot.logger.log("\nTurn Corrected Left = " + (goalSpeed - pTurn * currentHeading + pPos * currentLeftError) +
+    			"\nTurn Corrected Right = " + (goalSpeed + pTurn * currentHeading + pPos * currentRightError), 4);
     	
     	Robot.driveTrain.setMotorsRaw(leftSpeed, rightSpeed);
     	

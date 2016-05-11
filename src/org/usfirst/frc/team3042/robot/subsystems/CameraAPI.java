@@ -59,10 +59,10 @@ public class CameraAPI extends Subsystem {
 	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
 	
 	//Errors/calculators practice
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(11*255/180, 60*255/180);
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(60*255/180, 100*255/180);
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(65*255/180, 90*255/180);	//Range for green light
 	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(85, 255);
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(60, 255);
 	
 	//Chanhassen
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(85, 255);	//Range for green light
@@ -123,7 +123,7 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -54 : -47.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -80.5 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
