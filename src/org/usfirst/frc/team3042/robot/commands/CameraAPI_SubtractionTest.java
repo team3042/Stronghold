@@ -24,7 +24,7 @@ public class CameraAPI_SubtractionTest extends Command {
     	Robot.logger.log("Initialize", 1);
     	
     	Image testImage = Robot.camera.getSubtractedFrame();
-    	//Image litFrame = Robot.camera.getLitFrame();
+    	Image litFrame = Robot.camera.getLitFrame();
     	//Image unlitFrame = Robot.camera.getUnlitFrame();
     	/*Image testImage = Robot.camera.getHSVFilteredCameraFrame(
     			Robot.camera.TARGET_HUE_RANGE, 
@@ -32,6 +32,7 @@ public class CameraAPI_SubtractionTest extends Command {
     			Robot.camera.TARGET_VAL_RANGE); */
     	
     	Robot.camera.outputImage(testImage, "filterTest.png");
+    	Robot.camera.outputImage(litFrame, "litFrame.png");
     }
 
     // Called repeatedly when this Command is scheduled to run

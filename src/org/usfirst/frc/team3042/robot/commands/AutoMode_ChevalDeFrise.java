@@ -31,17 +31,17 @@ public class AutoMode_ChevalDeFrise extends CommandGroup {
     	addParallel(new Snout_SetPosition(250));
     	addSequential(new Auto_Drive(AutoType.STRAIGHT, 2.66, 2));
     	
-    	addSequential(new Auto_SetSnoutPosition(45)); 
-    	addParallel(new Auto_ConditionalSnout(20, 4000, 240));
-    	addSequential(new Auto_Drive(AutoType.STRAIGHT, 5.9, 3)); 
+    	//addSequential(new Auto_SetSnoutPosition(45)); 
+    	//addParallel(new Auto_ConditionalSnout(20, 4000, 240));
+    	//addSequential(new Auto_Drive(AutoType.STRAIGHT, 5.9, 3)); 
     	
     	//addParallel(new Snout_AutoShootPosition());
-    	
+    	/*
     	addSequential(new Auto_FaceGoalForwards(defensePosition));
     	if(defensePosition != 0) {
     		addSequential(new Auto_AimShoot());
     	} 
     	
-    	addSequential(new Snout_Storage());
+    	addSequential(new Snout_Storage()); */
     }
 }
