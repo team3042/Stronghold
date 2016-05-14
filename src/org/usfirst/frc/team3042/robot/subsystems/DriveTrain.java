@@ -6,6 +6,7 @@ import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDeviceStatus;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
@@ -211,6 +212,14 @@ public class DriveTrain extends Subsystem {
 	
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
+	}
+	
+	public boolean isLeftEncPresent() {
+		return !(leftEncMotor.isSensorPresent(FeedbackDevice.QuadEncoder) == FeedbackDeviceStatus.FeedbackStatusPresent);
+	}
+	
+	public boolean isRightEncPresent() {
+		return !(rightEncMotor.isSensorPresent(FeedbackDevice.QuadEncoder) == FeedbackDeviceStatus.FeedbackStatusPresent);
 	}
 	
 	public void resetGyro() {

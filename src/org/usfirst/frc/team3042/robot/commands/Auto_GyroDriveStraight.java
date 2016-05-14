@@ -66,8 +66,10 @@ public class Auto_GyroDriveStraight extends Command {
     	
     	double currentHeading = Robot.driveTrain.getGyro();
     	
-    	double leftSpeed = goalSpeed - pTurn * currentHeading + pPos * currentLeftError;
-    	double rightSpeed = goalSpeed + pTurn * currentHeading + pPos * currentRightError;
+    	double currentPPos = (Robot.driveTrain.isLeftEncPresent() && Robot.driveTrain.isRightEncPresent())? pPos : 0;
+    	
+    	double leftSpeed = goalSpeed - pTurn * currentHeading + currentPPos * currentLeftError;
+    	double rightSpeed = goalSpeed + pTurn * currentHeading + currentPPos * currentRightError;
     	
     	Robot.logger.log("\nTurn Corrected Left = " + (goalSpeed - pTurn * currentHeading + pPos * currentLeftError) +
     			"\nTurn Corrected Right = " + (goalSpeed + pTurn * currentHeading + pPos * currentRightError), 4);
