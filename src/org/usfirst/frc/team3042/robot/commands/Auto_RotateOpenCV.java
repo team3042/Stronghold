@@ -25,7 +25,9 @@ public class Auto_RotateOpenCV extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	double offset = Robot.cameraCV.getRotationOffset();
+    	double snoutAngle = Robot.snout.getAngle();
+    	
+    	double offset = Robot.cameraCV.getGoalPose(snoutAngle)[1];
     	if(Robot.snout.isBackwards()) {
 			offset *= -1;
 		}

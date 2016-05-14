@@ -58,6 +58,10 @@ public class CameraOpenCV extends Subsystem {
 	private static final String FILE_DATE_FORMAT = "yyyy-MM-dd-hhmmss";
 	private static final String OUTPUT_DIRECTORY = "/home/lvuser/images/";
 	
+	static final double CENTER_X = 179.5, CENTER_Y = 239.5;
+	static final double SNOUT_HEIGHT = 10.0 / 12, SNOUT_X_OFFSET = 16.0 / 12, CAMERA_X_OFFSET = 8.0 / 12, CAMERA_Y_OFFSET = 4.0 / 12; //Robot measurements in feet
+	static final double GOAL_HEIGHT = 8.08; //Field measurements in feet
+	
 	Mat stencil;
 	
 	public CameraOpenCV(){
@@ -107,19 +111,38 @@ public class CameraOpenCV extends Subsystem {
 		}
     }
     
-    //Gets the current angular offset from the target in radians
-    public double getRotationOffset() {
+    //Gets the current angular offset from the target in radians from perspective of camera
+    public double getSimpleRotationOffset() {
     	double angleOffset = 0;
     	if(isConnected) {
     		Point[] targetConvexHull = getTargetConvexHull();
     	
-    		angleOffset = calculateRotationOffset(targetConvexHull);
+    		angleOffset = getHorizontalOffset(targetConvexHull);
     	}
     	else {
     		Robot.logger.log("No camera found", 2);
     	}
     	
     	return angleOffset;
+    }
+    
+    //Returns an array with (distance to goal, robot angle to goal)
+    public double[] getGoalPose(double snoutAngle) {
+    	double[] goalPose = {0, 0};
+    	if(isConnected) {
+    		Point[] targetConvexHull = getTargetConvexHull();
+    		
+    		double horizontalOffset = getHorizontalOffset(targetConvexHull);
+    		double verticalOffset = getVerticalOffset(targetConvexHull);
+    		
+    		goalPose[0] = getDistanceToGoal(verticalOffset, snoutAngle);
+    		goalPose[1] = getRobotRotationOffset(horizontalOffset, verticalOffset, snoutAngle);
+    	}
+    	else {
+    		Robot.logger.log("No camera found", 2);
+    	}
+    	
+    	return goalPose;
     }
     
     //Outputs the current camera view to the image folder on the roborio
@@ -306,12 +329,44 @@ public class CameraOpenCV extends Subsystem {
   	    return convexHull;
   	}
   	
-  	private double calculateRotationOffset(Point[] convexHull) {
-  		double pixelOffset = 0.5 * (convexHull[1].y + convexHull[2].y) - OFFSET_ZERO;
-  		
-  		double angleOffset = Math.atan(pixelOffset / FOCAL_LENGTH);
-  		
-  		return angleOffset;
-  	}
+  	//Calculating horizontal angle offset from goal in radians, CCW is positive
+  	private double getHorizontalOffset(Point[] convexHull) {
+		double pixelOffset = 0.5 * (convexHull[1].y + convexHull[2].y) - CENTER_X;
+		
+		double angleOffset = Math.atan2(pixelOffset, FOCAL_LENGTH);
+		
+		return angleOffset;
+	}
+	
+  	//Calculating vertical angle offset from goal in radians, upwards is positive
+	private double getVerticalOffset(Point[] convexHull) {
+		double pixelOffset = 0.5 * (convexHull[1].x + convexHull[2].x) - CENTER_Y;
+		
+		double angleOffset = Math.atan2(pixelOffset, FOCAL_LENGTH);
+		
+		return angleOffset;
+	}
+	
+	private double getDistanceToGoal(double angleOffset, double snoutAngle) {
+		double cameraHeight = Math.sin(snoutAngle) * CAMERA_X_OFFSET + Math.cos(snoutAngle) * CAMERA_Y_OFFSET + SNOUT_HEIGHT;
+		double cameraHorizontalOffset = Math.cos(snoutAngle) * CAMERA_X_OFFSET - Math.sin(snoutAngle) * CAMERA_Y_OFFSET;
+		double heightToGoal = GOAL_HEIGHT - cameraHeight;
+		double angleToGoal = snoutAngle + angleOffset;
+		
+		double distanceToGoal = heightToGoal / Math.tan(angleToGoal) + cameraHorizontalOffset;
+		return distanceToGoal;
+	}
+	
+	private double getRobotRotationOffset(double horizontalAngleOffset, double verticalAngleOffset, double snoutAngle) {
+		double cameraHorizontalOffset = Math.cos(snoutAngle) * CAMERA_X_OFFSET - Math.sin(snoutAngle) * CAMERA_Y_OFFSET;
+		double distance = getDistanceToGoal(verticalAngleOffset, snoutAngle);
+		
+		double cameraToGoal = distance - cameraHorizontalOffset;
+		double centerToGoal = distance + SNOUT_X_OFFSET;
+		
+		double centerToGoalAngle = Math.atan2(cameraToGoal * Math.tan(horizontalAngleOffset), centerToGoal);
+		
+		return centerToGoalAngle;
+	}
 }
 
