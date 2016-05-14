@@ -32,7 +32,7 @@ public class Auto_FaceGoalForwards extends CommandGroup {
 		case 1:
 			break;
 		case 2:
-			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 0.72, 2, 0));
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 0.52, 2, 0));
 			break;
 		case 3:
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_RIGHT, 0.32, 2, 0));
@@ -41,9 +41,9 @@ public class Auto_FaceGoalForwards extends CommandGroup {
 			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 0.08, 2, 0));
 			break;
 		case 5:
-			addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, 4, 2));
-			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 1.02, 2, 0));
+			addSequential(new Auto_Drive(Auto_Drive.AutoType.TURN_LEFT, 0.52, 2, 0));
 			break;
-	}
+    	}
+    	addSequential(new Auto_GoToAutoShoot(defensePosition));
     }
 }

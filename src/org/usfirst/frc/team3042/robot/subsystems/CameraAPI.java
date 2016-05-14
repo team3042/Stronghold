@@ -54,9 +54,15 @@ public class CameraAPI extends Subsystem {
 	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(109, 255);	//Range for green light
 	*/
 	/*Daytime Commons 8*/
-	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
-	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
-	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(18*255/180, 100*255/180);	//Range for green light
+	//public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(119, 255);	//Range for green light
+	//public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(11, 255);	//Range for green light
+	
+	//Errors/calculators practice
+	public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(60*255/180, 100*255/180);
+	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(65*255/180, 90*255/180);	//Range for green light
+	public static NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(0, 255);	//Range for green light
+	public static NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(60, 255);
 	
 	//Chanhassen
 	//public static NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(85, 255);	//Range for green light
@@ -117,13 +123,13 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -52 : -47.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -80.5 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
 		camera.writeResolution(Resolution.k480x360);
 		camera.writeWhiteBalance(WhiteBalance.kFixedFluorescent2);
-		camera.writeBrightness(50);
+		camera.writeBrightness(0);
 		//camera.writeBrightness(50);//Daytime Commons
 		camera.writeExposureControl(ExposureControl.kHold);
 		//camera.writeColorLevel(100);//Daytime Commons
@@ -257,7 +263,7 @@ public class CameraAPI extends Subsystem {
 		//Filtered HSV
     	Image binaryImage = getHSVFilteredCameraFrame(TARGET_HUE_RANGE, TARGET_SAT_RANGE, TARGET_VAL_RANGE);
     	
-    	filterOutSmallParticles(binaryImage, 10, 172800);
+    	filterOutSmallParticles(binaryImage, 200, 172800);
     	Image filledImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		NIVision.imaqFillHoles(filledImage, binaryImage, 1);
 		NIVision.imaqConvexHull(binaryImage, filledImage, 1);
@@ -390,48 +396,81 @@ public class CameraAPI extends Subsystem {
 	private Image unfilteredImage;
 	//A method that allows other classes to utilize the camera classes ability to analyze frames
 	public Image getHSVFilteredCameraFrame(NIVision.Range hueRange, NIVision.Range satRange, NIVision.Range valRange ){
-		
-		//Get an image from the camera
-		//Image unfilteredFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		//camera.getImage(unfilteredFrame);
-		
 		Image subtractedFrame = getSubtractedFrame();
 		
 		unfilteredImage = subtractedFrame;
 		
 		//Filter the image from the camera through an HSV filter
 		Image filteredBinaryFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
-		NIVision.imaqColorThreshold(filteredBinaryFrame, unfilteredImage, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
-		//outputImage(unfilteredImage, "FilteredImage" + generateFileName());
+		NIVision.imaqColorThreshold(filteredBinaryFrame, subtractedFrame, 255, NIVision.ColorMode.HSV, hueRange, satRange, valRange);
+
 		return filteredBinaryFrame;
 	}
 	
 	public Image getSubtractedFrame() {
 		Timer timer = new Timer();
+		double waitTime = 0.3;
+		
+		//Get Unlit Frame
 		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(unlitFrame);
-		timer.start();
-		while(timer.get() < 0.2);
-		
-		Robot.ledSwitch.setOn();
-		
 		timer.reset();
 		timer.start();
-		while(timer.get() < 0.25); //TODO test shorter timeouts
+		while(timer.get() < waitTime);
+
+		//Turn Light On
+		Robot.ledSwitch.setOn();		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
 		
+		//Get Lit Frame
 		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		camera.getImage(litFrame);
-		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+
+		//Turn Light Off
 		Robot.ledSwitch.setOff();
-		Robot.logger.log("Beginning subtraction", 3);
+		
+		//Subtract Lit - Unlit
 		Image subtractedFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		NIVision.imaqSubtract(subtractedFrame, litFrame, unlitFrame);
-		Robot.logger.log("End subtraction", 3);
 		
-		//outputImage(subtractedFrame, "SubtractedImage" + generateFileName()); 
-		//outputImage(unlitFrame, "UnlitFrame" + generateFileName());
-		//outputImage(litFrame, "LitFrame" + generateFileName());
+		//outputImage(unlitFrame, "unlitFrame4.png");
+		//outputImage(litFrame, "litFrame4.png");
+		
 		return subtractedFrame;
+	}
+	
+	public Image getLitFrame() {
+		Timer timer = new Timer();
+		double waitTime = 0.2;
+		//Turn Light On
+		Robot.ledSwitch.setOn();		
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+				
+		//Get Lit Frame
+		Image litFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		camera.getImage(litFrame);
+		timer.reset();
+		timer.start();
+		while(timer.get() < waitTime);
+
+		//Turn Light Off
+		Robot.ledSwitch.setOff();
+		
+		return litFrame;
+	}
+	
+	public Image getUnlitFrame() {
+		Image unlitFrame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		camera.getImage(unlitFrame);
+		
+		return unlitFrame;
 	}
 	
 	//A method that filters out small particles from a binary image

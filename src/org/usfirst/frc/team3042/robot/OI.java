@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.commands.*;
+import org.usfirst.frc.team3042.robot.commands.Auto_Drive.AutoType;
 import org.usfirst.frc.team3042.robot.triggers.GamePadTrigger;
 import org.usfirst.frc.team3042.robot.triggers.POVButton;
 
@@ -55,7 +56,7 @@ public class OI {
 		
 		//Shooter - Intake	
 		gunner_RT.whileActive(new Shooter_Shoot());
-		gunner_RB.whileActive(new Shooter_BatterShoot());
+		gunner_RB.whileActive(new Snout_LowGoalPosition());
 		
 		//Control Snout Position
 		//gunner_LeftJoyDown.whileActive(new Snout_Raise());
@@ -63,7 +64,7 @@ public class OI {
 		gunner_B.whenPressed(new Snout_Pickup());
 		gunner_A.whileHeld(new Shooter_Intake());
 		gunner_X.whenPressed(new Snout_Storage());
-		gunner_LT.whenActive(new Interruptible(new Snout_Adjust()));
+		//gunner_LT.whenActive(new Interruptible(new Snout_Adjust()));
 		gunner_Y.whenPressed(new Snout_ShootPosition());
 		gunner_LB.whenActive(new Snout_LayupPosition());
 		
@@ -76,6 +77,9 @@ public class OI {
 		gunner_Start.whileHeld(new HookLift_Raise());
 		gunner_Back.whileHeld(new HookLift_Retract());
 		
+		left_3.whenPressed(new DefenseExtendServo_Retract());
+		left_4.whenPressed(new DefenseExtendServo_Extend());
+		
 		//Auto
 		/*
 		left_3.whenPressed(new Auto_FollowTrajectory(
@@ -87,10 +91,12 @@ public class OI {
 		//right_4.whenPressed(new Interruptible(new Snout_Adjust()));
 		//left_4.whenPressed(new Auto_StopFollow());
 		//left_5.whenPressed(new AutoMode_Ramparts(4));
-		right_4.whenPressed(new CameraAPI_TakeCalibrationImage());
+		//right_4.whenPressed(new CameraAPI_TakeCalibrationImage());
 		
 		//Testing
-		right_5.whileHeld(new CameraAPI_SubtractionTest());
+		right_5.whenPressed(new CameraAPI_SubtractionTest());
+		//right_5.whileHeld(new LEDSwitch_SetOn());
+		right_4.whenPressed(new Auto_GyroDriveStraight(7, 2.5));
 	}
 }
 

@@ -19,7 +19,7 @@ public class Snout_AutoShootPosition extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.snout.goToAutoShoot();
+    	//Robot.snout.goToAutoShoot();
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -26,7 +26,7 @@ public class Auto_RotateAlt extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Robot.camera.outputCleanImage();
+    	//Robot.camera.outputCleanImage();
     	
     	
     	double offset = Robot.camera.getRotationOffset();
@@ -54,11 +54,13 @@ public class Auto_RotateAlt extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.logger.log("End", 1);
+    	
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.logger.log("Interrupted", 1);
+    	
     }
 }

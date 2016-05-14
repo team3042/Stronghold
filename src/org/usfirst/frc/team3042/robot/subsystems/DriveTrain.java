@@ -6,6 +6,7 @@ import org.usfirst.frc.team3042.robot.commands.DriveTrain_TankDrive;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDeviceStatus;
 import edu.wpi.first.wpilibj.CANTalon.MotionProfileStatus;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Notifier;
@@ -20,7 +21,7 @@ public class DriveTrain extends Subsystem {
 	public CANTalon leftMotorFront = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_1);
 	CANTalon leftMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_LEFT_2);
 	CANTalon rightMotorFront = new CANTalon(RobotMap.DRIVETAIN_TALON_RIGHT_1);
-	CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
+	public CANTalon rightMotorRear = new CANTalon(RobotMap.DRIVETRAIN_TALON_RIGHT_2);
 	
 	//Set which of the motors has the encoder attached
 	CANTalon leftEncMotor = leftMotorFront;
@@ -40,12 +41,12 @@ public class DriveTrain extends Subsystem {
 	//PIDF values
 	public double kP = 1, kI = 0, kD = 0;
 	public double kF = (RobotMap.isSkoll) ? 0.9 : 0.9;
-	double pPos = 1.3, iPos = 0.008, fPos = 0;
+	double pPos = 1.3, iPos = 0.015, fPos = 0;
 	int iZone = 150;
 	
 	//Values for checking if near setpoint
 	double leftSetpoint, rightSetpoint;
-	double tolerance = 5.0 / encCounts;
+	double tolerance = 4.0 / encCounts;
 	
 	//Creating thread to make talon process motion profile buffer when points are available in upper buffer
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -72,7 +73,7 @@ public class DriveTrain extends Subsystem {
     	
     	initEncoders();
     	
-    	//gyro.reset();
+    	gyro.reset();
     	
     	//Starting talons processing motion profile
     	leftMotorFront.changeMotionControlFramePeriod(5);
@@ -96,6 +97,16 @@ public class DriveTrain extends Subsystem {
     	leftMotorFront.setF(kF);
     	rightMotorFront.setF(kF);
     	
+	}
+	
+	public void tempReverseLeft() {
+    	//leftMotorFront.setInverted(true);
+    	//leftMotorFront.reverseOutput(true);
+	}
+	
+	public void tempUnreverseLeft() {
+    	//leftMotorFront.setInverted(false);
+    	//leftMotorFront.reverseOutput(false);
 	}
 	
 	void initEncoders() {
@@ -201,6 +212,14 @@ public class DriveTrain extends Subsystem {
 	
 	public double getRightSpeed() {
 		return rightEncMotor.getSpeed();
+	}
+	
+	public boolean isLeftEncPresent() {
+		return !(leftEncMotor.isSensorPresent(FeedbackDevice.QuadEncoder) == FeedbackDeviceStatus.FeedbackStatusPresent);
+	}
+	
+	public boolean isRightEncPresent() {
+		return !(rightEncMotor.isSensorPresent(FeedbackDevice.QuadEncoder) == FeedbackDeviceStatus.FeedbackStatusPresent);
 	}
 	
 	public void resetGyro() {

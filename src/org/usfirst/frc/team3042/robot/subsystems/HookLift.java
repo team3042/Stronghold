@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class HookLift extends Subsystem {
     	
-	CANTalon liftTalon = new CANTalon(RobotMap.HOOK_LIFT_TALON);
+	public CANTalon liftTalon = new CANTalon(RobotMap.HOOK_LIFT_TALON);
 	
-	final double raiseSpeed = (RobotMap.isSkoll)? 0.5 : 0.75, lowerSpeed = (RobotMap.isSkoll)? 0.4 : 0.75;
+	final double raiseSpeed = (RobotMap.isSkoll)? 0.65 : 0.65, lowerSpeed = (RobotMap.isSkoll)? 0.5 : 0.65;
 	int encoderZero;
 	final double encLimit = 47000;
 	final double tolerance = 500;

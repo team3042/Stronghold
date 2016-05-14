@@ -1,38 +1,29 @@
 package org.usfirst.frc.team3042.robot.commands;
 
 import org.usfirst.frc.team3042.robot.Robot;
-
-import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.Image;
+import org.usfirst.frc.team3042.robot.subsystems.Snout;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class CameraAPI_SubtractionTest extends Command {
-	
-    public CameraAPI_SubtractionTest() {
+public class Auto_GoToAutoShoot extends Command {
+	int position;
+
+    public Auto_GoToAutoShoot(int position) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.camera);
-    	requires(Robot.ledSwitch);
+    	requires(Robot.snout);
+    	
+    	this.position = position;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
-    	Image testImage = Robot.camera.getSubtractedFrame();
-    	Image litFrame = Robot.camera.getLitFrame();
-    	//Image unlitFrame = Robot.camera.getUnlitFrame();
-    	/*Image testImage = Robot.camera.getHSVFilteredCameraFrame(
-    			Robot.camera.TARGET_HUE_RANGE, 
-    			Robot.camera.TARGET_SAT_RANGE, 
-    			Robot.camera.TARGET_VAL_RANGE); */
-    	
-    	Robot.camera.outputImage(testImage, "filterTest.png");
-    	Robot.camera.outputImage(litFrame, "litFrame.png");
+    	Robot.snout.goToAutoShoot(position);	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -41,7 +32,7 @@ public class CameraAPI_SubtractionTest extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return Robot.snout.nearSetpoint();
     }
 
     // Called once after isFinished returns true

@@ -10,8 +10,6 @@ public class FileIO {
 	PrintStream writer;
 	Scanner scanner;
 	
-	boolean fileExists;
-
 	public void openFile(String path, String filename) {
 		File dir = new File(path);
 		String url = path + filename;
@@ -21,7 +19,7 @@ public class FileIO {
 		
 		try {
 			//Checking if file exists and deleting it and recreating it to clear if it does
-			fileExists = file.createNewFile();
+			boolean fileExists = file.createNewFile();
 			if (!fileExists) {
 				file.delete();
 				file.createNewFile();

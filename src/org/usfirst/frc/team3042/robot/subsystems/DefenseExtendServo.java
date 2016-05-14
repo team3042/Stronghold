@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
+import org.usfirst.frc.team3042.robot.commands.DefenseExtendServo_Retract;
 import org.usfirst.frc.team3042.robot.commands.HookLiftServo_Retract;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -9,9 +10,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class HookLiftServo extends Subsystem {
+public class DefenseExtendServo extends Subsystem {
 	
-	Servo servo = new Servo(RobotMap.HOOK_LIFT_SERVO);
+	Servo servo = new Servo(RobotMap.DEFENSE_SERVO);
 	
 	double retractAngle = (RobotMap.isSkoll)? 120: 65;
 	double extendAngle = (RobotMap.isSkoll)? 30: 0;
@@ -21,7 +22,7 @@ public class HookLiftServo extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new HookLiftServo_Retract());
+    	setDefaultCommand(new DefenseExtendServo_Retract());
     }
     
     //Setting the loading servo to various positions

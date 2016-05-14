@@ -26,6 +26,8 @@ public class Auto_Drive extends Command {
 	
 	double wheelbaseWidth = 2.4;
 	
+	AutoType autoType;
+	
 	AutoTrajectory_MotionProfile motionProfileLeft;
 	AutoTrajectory_MotionProfile motionProfileRight;
 	
@@ -35,6 +37,8 @@ public class Auto_Drive extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);
+    	
+    	this.autoType = autoType;
     	
     	if(autoType == AutoType.STRAIGHT) {
     		leftDistance = distance;

@@ -26,9 +26,9 @@ public class AutoMode_RoughTerrain extends CommandGroup {
         // arm.
     	
     	addParallel(new Snout_Storage());
-    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -9, -3));
+    	addSequential(new Auto_Drive(Auto_Drive.AutoType.STRAIGHT, -9.25, -3));
     	
-    	addParallel(new Snout_AutoShootPosition()); 
+    	//addParallel(new Snout_AutoShootPosition()); 
     	
     	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {
