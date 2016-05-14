@@ -27,7 +27,7 @@ public class AutoMode_Ramparts extends CommandGroup {
     	
     	//TODO Find values for snout positioning
     	addParallel(new Snout_Storage());
-    	addSequential(new Auto_GyroDriveStraight(-10, -3));
+    	addSequential(new Auto_GyroDriveStraight(-8.2, -2.6));
     	
     	addSequential(new Auto_FaceGoalReverse(defensePosition));
     	if(defensePosition != 0) {

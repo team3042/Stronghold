@@ -23,6 +23,8 @@ public class CameraAPI_SubtractionTest extends Command {
     protected void initialize() {
     	Robot.logger.log("Initialize", 1);
     	
+    	Robot.logger.log("Snout Angle: " + Robot.snout.getAngle(), 2);
+    	
     	Image testImage = Robot.camera.getSubtractedFrame();
     	Image litFrame = Robot.camera.getLitFrame();
     	//Image unlitFrame = Robot.camera.getUnlitFrame();
@@ -32,7 +34,7 @@ public class CameraAPI_SubtractionTest extends Command {
     			Robot.camera.TARGET_VAL_RANGE); */
     	
     	Robot.camera.outputImage(testImage, "filterTest.png");
-    	Robot.camera.outputImage(litFrame, "litFrame.png");
+    	Robot.camera.outputImage(litFrame, "litFrame3.png");
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -26,7 +26,7 @@ public class Snout extends Subsystem {
 	//private double shoot = 240;
 	private double lowGoal = 73;
 	private double autoShoot = 240;
-	private double arcOuterworksShoot = 280;
+	private double arcOuterworksShoot = (RobotMap.isSkoll)? 258 : 280;
 	private double arcCloseShoot = 310;
 	private double layup = 350;
 	private double batter = 550;

@@ -23,7 +23,7 @@ public class Auto_GyroDriveStraight extends Command {
 	double goalPosition = 0, goalSpeed = 0;
 	
 	//Proportional values for control of encoder position and heading
-	double pPos = 0.25 / 1440, pTurn = 0.02;
+	double pPos = 0.25 / 1440, pTurn = 0.04;
 		
 	AutoTrajectory_MotionProfile motionProfile;
 	

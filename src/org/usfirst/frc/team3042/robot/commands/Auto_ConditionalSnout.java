@@ -16,7 +16,7 @@ public class Auto_ConditionalSnout extends Command {
 	Timer timer = new Timer();
 	double timeout = 5.0;
 	double tolerance = 10.0;
-	int waitCyclesLeft, waitCycles = 2;
+	int waitCyclesLeft, waitCycles = 4;
 	
     public Auto_ConditionalSnout(double startPot, int encTarget, double potValue) {
         // Use requires() here to declare subsystem dependencies
@@ -48,7 +48,7 @@ public class Auto_ConditionalSnout extends Command {
     	if (waitCyclesLeft <= 0) {
     		int leftEnc = Math.abs(Robot.driveTrain.getLeftEncoder());
     		int rightEnc = Math.abs(Robot.driveTrain.getRightEncoder());
-    	
+    		
     		if ((leftEnc > encTarget) || (rightEnc > encTarget)) {
     			Robot.snout.setPosition(potValue);
     			finished = true;

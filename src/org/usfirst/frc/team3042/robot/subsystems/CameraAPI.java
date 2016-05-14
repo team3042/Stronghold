@@ -123,7 +123,7 @@ public class CameraAPI extends Subsystem {
 	//Fenrir offset at 320x240 is -16.5. 
 	//Scaled up to 480x360 I expect it to be -25
 	//If hitting right make less negative, to the left change to more negative.
-	double OFFSET_ZERO = (RobotMap.isSkoll) ? -80.5 : -47.5;
+	double OFFSET_ZERO = (RobotMap.isSkoll) ? -66 : -47.5;
 	
 	public CameraAPI(){
 		camera.writeCompression(30);
